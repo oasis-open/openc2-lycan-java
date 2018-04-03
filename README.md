@@ -15,6 +15,10 @@ Jackson 2.8.8 or later.
 
 ### Maven users
 
+This repo is not currently in Maven Central so it requires users to manually build the repo
+and push the resulting jar to your local Maven repository.
+
+
 Add this dependency to your project's POM:
 
 ```xml
