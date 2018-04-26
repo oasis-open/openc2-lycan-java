@@ -71,7 +71,7 @@ public class OpenC2ResponseDeserializer extends JsonDeserializer<OpenC2Response>
 			} else if (key.equals("status")) {
 				response.setStatus(nodes.get(key).asText());
 			} else if (key.equals("result")) {
-				response.setResult(nodes.get(key).asText());
+				response.setResults(nodes.get(key).asText());
 			} else {
 				; // Ignore any other keys
 			}

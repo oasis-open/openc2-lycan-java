@@ -69,7 +69,7 @@ public class LycanExample.java {
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/oasis-open/openc2-lycan-java/blob/develop/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/oasis-open/openc2-lycan-java/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
@@ -77,10 +77,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Blake Essing** - *Initial work* - [AT&T](https://github.com/<our github>)
-* **Mike Stair** - *Initial work* - [AT&T](https://github.com/<our github>)
-
-See also the list of [contributors](https://github.com/<our/project/contributors) who participated in this project.
+* **Blake Essing** - *Initial work* - [AT&T](https://github.com/bessing)
 
 
 <div>

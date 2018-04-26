@@ -46,7 +46,7 @@ public class OpenC2ResponseSerializer extends JsonSerializer<OpenC2Response> {
 	 *       }
 	 *    }
 	 *    "status": <status>
-	 *    "result": <result>
+	 *    "results": <results>
 	 * }
 	 * 
 	 * (non-Javadoc)
@@ -63,7 +63,7 @@ public class OpenC2ResponseSerializer extends JsonSerializer<OpenC2Response> {
 		generator.writeEndObject();
 		generator.writeEndObject();
 		generator.writeObjectField("status", oc2Resp.getStatus());
-		generator.writeObjectField("result", oc2Resp.getResult());
+		generator.writeObjectField("results", oc2Resp.getResults());
 		generator.writeEndObject();		
 	}
 

@@ -40,7 +40,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class OpenC2Response {
 	private String source;
 	private String status;
-	private Object result;
+	private Object results;
 	
 	/**
 	 * This constructor only exists for Jackson processing and should
@@ -57,21 +57,21 @@ public class OpenC2Response {
 	 * @param type string representing the ActionType that describes the OpenC2 response message
 	 * @param value value of the OpenC2 response
 	 */
-	public OpenC2Response(String source, String status, Object result) {
+	public OpenC2Response(String source, String status, Object results) {
 		this.source = source;
 		this.status = status;
-		this.result = result;
+		this.results = results;
 	}
 	
 
 	public String getSource() 	{ return source; }
 	public String getStatus() 	{ return status; }
-	public Object getResult() 	{ return result; }
+	public Object getResults() 	{ return results; }
 	
 	@JsonAnySetter
 	public void setSource(String source) 	{ this.source = source; }	
 	public void setStatus(String status) 	{ this.status = status; }
-	public void setResult(Object result) 	{ this.result = result; }
+	public void setResults(Object results) 	{ this.results = results; }
 	
 	/**
 	 * Convert the OpenC2Message object to a JSON string
