@@ -25,24 +25,27 @@ package org.oasis.openc2.lycan;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-
 import org.oasis.openc2.lycan.json.JsonFormatter;
+import org.oasis.openc2.lycan.utilities.StatusCode;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OpenC2ResponseTest {
 	// Display the JSON to the console for human viewing
-	private static final boolean toConsole = true;
+	private static final boolean toConsole = false;
 	
-	private static String expected = "{\"response\":{\"source\":{\"type\":\"CommandResp\"}},\"status\":\"complete\",\"result\":\"Results of command\"}";
+//	private static String expected = "{\"response\":{\"source\":{\"type\":\"CommandResp\"}},\"status\":\"complete\",\"result\":\"Results of command\"}";
+	private static String expected1 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200}";
+	private static String expected2 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200,\"status_text\":\"Successful\",\"results\":\"These are the results\"}";
 	
 
 	@Test
 	public void test1() throws Exception {
 		
-		OpenC2Response response = new OpenC2Response("CommandResp", "complete", "Results of command");
+		OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK);
 		OpenC2Response response2 = JsonFormatter.readOC2ResponseJson(response.toJson());
-		OpenC2Response response3 = JsonFormatter.readOC2ResponseJson(expected);
+		OpenC2Response response3 = JsonFormatter.readOC2ResponseJson(expected1);
 
 		if (toConsole) {
     		// This is just to allow developer to eyeball the JSON created
@@ -57,6 +60,31 @@ public class OpenC2ResponseTest {
     	JsonNode response2JN = new ObjectMapper().readTree(response2.toJson());
     	JsonNode response3JN = new ObjectMapper().readTree(response3.toJson());
     	
+		assertEquals(responseJN, response2JN);  // Verify that the object created from a string is the same
+    	assertEquals(responseJN, response3JN);  // Verify that the object from an external JSON string is the same
+    	
+	}
+
+	@Test
+	public void test2() throws Exception {
+		
+		OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK, "Successful", "These are the results");
+		OpenC2Response response2 = JsonFormatter.readOC2ResponseJson(response.toJson());
+		OpenC2Response response3 = JsonFormatter.readOC2ResponseJson(expected2);
+
+		if (toConsole) {
+    		// This is just to allow developer to eyeball the JSON created
+			System.out.println("");
+    		System.out.println("OpenC2ResponseTest - Test1 JSON output:");
+			System.out.println(response.toJson());
+			System.out.println(response.toPrettyJson());
+			System.out.println("\n\n");
+		}
+			
+    	JsonNode responseJN = new ObjectMapper().readTree(response.toJson());
+    	JsonNode response2JN = new ObjectMapper().readTree(response2.toJson());
+    	JsonNode response3JN = new ObjectMapper().readTree(response3.toJson());
+
     	assertEquals(responseJN, response2JN);  // Verify that the object created from a string is the same
     	assertEquals(responseJN, response3JN);  // Verify that the object from an external JSON string is the same
     	

@@ -25,7 +25,9 @@ package org.oasis.openc2.lycan;
 import org.oasis.openc2.lycan.json.JsonFormatter;
 import org.oasis.openc2.lycan.json.OpenC2ResponseDeserializer;
 import org.oasis.openc2.lycan.json.OpenC2ResponseSerializer;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
+import org.oasis.openc2.lycan.utilities.StatusCode;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -38,8 +40,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonSerialize(using = OpenC2ResponseSerializer.class)
 @JsonDeserialize(using = OpenC2ResponseDeserializer.class)
 public class OpenC2Response {
-	private String source;
-	private String status;
+	private String id;
+	private String idRef;
+	private int status;
+	private String statusText;
 	private Object results;
 	
 	/**
@@ -51,27 +55,49 @@ public class OpenC2Response {
 	}
 	
 	/**
-	 * Constructor to assign the command, type and value to the response
+	 * Constructor to assign the id, id ref and status to the response
 	 * 
-	 * @param command command the response is for
-	 * @param type string representing the ActionType that describes the OpenC2 response message
-	 * @param value value of the OpenC2 response
+	 * @param id id of the response
+	 * @param idRef id of the command that induced this response
+	 * @param status An integer status code
 	 */
-	public OpenC2Response(String source, String status, Object results) {
-		this.source = source;
-		this.status = status;
-		this.results = results;
+	public OpenC2Response(String id, String idRef, StatusCode status) {
+		this.id = id;
+		this.idRef = idRef;
+		this.status = status.getValue();
 	}
 	
+	/**
+	 * Constructor to assign the id, id ref, status, status text and results to the response
+	 * 
+	 * @param id id of the response
+	 * @param idRef id of the command that induced this response
+	 * @param status An integer status code
+	 * @param statusText A free-form human redable description of the response status
+	 * @param results Data or extended status information that was requested from an OpenC2 command
+	 */
+	public OpenC2Response(String id, String idRef, StatusCode status, String statusText, Object results) {
+		this.id = id;
+		this.idRef = idRef;
+		this.status = status.getValue();
+		this.statusText = statusText;
+		this.results = results;
+	}
 
-	public String getSource() 	{ return source; }
-	public String getStatus() 	{ return status; }
-	public Object getResults() 	{ return results; }
+	public String getId()			{ return id; }
+	public String getIdRef()		{ return idRef; }
+	public int getStatus() 			{ return status; }
+	public String getStatusText() 	{ return statusText; }
+	public Object getResults() 		{ return results; }
 	
-	@JsonAnySetter
-	public void setSource(String source) 	{ this.source = source; }	
-	public void setStatus(String status) 	{ this.status = status; }
-	public void setResults(Object results) 	{ this.results = results; }
+//	@JsonAnySetter
+	public void setId(String id)				 { this.id = id; }
+	public void setIdRef(String idRef)			 { this.idRef = idRef; }
+	@JsonIgnore
+	public void setStatus(StatusCode status)	 { this.status = status.getValue(); }
+	public void setStatus(int status) 			 { this.status = status; }	
+	public void setStatusText(String statusText) { this.statusText = statusText; }
+	public void setResults(Object results) 		 { this.results = results; }
 	
 	/**
 	 * Convert the OpenC2Message object to a JSON string
@@ -80,7 +106,7 @@ public class OpenC2Response {
 	 * @throws JsonProcessingException
 	 */
 	public String toJson() throws JsonProcessingException {
-		return JsonFormatter.getJson(this);
+		return JsonFormatter.getJson(this, false);
 	}
 	
 	/**
@@ -91,7 +117,7 @@ public class OpenC2Response {
 	 * @throws JsonProcessingException
 	 */
 	public String toPrettyJson() throws JsonProcessingException {
-		return JsonFormatter.getPrettyJson(this);
+		return JsonFormatter.getJson(this, true);
 	}
 	
 }

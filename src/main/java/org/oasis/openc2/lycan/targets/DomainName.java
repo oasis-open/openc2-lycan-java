@@ -22,15 +22,19 @@
  */
 package org.oasis.openc2.lycan.targets;
 
-import java.util.List;
+import org.oasis.openc2.lycan.utilities.OpenC2Map;
 
-import org.oasis.openc2.lycan.utilities.Keys;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
  * Implementation of an DomainName OpenC2 target
  *
  */
-public class DomainName extends OpenC2Target {
+public class DomainName extends OpenC2Map<TargetType> {
+	
+	public DomainName() {
+		super(TargetType.DOMAIN_NAME);
+	}
 	
 	/**
 	 * Constructor to create a domain name target
@@ -47,17 +51,13 @@ public class DomainName extends OpenC2Target {
 	 * 
 	 * @param domainName the domain name to be assign
 	 */
-	private void setDomainName(String domainName) {
-		super.addSpecifier(Keys.VALUE, domainName);
+	@JsonSetter("domain_name")
+	public void setDomainName(String domainName) {
+		super.put(TargetType.DOMAIN_NAME.toString(), domainName);
 	}
 	
-	/**
-	 * Set a list references the domain resolves to
-	 * 
-	 * @param value List of strings when multiple domain names are needed
-	 */
-	public void setResolvesToRefs(List<String> value) {
-		super.addSpecifier(Keys.RESOLVES_TO_REFS, value);
+	public String getDomainName() {
+		return super.get(TargetType.DOMAIN_NAME.toString()).toString();
 	}
 	
 }

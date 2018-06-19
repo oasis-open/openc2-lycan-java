@@ -26,6 +26,7 @@ import java.io.IOException;
 
 import org.oasis.openc2.lycan.OpenC2Message;
 import org.oasis.openc2.lycan.OpenC2Response;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,6 +38,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 public class JsonFormatter {
+	
+	private JsonFormatter() { }
 
 	/**
 	 * Read a OpenC2 JSON string and convert it into a OpenC2Message object
@@ -47,7 +50,7 @@ public class JsonFormatter {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	public static OpenC2Message readOpenC2Message(String json) throws JsonParseException, JsonMappingException, IOException {
+	public static OpenC2Message readOpenC2Message(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(json, OpenC2Message.class);
 	}
@@ -56,27 +59,17 @@ public class JsonFormatter {
 	 * Convert an OpenC2Message object to a JSON string
 	 * 
 	 * @param message OpenC2Message object to be serialized into a JSON string
+	 * @param prettyPrint return the JSON string with return characters and tabs to make it
+	 * 					  easier to print and read.
 	 * @return String containing the JSON representation of the OpenC2Message object
 	 * @throws JsonProcessingException
 	 */
-	public static String getJson(OpenC2Message message) throws JsonProcessingException {
+	public static String getJson(OpenC2Message message, boolean prettyPrint) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
+		if (prettyPrint)
+			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message);
 		return mapper.writeValueAsString(message);
-	}
-	
-	/**
-	 * Convert and OpenC2Message object to a JSON string for printing to the 
-	 * console
-	 * 
-	 * @param message OpenC2Message object to be serialized into a JSON string for humans
-	 * @return String containing the JSON representation of the OpenC2Message object with line breaks 
-	 * @throws JsonProcessingException
-	 */
-	public static String getPrettyJson(OpenC2Message message) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Include.NON_NULL);
-		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message);
 	}
 
 
@@ -89,7 +82,7 @@ public class JsonFormatter {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	public static OpenC2Response readOC2ResponseJson(String json) throws JsonParseException, JsonMappingException, IOException {
+	public static OpenC2Response readOC2ResponseJson(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(json, OpenC2Response.class);
 	}
@@ -101,24 +94,12 @@ public class JsonFormatter {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	public static String getJson(OpenC2Response message) throws JsonProcessingException {
+	public static String getJson(OpenC2Response message, boolean prettyPrint) throws JsonProcessingException {
 		message.toString();
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
+		if (prettyPrint)
+			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message);
 		return mapper.writeValueAsString(message);
-	}
-	
-	/**
-	 * Convert and OpenC2Response object to a JSON string for printing to the 
-	 * console
-	 * 
-	 * @param message
-	 * @return
-	 * @throws JsonProcessingException
-	 */
-	public static String getPrettyJson(OpenC2Response message) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Include.NON_NULL);
-		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message);
 	}
 }

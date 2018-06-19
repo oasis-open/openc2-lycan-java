@@ -26,8 +26,8 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.oasis.openc2.lycan.OpenC2Response;
+
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,20 +42,18 @@ public class OpenC2ResponseDeserializer extends JsonDeserializer<OpenC2Response>
 	 * Customized deserializer to create a OpenC2Response object from the following JSON
 	 * 
 	 * {
-	 *    "response": {
-	 *       "source": {
-	 *          "type": <value>
-	 *       }
-	 *    }
-	 *    "status": <status>
-	 *    "result": <result>
+	 *   "id": <id>,
+	 *   "id_ref": <id_ref>,
+	 *   "status": <status>,
+	 *   "status_text": <status_text>,
+	 *   "results": <results>
 	 * }
 	 * 
 	 * (non-Javadoc)
 	 * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
 	 */
 	@Override
-	public OpenC2Response deserialize(JsonParser parser, DeserializationContext context) throws IOException, JsonProcessingException {
+	public OpenC2Response deserialize(JsonParser parser, DeserializationContext context) throws IOException {
 		OpenC2Response response = new OpenC2Response();
 		
 		JsonNode nodes = parser.getCodec().readTree(parser);
@@ -64,17 +62,17 @@ public class OpenC2ResponseDeserializer extends JsonDeserializer<OpenC2Response>
 		while (keys.hasNext()) {
 			String key = keys.next();
 			
-			if (key.equals("response")) {
-				JsonNode typeNode = nodes.path("response").path("source").path("type");
-				if (!typeNode.isMissingNode())
-					response.setSource(typeNode.asText());
+			if (key.equals("id")) {
+				response.setId(nodes.get(key).asText());
+			} else if (key.equals("id_ref")) {
+				response.setIdRef(nodes.get(key).asText());
 			} else if (key.equals("status")) {
-				response.setStatus(nodes.get(key).asText());
-			} else if (key.equals("result")) {
+				response.setStatus(nodes.get(key).asInt());
+			} else if (key.equals("status_text")) {
+				response.setStatusText(nodes.get(key).asText());
+			} else if (key.equals("results")) {
 				response.setResults(nodes.get(key).asText());
-			} else {
-				; // Ignore any other keys
-			}
+			}  // Ignore any other keys
 		}
 		
 		return response;

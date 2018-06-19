@@ -25,8 +25,8 @@ package org.oasis.openc2.lycan.json;
 import java.io.IOException;
 
 import org.oasis.openc2.lycan.OpenC2Response;
+
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
@@ -40,30 +40,26 @@ public class OpenC2ResponseSerializer extends JsonSerializer<OpenC2Response> {
 	 * Customized serializer to create a response object that follows the following format
 	 * 
 	 * {
-	 *    "response": {
-	 *       "source": {
-	 *          "type": <value>
-	 *       }
-	 *    }
-	 *    "status": <status>
-	 *    "results": <results>
+	 *   "id": <id>,
+	 *   "id_ref": <id_ref>,
+	 *   "status": <status>,
+	 *   "status_text": <status_text>,
+	 *   "results": <results>
 	 * }
 	 * 
 	 * (non-Javadoc)
 	 * @see com.fasterxml.jackson.databind.JsonSerializer#serialize(java.lang.Object, com.fasterxml.jackson.core.JsonGenerator, com.fasterxml.jackson.databind.SerializerProvider)
 	 */
 	@Override
-	public void serialize(OpenC2Response oc2Resp, JsonGenerator generator, SerializerProvider provider) throws IOException, JsonProcessingException {
+	public void serialize(OpenC2Response oc2Resp, JsonGenerator generator, SerializerProvider provider) throws IOException {
 		generator.writeStartObject();
-		generator.writeFieldName("response");
-		generator.writeStartObject();
-		generator.writeFieldName("source");
-		generator.writeStartObject();
-		generator.writeObjectField("type", oc2Resp.getSource());
-		generator.writeEndObject();
-		generator.writeEndObject();
+		generator.writeObjectField("id", oc2Resp.getId());
+		generator.writeObjectField("id_ref", oc2Resp.getIdRef());
 		generator.writeObjectField("status", oc2Resp.getStatus());
-		generator.writeObjectField("results", oc2Resp.getResults());
+		if (oc2Resp.getStatusText() != null && !oc2Resp.getStatusText().isEmpty())
+			generator.writeObjectField("status_text", oc2Resp.getStatusText());
+		if (oc2Resp.getResults() != null)
+			generator.writeObjectField("results", oc2Resp.getResults());
 		generator.writeEndObject();		
 	}
 

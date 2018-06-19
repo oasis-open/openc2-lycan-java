@@ -23,89 +23,81 @@
 package org.oasis.openc2.lycan;
 
 import org.oasis.openc2.lycan.action.ActionType;
-import org.oasis.openc2.lycan.actuators.OpenC2Actuator;
+import org.oasis.openc2.lycan.actuators.ActuatorType;
 import org.oasis.openc2.lycan.json.JsonFormatter;
-import org.oasis.openc2.lycan.modifiers.OpenC2Modifier;
-import org.oasis.openc2.lycan.targets.OpenC2Target;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import org.oasis.openc2.lycan.json.OpenC2MessageDeserializer;
+import org.oasis.openc2.lycan.json.OpenC2MessageSerializer;
+import org.oasis.openc2.lycan.targets.TargetType;
+import org.oasis.openc2.lycan.utilities.OpenC2Map;
 
-/**
- * OpenC2Message is the base object that should be used when working with
- * OpenC2 messaging.  At a minimum, all OpenC2 messages must have an 
- * action and a target.  Actuator and modifiers are optional.
- *
- */
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(using = OpenC2MessageSerializer.class)
+@JsonDeserialize(using = OpenC2MessageDeserializer.class)
 public class OpenC2Message {
+	private String id;
 	private ActionType action;
-	private OpenC2Target target;
-	private OpenC2Actuator actuator = null;
-	private OpenC2Modifier modifiers = null;
+	private OpenC2Map<TargetType> target;
+	private OpenC2Map<ActuatorType> actuator;
+	private OpenC2Map<String> args;
 	
-	/**
-	 * This constructor only exists for Jackson processing and should
-	 * not be used directly
-	 */
-	public OpenC2Message() {}
+	public OpenC2Message() { }
 	
-	/**
-	 * Constructor to assign an action and a target to the message
-	 * 
-	 * @param action ActionType that describes the OpenC2 message
-	 * @param target Target object for the message
-	 */
-	public OpenC2Message(ActionType action, OpenC2Target target) {
+	public OpenC2Message(ActionType action, OpenC2Map<TargetType> target) {
 		this.action = action;
-		this.target = target;		
+		this.target = target;
 	}
 	
-	/**
-	 * Constructor to assign the action, target and actuator to the message
-	 * 
-	 * @param action ActionType that describes the OpenC2 message
-	 * @param target Target object for the message
-	 * @param actuator Actuator object for the message
-	 */
-	public OpenC2Message(ActionType action, OpenC2Target target, OpenC2Actuator actuator) {
+	public OpenC2Message(String id, ActionType action, OpenC2Map<TargetType> target) {
 		this(action, target);
+		this.id = id;
+	}
+	
+	public String getId() {  return id; }
+	public String getAction() { return action.toString(); }
+	public OpenC2Map<TargetType> getTarget() { return target; }
+	public OpenC2Map<ActuatorType> getActuator() { return actuator; }
+	public OpenC2Map<String> getArgs() { return args; }
+	
+	public OpenC2Message setId(String id) { 
+		this.id = id;
+		return this;
+	}
+	
+	public OpenC2Message setAction(String action) { 
+		this.action = ActionType.valueOf(action.toUpperCase()); 
+		return this;
+	}
+	
+	public OpenC2Message setTarget(OpenC2Map<TargetType> target) { 
+		this.target = target; 
+		return this;
+	}
+	
+	public OpenC2Message setActuator(OpenC2Map<ActuatorType> actuator) {
 		this.actuator = actuator;
+		return this;
 	}
 	
-	/**
-	 * Constructor to assign the action, target and modifier to the message
-	 * 
-	 * @param action ActionType that describes the OpenC2 message
-	 * @param target Target object for the message
-	 * @param modifier Modifier object for the message
-	 */
-	public OpenC2Message(ActionType action, OpenC2Target target, OpenC2Modifier modifier) {
-		this(action, target);
-		this.modifiers = modifier;
+	public OpenC2Message setArgs(OpenC2Map<String> args) {
+		this.args = args;
+		return this;
 	}
 	
-	/**
-	 * Constructor to assign the action, target, actuator and modifier to the message
-	 * 
-	 * @param action ActionType that describes the OpenC2 message
-	 * @param target Target object for the message
-	 * @param actuator Actuator object for the message
-	 * @param modifier Modifier object for the message
-	 */
-	public OpenC2Message(ActionType action, OpenC2Target target, OpenC2Actuator actuator, OpenC2Modifier modifiers) {
-		this(action, target);
-		this.actuator = actuator;
-		this.modifiers = modifiers;
+	public boolean hasId() {
+		return (id != null && !id.isEmpty());
 	}
 	
-	public String getAction() 			{ return action.toString(); }
-	public OpenC2Target getTarget() 		{ return target; }
-	public OpenC2Actuator getActuator() 	{ return actuator; }
-	public OpenC2Modifier getModifiers() 	{ return modifiers; }
+	public boolean hasActuator() {
+		return (actuator != null && actuator.size() > 0);
+	}
 	
-	public void setAction(String action) 			{ this.action = ActionType.valueOf(action.toUpperCase()); }
-	public void setTarget(OpenC2Target target) 		{ this.target = target; }
-	public void setActuator(OpenC2Actuator actuator) 	{ this.actuator = actuator; }
-	public void setModifier(OpenC2Modifier modifiers) 	{ this.modifiers = modifiers; }
-	
+	public boolean hasArgs() {
+		return (args != null && args.size() > 0);
+	}
+
 	/**
 	 * Convert the OpenC2Message object to a JSON string
 	 * 
@@ -113,7 +105,7 @@ public class OpenC2Message {
 	 * @throws JsonProcessingException
 	 */
 	public String toJson() throws JsonProcessingException {
-		return JsonFormatter.getJson(this);
+		return JsonFormatter.getJson(this, false);
 	}
 	
 	/**
@@ -124,6 +116,7 @@ public class OpenC2Message {
 	 * @throws JsonProcessingException
 	 */
 	public String toPrettyJson() throws JsonProcessingException {
-		return JsonFormatter.getPrettyJson(this);
+		return JsonFormatter.getJson(this, true);
 	}
+
 }

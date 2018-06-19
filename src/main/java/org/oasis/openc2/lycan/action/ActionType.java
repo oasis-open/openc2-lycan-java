@@ -27,48 +27,43 @@ package org.oasis.openc2.lycan.action;
  *
  */
 public enum ActionType {
-	SCAN("scan"),
-	LOCATE("locate"),
-	QUERY("query"),
-	REPORT("report"),
-	GET("get"),
-	NOTIFY("notify"),
-	// Actions that Control Permissions
-	DENY("deny"),
-	CONTAIN("contain"),
-	ALLOW("allow"),
-	// Actions that Control Activities/Devices
-	START("start"),
-	STOP("stop"),
-	RESTART("restart"),
-	PAUSE("pause"),
-	RESUME("resume"),
-	CANCEL("cancel"),
-	SET("set"),
-	UPDATE("update"),
-	MOVE("move"),
-	REDIRECT("redirect"),
-	DELETE("delete"),
-	SNAPSHOT("snapshot"),
-	DETONATE("detonate"),
-	RESTORE("restore"),
-	SAVE("save"),
-	MODIFY("modify"),
-	THROTTLE("throttle"),
-	DELAY("delay"),
-	SUBSTITUTE("substitute"),
-	COPY("copy"),
-	SINK("sink"),
-	// Sensor-related actions
-	DISTILL("distill"),
-	AUGMENT("augment"),
-	// Effects-based actions
-	INVESTIGATE("investigate"),
-	MITIGATE("mitigate"),
-	REMEDIATE("remediate"),
-	// Response and Alert
-	RESPONSE("response"),
-	ALERT("alert");
+	// Actions that control information
+	SCAN("scan"),				// Systematic examination of some aspect of the entity or it's environment in order to obtain information
+	LOCATE("locate"),			// Find an object either physically, logically, functionally or by organization
+	CREATE("create"), 			// Add a new entity of a known type (e.g., data, files, directories)	
+	QUERY("query"),				// Initiate a request for information
+	SET("set"),					// Change a value, configuration, or state of a managed entity
+	DELETE("delete"),			// Remove an entity (e.g., data, files, flows)
+	REPORT("report"),			// Task an entity to provide information to a designated recipient of the information
+	NOTIFY("notify"),			// Set an entity's alerting preferences.
+	// Actions that control access
+	DENY("deny"),				// Prevent a certain event or action from completion, such as preventing a flow from reaching a destination (e.g., block) or preventing access
+	CONTAIN("contain"),			// Isolate a file, process, or entity such that it cannot modify or access assets or processes
+	ALLOW("allow"),				// Permit access to or execution of a target
+	// Actions that control activities/devices
+	START("start"),				// Initiate a process, application, system, or some other activity
+	STOP("stop"),				// Halt a system or ends an activity
+	RESTART("restart"),			// Stop then start a system or an activity
+	PAUSE("pause"),				// Cease a system or activity while maintaining state
+	RESUME("resume"),			// Start a system or activity from a paused state
+	CANCEL("cancel"),			// Invalidate a previously issued action
+	UPDATE("update"),			// Instruct a component to retrieve, install, process, and operate in accordance with a software update, reconfiguration or some other update
+	MOVE("move"),				// Change the location of a file, subnet, network, or process
+	REDIRECT("redirect"),		// Change the flow to a particular destination other than its original intended destination
+	SNAPSHOT("snapshot"),		// Record and store the state of a target at an instant in time
+	DETONATE("detonate"),		// Execute and observe the behavior of a target (e.g. file, hyperlink) in an isolated environment
+	RESTORE("restore"),			// Return a system to a previously known site
+	SAVE("save"),				// Commit data or system state to memory
+	THROTTLE("throttle"),		// adjust the rate of a process, function or activity
+	DELAY("delay"),				// Stop or hold up an activity or data transmittal
+	SUBSTITUTE("substitute"),	// Replace all or part of the payload
+	COPY("copy"),				// Duplicate a file or data flow
+	SYNC("sync"),				// Synchronize a sensor or actuator with other system components
+	// Events based actions
+	INVESTIGATE("investigate"),	// Task the recipient to aggregate and report information as it pertains to a security event or incident
+	MITIGATE("mitigate"),		// Task the recipient to circumvent a problem without necessarily eliminating the vulnerability or attack point
+	REMEDIATE("remediate");		// Task the recipient to eliminate a vulnerability or attack point
+	
 	
 	private String type;
 	

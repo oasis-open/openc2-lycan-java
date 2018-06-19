@@ -4,7 +4,7 @@
 
   	<groupId>org.oasis.openc2</groupId>
   	<artifactId>lycan</artifactId>
-  	<version>0.0.1-SNAPSHOT</version>
+  	<version>0.1.0-SNAPSHOT</version>
   	<packaging>jar</packaging>
 
   	<name>lycan</name>
@@ -12,11 +12,23 @@
 
 	<properties>
 		<jackson.version>2.8.8</jackson.version>
-		<junit.version>4.11</junit.version>
+		<commons.lang.version>3.7</commons.lang.version>
+		<commons.text.version>1.4</commons.text.version>
+		<junit.version>4.12</junit.version>
 		<java.version>1.7</java.version>
 	</properties>
   
 	<dependencies>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>${commons.lang.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-text</artifactId>
+		    <version>${commons.text.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
