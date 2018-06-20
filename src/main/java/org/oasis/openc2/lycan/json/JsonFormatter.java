@@ -44,11 +44,9 @@ public class JsonFormatter {
 	/**
 	 * Read a OpenC2 JSON string and convert it into a OpenC2Message object
 	 *  
-	 * @param json OpenC2Message json string
-	 * @return OpenC2Message object
-	 * @throws JsonParseException 
-	 * @throws JsonMappingException
-	 * @throws IOException
+	 * @param json OpenC2Message JSON string
+	 * @return OpenC2Message OpenC2Message object represented by the JSON string
+	 * @throws IOException Exception thrown by the Jackson library
 	 */
 	public static OpenC2Message readOpenC2Message(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -59,10 +57,9 @@ public class JsonFormatter {
 	 * Convert an OpenC2Message object to a JSON string
 	 * 
 	 * @param message OpenC2Message object to be serialized into a JSON string
-	 * @param prettyPrint return the JSON string with return characters and tabs to make it
-	 * 					  easier to print and read.
+	 * @param prettyPrint boolean to toggle if the return string is in human readable or not
 	 * @return String containing the JSON representation of the OpenC2Message object
-	 * @throws JsonProcessingException
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public static String getJson(OpenC2Message message, boolean prettyPrint) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -76,11 +73,9 @@ public class JsonFormatter {
 	/**
 	 * Read a OpenC2 JSON string and convert it into a OpenC2Response object
 	 *  
-	 * @param json
-	 * @return
-	 * @throws JsonParseException
-	 * @throws JsonMappingException
-	 * @throws IOException
+	 * @param json response JSON string 
+	 * @return OpenC2Response object
+	 * @throws IOException Exception thrown if there is a problem reading the JSON
 	 */
 	public static OpenC2Response readOC2ResponseJson(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -90,9 +85,10 @@ public class JsonFormatter {
 	/**
 	 * Convert an OpenC2Response object to a JSON string
 	 * 
-	 * @param message
-	 * @return
-	 * @throws JsonProcessingException
+	 * @param message OpenC2Message object to be converted to JSON
+	 * @param prettyPrint boolean to toggle if the return string is in human readable or not
+	 * @return String containing the JSON representation of the object
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public static String getJson(OpenC2Response message, boolean prettyPrint) throws JsonProcessingException {
 		message.toString();

@@ -30,11 +30,21 @@ import org.oasis.openc2.lycan.targets.TargetType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Map class that is used as a base for the target, actuator and args class
+ *
+ * @param <T> class type TargetType, ActuatorType or String (for args)
+ */
 public class OpenC2Map<T> {
 	protected String sectionType;
 	protected String objectType;
 	Map<String, Object> map;
 	
+	/**
+	 * Constructor for creating a OpenC2Map object for a given type
+	 * 
+	 * @param type The class type to assign to the object
+	 */
 	protected OpenC2Map(T type) {
 		this.sectionType = convertType(type);
 		this.objectType = type.toString();
@@ -114,6 +124,11 @@ public class OpenC2Map<T> {
 		return value;
 	}
 	
+	/**
+	 * Get the size of the internal map
+	 * 
+	 * @return number of elements in the map
+	 */
 	public int size() {
 		return map.size();
 	}

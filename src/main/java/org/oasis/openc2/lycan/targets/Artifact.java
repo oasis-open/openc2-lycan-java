@@ -38,7 +38,6 @@ public class Artifact extends OpenC2Map<TargetType> {
 	/**
 	 * Constructor
 	 * 
-	 * @param ip IP to assign to the ipv4 addr object
 	 */
 	public Artifact() {
 		super(TargetType.ARTIFACT);
@@ -54,6 +53,7 @@ public class Artifact extends OpenC2Map<TargetType> {
 	 * Set the mime value
 	 * 
 	 * @param mime to be assigned to the object
+	 * @return Artifact object used for method chaining
 	 */
 	@JsonSetter(Keys.MIME_TYPE)
 	public Artifact setMime(String mime) {
@@ -65,6 +65,7 @@ public class Artifact extends OpenC2Map<TargetType> {
 	 * Set the payload_bin value
 	 * 
 	 * @param value payload_bin data in binary format
+	 * @return Artifact object used for method chaining
 	 */
 	@JsonSetter(Keys.PAYLOAD_BIN)
 	public Artifact setPayloadBin(Byte[] value) {
@@ -76,6 +77,7 @@ public class Artifact extends OpenC2Map<TargetType> {
 	 * Set the URL value
 	 * 
 	 * @param value URL string to assign
+	 * @return Artifact object used for method chaining
 	 */
 	public Artifact setUrl(String value) {
 		super.put(Keys.URL, value);
@@ -86,6 +88,7 @@ public class Artifact extends OpenC2Map<TargetType> {
 	 * Set the hashes value
 	 * 
 	 * @param value URL string to assign
+	 * @return Artifact object used for method chaining
 	 */
 	public Artifact setHashes(Map<String, Object> value) {
 		super.put(Keys.HASHES, value);

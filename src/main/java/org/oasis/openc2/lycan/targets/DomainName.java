@@ -46,7 +46,7 @@ public class DomainName extends OpenC2Map<TargetType> {
 		setDomainName(domainName);
 	}
 	
-	/*
+	/**
 	 * Set the value of the domain name object
 	 * 
 	 * @param domainName the domain name to be assign
@@ -56,6 +56,11 @@ public class DomainName extends OpenC2Map<TargetType> {
 		super.put(TargetType.DOMAIN_NAME.toString(), domainName);
 	}
 	
+	/**
+	 * Get the value for the DomainName object
+	 * 
+	 * @return String value of the domain object
+	 */
 	public String getDomainName() {
 		return super.get(TargetType.DOMAIN_NAME.toString()).toString();
 	}

@@ -50,13 +50,9 @@ public class OpenC2MessageTest {
 	private static final String ARG2_KEY = "response_requested";
 	private static final String ARG2_VALUE = "Ack";
 	
-//	private static final String badJson = "{\"target\":{\"domain\":\"www.whoami.com\",\"ipv4\":\"1.2.3.4\",\"type\":\"openc2:device\",\"actuator\":{\"key2\":\"valueKey2\",\"type\":\"openc2:endpoint\",\"key1\":\"valueKey1\"},\"modifier\":{\"cert\":\"true\",\"confidence\":\"85\"},\"action\":\"copy\"}";
-//	private static final String inputJson = "{\"target\":{\"domain\":\"www.whoami.com\",\"ipv4\":\"1.2.3.4\",\"type\":\"openc2:device\"},\"actuator\":{\"key2\":\"valueKey2\",\"type\":\"openc2:endpoint\",\"key1\":\"valueKey1\"},\"modifiers\":{\"cert\":\"true\",\"confidence\":\"85\"},\"action\":\"copy\"}";
 	private static final String test1Json = "{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}";
 	private static final String test2Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}";
 	private static final String test4Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"args\":{\"start_time\":\"now\",\"response_requested\":\"Ack\"}}";
-//	private static final String inputJson2 = "{\"action\":\"investigate\",\"target\":{\"certSpecs\":{\"validity_not_before\":\"2016-03-12T12:00:00Z\",\"subject\":\"C=US, ST=Maryland, L=Pasadena, O=Brent Baccala, OU=FreeSoft, CN=www.freesoft.org/emailAddress=baccala@freesoft.org\",\"issuer\":\"C=ZA, ST=Western Cape, L=Cape Town, O=Thawte Consulting cc, OU=Certification Services Division, CN=Thawte Server CA/emailAddress=server-cert@thawte.com\",\"validity_not_after\":\"2016-08-21T12:00:00Z\"},\"type\":\"openc2:x509-certificate\"}}";
-//    private static final String inputPrimitives = "{\"target\":{\"short\":32767,\"char\":\"A\",\"byte\":66,\"int\":2147483647,\"boolean\":true,\"double\":1.7976931348623157E308,\"long\":9223372036854775807,\"type\":\"openc2:directory\",\"float\":3.4028235E38},\"action\":\"investigate\"}";	
     
     /**
      * This test case is just to cover noise that shows up in the code

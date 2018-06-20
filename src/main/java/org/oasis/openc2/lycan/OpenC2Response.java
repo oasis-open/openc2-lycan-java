@@ -102,8 +102,8 @@ public class OpenC2Response {
 	/**
 	 * Convert the OpenC2Message object to a JSON string
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return String containing the JSON
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public String toJson() throws JsonProcessingException {
 		return JsonFormatter.getJson(this, false);
@@ -113,8 +113,8 @@ public class OpenC2Response {
 	 * Convert the OpenC2Message object to a JSON string that is more
 	 * reader friendly.
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return String containing the JSON in a human readable format
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public String toPrettyJson() throws JsonProcessingException {
 		return JsonFormatter.getJson(this, true);

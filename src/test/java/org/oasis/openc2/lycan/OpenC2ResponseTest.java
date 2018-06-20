@@ -35,7 +35,6 @@ public class OpenC2ResponseTest {
 	// Display the JSON to the console for human viewing
 	private static final boolean toConsole = false;
 	
-//	private static String expected = "{\"response\":{\"source\":{\"type\":\"CommandResp\"}},\"status\":\"complete\",\"result\":\"Results of command\"}";
 	private static String expected1 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200}";
 	private static String expected2 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200,\"status_text\":\"Successful\",\"results\":\"These are the results\"}";
 	

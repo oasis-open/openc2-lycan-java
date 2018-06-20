@@ -34,9 +34,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DomainNameTest  {
-//	private static final String expect = "{\"action\":\"locate\",\"target\":{\"value\":\"www.mydomain.com\",\"type\":\"openc2:domain-name\"}}";
-//	private static final String expect2 = "{\"action\":\"allow\",\"target\":{\"resolves_to_refs\":[\"test.one.org\",\"test.two.org\"],\"value\":\"www.yourdomain.com\",\"type\":\"openc2:domain-name\"}}";
-
 	private static final boolean toConsole = false;
 	private static final String DOMAIN_VALUE = "www.my.domain";
 	

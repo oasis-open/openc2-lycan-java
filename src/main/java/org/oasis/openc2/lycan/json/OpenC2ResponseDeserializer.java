@@ -38,20 +38,6 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public class OpenC2ResponseDeserializer extends JsonDeserializer<OpenC2Response> {
 
-	/*
-	 * Customized deserializer to create a OpenC2Response object from the following JSON
-	 * 
-	 * {
-	 *   "id": <id>,
-	 *   "id_ref": <id_ref>,
-	 *   "status": <status>,
-	 *   "status_text": <status_text>,
-	 *   "results": <results>
-	 * }
-	 * 
-	 * (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
-	 */
 	@Override
 	public OpenC2Response deserialize(JsonParser parser, DeserializationContext context) throws IOException {
 		OpenC2Response response = new OpenC2Response();

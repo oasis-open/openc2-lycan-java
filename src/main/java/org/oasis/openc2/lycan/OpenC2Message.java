@@ -34,6 +34,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * OpenC2Message is the base object that should be used when working with
+ * OpenC2 request messages.  At a minimum all OpenC2 messages must have 
+ * an action and a target.  Id, actuator and args are optional.
+ *
+ */
 @JsonSerialize(using = OpenC2MessageSerializer.class)
 @JsonDeserialize(using = OpenC2MessageDeserializer.class)
 public class OpenC2Message {
@@ -43,13 +49,30 @@ public class OpenC2Message {
 	private OpenC2Map<ActuatorType> actuator;
 	private OpenC2Map<String> args;
 	
+	/**
+	 * This constructor only exists for Jackson processing and should 
+	 * not be used directly.
+	 */
 	public OpenC2Message() { }
 	
+	/**
+	 * Constructor to assign an action and target to the message
+	 * 
+	 * @param action ActionType that describes the OpenC2 message
+	 * @param target Target object for the message
+	 */
 	public OpenC2Message(ActionType action, OpenC2Map<TargetType> target) {
 		this.action = action;
 		this.target = target;
 	}
 	
+	/**
+	 * Constructor to assign the id, action and target to the message
+	 * 
+	 * @param id UUID to uniquely identify the message
+	 * @param action ActionType that describes the OpenC2 message
+	 * @param target Target object for the message
+	 */
 	public OpenC2Message(String id, ActionType action, OpenC2Map<TargetType> target) {
 		this(action, target);
 		this.id = id;
@@ -86,14 +109,29 @@ public class OpenC2Message {
 		return this;
 	}
 	
+	/**
+	 * Check if the id value has been set
+	 * 
+	 * @return true if the id value has been set
+	 */
 	public boolean hasId() {
 		return (id != null && !id.isEmpty());
 	}
 	
+	/**
+	 * Check if the actuator object has been created
+	 * 
+	 * @return true if the actuator object has been set
+	 */
 	public boolean hasActuator() {
 		return (actuator != null && actuator.size() > 0);
 	}
 	
+	/**
+	 * Check if the args object has been created
+	 * 
+	 * @return true if the args object has been set
+	 */
 	public boolean hasArgs() {
 		return (args != null && args.size() > 0);
 	}
@@ -101,8 +139,8 @@ public class OpenC2Message {
 	/**
 	 * Convert the OpenC2Message object to a JSON string
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return String containing the JSON representation of the object 
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public String toJson() throws JsonProcessingException {
 		return JsonFormatter.getJson(this, false);
@@ -112,8 +150,9 @@ public class OpenC2Message {
 	 * Convert the OpenC2Message object to a JSON string that is more
 	 * reader friendly.
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return String containing the JSON representation of the object in human 
+	 * 		   readable format
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public String toPrettyJson() throws JsonProcessingException {
 		return JsonFormatter.getJson(this, true);

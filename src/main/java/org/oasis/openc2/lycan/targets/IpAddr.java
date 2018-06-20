@@ -49,11 +49,6 @@ public class IpAddr extends OpenC2Map<TargetType> {
 		setIpAddr(ip);
 	}
 	
-	/*
-	 * Set the ip value for the IpAddr section
-	 * 
-	 * @param ip to be assigned to the object
-	 */
 	@JsonSetter("ip_addr")
 	public void setIpAddr(String ip) {
 		super.put(TargetType.IP_ADDR.toString(), ip);
