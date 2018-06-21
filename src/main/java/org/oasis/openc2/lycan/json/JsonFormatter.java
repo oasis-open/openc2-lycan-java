@@ -28,9 +28,7 @@ import org.oasis.openc2.lycan.OpenC2Message;
 import org.oasis.openc2.lycan.OpenC2Response;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -39,8 +37,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JsonFormatter {
 	
-	private JsonFormatter() { }
-
 	/**
 	 * Read a OpenC2 JSON string and convert it into a OpenC2Message object
 	 *  

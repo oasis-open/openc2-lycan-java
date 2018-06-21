@@ -38,7 +38,23 @@ public class OpenC2ResponseTest {
 	private static String expected1 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200}";
 	private static String expected2 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200,\"status_text\":\"Successful\",\"results\":\"These are the results\"}";
 	
-
+    /**
+     * This test case is just to cover noise that shows up in the code
+     * coverage report.  These aren't actual tests, they just exercise 
+     * some non-testable or trivial aspect of the code that is being 
+     * flagged due to the way the Emma engine executes it's reporting.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testCodeCoverage() throws Exception {
+    	OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK);
+    	response.setStatus(StatusCode.BAD_REQUEST);
+    	assertEquals(StatusCode.BAD_REQUEST.getValue(), response.getStatus());
+    	
+    	response.toPrettyJson(); // Just to call the method for coverage
+    }
+    
 	@Test
 	public void test1() throws Exception {
 		

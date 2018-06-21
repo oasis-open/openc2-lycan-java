@@ -20,35 +20,37 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
- package org.oasis.openc2.lycan.utilities;
+package org.oasis.openc2.lycan.actuators;
+
+import org.oasis.openc2.lycan.utilities.Keys;
+import org.oasis.openc2.lycan.utilities.OpenC2Map;
 
 /**
- * The Keys class contains a list of static strings that are used to set the 
- * key portion of key/value pairs that are pushed to the various sections
- * of OpenC2 message.  This is done so if values change for given keys as the
- * spec matures, only need to change one class.
+ * Sample implementation of a single attribute actuator
+ * This is a sample because the spec does not have specific 
+ * definition for actuators at this time
  *
  */
-public class Keys {
-	// Main message keys
-	public static final String ID = "id";
-	public static final String ACTION = "action";
-	public static final String TARGET = "target";
-	public static final String ACTUATOR = "actuator";
-	public static final String ARGUMENTS = "args";
+public class NetworkSensor extends OpenC2Map<ActuatorType> {
 	
-	// Subsection keys
-	public static final String NAME = "name";
-	public static final String PATH = "path";
-	public static final String HASHES = "hashes";
+	/**
+	 * Constructor
+	 */
+	public NetworkSensor() {
+		super(ActuatorType.NETWORK_SENSOR);
+	}
 	
-	public static final String TYPE = "type";
-	public static final String VALUE = "value";
-	public static final String RESOLVES_TO_REFS = "resolves_to_refs";
-	public static final String BELONGS_TO_REFS = "belongs_to_refs";
-	public static final String MIME_TYPE = "mime_type";
-	public static final String PAYLOAD_BIN = "payload_bin";
-	public static final String URL = "url";
-	public static final String DXL_TOPIC = "dxl_topic";
+	public NetworkSensor setName(String name) {
+		super.put(Keys.NAME, name);
+		return this;
+	}
 	
+	public NetworkSensor setPath(String path) {
+		super.put(Keys.PATH, path);
+		return this;
+	}
+	
+	public String getName() { return super.get(Keys.NAME).toString(); }
+	public String getPath() { return super.get(Keys.PATH).toString(); }
+
 }

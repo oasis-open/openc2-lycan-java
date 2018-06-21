@@ -107,7 +107,7 @@ public class OpenC2MessageDeserializer extends JsonDeserializer<OpenC2Message> {
 				}
 				
 				try {
-					Class<?> clazz = Class.forName(getTargetClassName(actuatorName));
+					Class<?> clazz = Class.forName(getActuatorClassName(actuatorName));
 					message.setActuator((OpenC2Map<ActuatorType>)mapper.readValue(actuatorParser, clazz));
 				} catch (ClassNotFoundException e) {
 					throw new IOException("Unknown actuator type '" + getActuatorClassName(actuatorName) + "' found in JSON");

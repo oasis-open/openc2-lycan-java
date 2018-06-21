@@ -25,6 +25,9 @@ package org.oasis.openc2.lycan.targets;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.oasis.openc2.lycan.OpenC2Message;
 import org.oasis.openc2.lycan.action.ActionType;
@@ -38,11 +41,22 @@ public class FileTest {
 	private static final String NAME_VALUE = "testfile";
 	private static final String PATH_VALUE = "/tmp/testfile";
 	private static final String HASH_VALUE = "123456789";
+	private static final String HASHKEY1_VALUE = "hashkey1";
+	private static final String VALUE1_VALUE = "value1";
+	private static final String HASHKEY2_VALUE = "hashkey2";
+	private static final String VALUE2_VALUE = "value2";
+	private static final Map<String, Object> MAP_VALUE;
 
 	private static final String expect = "{\"action\":\"deny\",\"target\":{\"file\":{\"name\":\"testfile\"}}}";
 	private static final String expect2 = "{\"action\":\"deny\",\"target\":{\"file\":{\"path\":\"/tmp/testfile\"}}}";
 	private static final String expect3 = "{\"action\":\"deny\",\"target\":{\"file\":{\"hashes\":\"123456789\"}}}";
 	private static final String expect4 = "{\"action\":\"deny\",\"target\":{\"file\":{\"name\":\"testfile\",\"path\":\"/tmp/testfile\",\"hashes\":\"123456789\"}}}";
+
+	static {
+		MAP_VALUE = new HashMap<String, Object>();
+		MAP_VALUE.put(HASHKEY1_VALUE, VALUE1_VALUE);
+		MAP_VALUE.put(HASHKEY2_VALUE, VALUE2_VALUE);
+	}
 
 	@Test
 	public void test1() throws Exception {
@@ -108,13 +122,25 @@ public class FileTest {
     		System.out.println("FileTest - Test3 JSON output:");
     		System.out.println(message.toJson());
 			System.out.println(message.toPrettyJson());
-			System.out.println("\n\n");
 		}
 		
 		OpenC2Message inMsg = JsonFormatter.readOpenC2Message(expect3);
 		assertTrue(inMsg.getTarget() instanceof File);
 		File inTarget = (File)inMsg.getTarget();
 		assertEquals(HASH_VALUE, inTarget.getHashes());
+		
+		target = new File().setHash(MAP_VALUE);
+		message = new OpenC2Message(ActionType.DENY, target);
+		
+		if (toConsole) {
+    		// This is just to allow developer to eyeball the JSON created
+    		System.out.println("");
+    		System.out.println(message.toJson());
+			System.out.println(message.toPrettyJson());
+			System.out.println("\n\n");
+		}
+		
+		
 	}
 
 	@Test

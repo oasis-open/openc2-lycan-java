@@ -55,35 +55,50 @@ public class Header {
 	 * 
 	 * @param version Message protocol version
 	 */
-	public void setVersion(String version) { this.version = version; }
+	public Header setVersion(String version) { 
+		this.version = version;
+		return this;
+	}
 	
 	/**
 	 * Set the command id
 	 * 
 	 * @param commandId Optional identifer used to correlate responses to a command
 	 */
-	public void setCommandId(String commandId) { this.commandId = commandId; }
+	public Header setCommandId(String commandId) { 
+		this.commandId = commandId;
+		return this;
+	}
 	
 	/**
 	 * Set the created date/time
 	 * 
 	 * @param created Optional ISO8601 date and time the message was created
 	 */
-	public void setCreated(String created) { this.created = created; }
+	public Header setCreated(String created) { 
+		this.created = created;
+		return this;
+	}
 	
 	/**
 	 * Set the sender
 	 * 
 	 * @param sender Optional identifier for the originator of the message
 	 */
-	public void setSender(String sender) { this.sender = sender; }
+	public Header setSender(String sender) { 
+		this.sender = sender;
+		return this;
+	}
 	
 	/**
 	 * Set the context type
 	 * 
 	 * @param contentType The type and version of the message body
 	 */
-	public void setContentType(String contentType) { this.contentType = contentType; }
+	public Header setContentType(String contentType) { 
+		this.contentType = contentType;
+		return this;
+	}
 	
 	
 }
