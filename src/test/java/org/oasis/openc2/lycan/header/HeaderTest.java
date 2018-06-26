@@ -31,5 +31,45 @@ public class HeaderTest {
 		assertEquals(VERSION2_VALUE, header.getVersion());
 		assertEquals(CONTENT2_VALUE, header.getContentType());
 	}
+	
+	@Test
+	public void testIsEmpty() {
+		Header header = new Header();
+		
+		assertTrue(header.isEmpty());
+		
+		header = new Header("", "")
+				.setCommandId("")
+				.setCreated("")
+				.setSender("");
+		assertTrue(header.isEmpty());
+		
+		header = new Header(VERSION_VALUE, CONTENT_VALUE)
+				.setCommandId(ID_VALUE)
+				.setCreated(CREATED_VALUE)
+				.setSender(SENDER_VALUE);		
+		
+		assertFalse(header.isEmpty());
+		header.setContentType("");
+		assertFalse(header.isEmpty());
+		header.setContentType(null);
+		assertFalse(header.isEmpty());
+		header.setContentType(CONTENT_VALUE).setSender("");
+		assertFalse(header.isEmpty());
+		header.setSender(null);
+		assertFalse(header.isEmpty());
+		header.setSender(SENDER_VALUE).setCreated("");
+		assertFalse(header.isEmpty());
+		header.setCreated(null);
+		assertFalse(header.isEmpty());
+		header.setCreated(CREATED_VALUE).setCommandId("");
+		assertFalse(header.isEmpty());
+		header.setCommandId(null);
+		assertFalse(header.isEmpty());
+		header.setCommandId(ID_VALUE).setVersion("");
+		assertFalse(header.isEmpty());
+		header.setVersion(null);
+		assertFalse(header.isEmpty());
+	}
 
 }

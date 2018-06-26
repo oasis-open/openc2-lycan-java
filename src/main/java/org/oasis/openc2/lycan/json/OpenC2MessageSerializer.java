@@ -41,6 +41,11 @@ public class OpenC2MessageSerializer extends JsonSerializer<OpenC2Message> {
 	@Override
 	public void serialize(OpenC2Message value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();
+		if (value.hasHeader()) {
+			gen.writeObjectField(Keys.HEADER, value.getHeader());
+			gen.writeFieldName(Keys.BODY);
+			gen.writeStartObject();
+		}
 		if (value.hasId())
 			gen.writeObjectField(Keys.ID, value.getId());
 		gen.writeObjectField(Keys.ACTION, value.getAction());
@@ -74,6 +79,8 @@ public class OpenC2MessageSerializer extends JsonSerializer<OpenC2Message> {
 			gen.writeObjectField(Keys.ARGUMENTS, value.getArgs().getAll());
 		}
 		
+		if (value.hasHeader())
+			gen.writeEndObject();
 		gen.writeEndObject();
 	}
 

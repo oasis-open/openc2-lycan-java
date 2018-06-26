@@ -26,11 +26,15 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.oasis.openc2.lycan.OpenC2Response;
+import org.oasis.openc2.lycan.header.Header;
+import org.oasis.openc2.lycan.utilities.Keys;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Customized deserializer for OpenC2 response messages
@@ -39,16 +43,24 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class OpenC2ResponseDeserializer extends JsonDeserializer<OpenC2Response> {
 
 	@Override
-	public OpenC2Response deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+	public OpenC2Response deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 		OpenC2Response response = new OpenC2Response();
+		ObjectMapper mapper = new ObjectMapper();
 		
-		JsonNode nodes = parser.getCodec().readTree(parser);
+		JsonNode nodes = p.getCodec().readTree(p);
 		Iterator<String> keys = nodes.fieldNames();
 		
 		while (keys.hasNext()) {
 			String key = keys.next();
 			
-			if (key.equals("id")) {
+			if (key.equals(Keys.HEADER)) {
+				JsonNode node = nodes.get(key);
+				String headerJson = mapper.writeValueAsString(node);
+				JsonParser parser = new JsonFactory().createParser(headerJson);
+				response.setHeader((Header)mapper.readValue(parser, Header.class));
+			} else if (key.equals(Keys.RESPONSE)) {
+				response = deserializeBody(mapper.writeValueAsString(nodes.get(key)), response, p, ctxt);
+			} else if (key.equals("id")) {
 				response.setId(nodes.get(key).asText());
 			} else if (key.equals("id_ref")) {
 				response.setIdRef(nodes.get(key).asText());
@@ -64,4 +76,31 @@ public class OpenC2ResponseDeserializer extends JsonDeserializer<OpenC2Response>
 		return response;
 	}
 
+	/*
+	 * Method to parse the body of a header based JSON string
+	 */
+	private OpenC2Response deserializeBody(String json, OpenC2Response response, JsonParser p, DeserializationContext ctxt) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		JsonNode nodes = mapper.readTree(json);
+		
+		Iterator<String> keys = nodes.fieldNames();
+		
+		while (keys.hasNext()) {
+			String key = keys.next();
+			if (key.equals("id")) {
+				response.setId(nodes.get(key).asText());
+			} else if (key.equals("id_ref")) {
+				response.setIdRef(nodes.get(key).asText());
+			} else if (key.equals("status")) {
+				response.setStatus(nodes.get(key).asInt());
+			} else if (key.equals("status_text")) {
+				response.setStatusText(nodes.get(key).asText());
+			} else if (key.equals("results")) {
+				response.setResults(nodes.get(key).asText());
+			}  // Ignore any other keys
+		}
+		
+		return response;
+	}
 }

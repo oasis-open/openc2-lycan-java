@@ -22,6 +22,9 @@
  */
 package org.oasis.openc2.lycan.header;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 /**
  * Implementation of the optional header object
  *
@@ -32,6 +35,12 @@ public class Header {
 	private String created;
 	private String sender;
 	private String contentType;
+	
+	
+	/**
+	 * Constructor
+	 */
+	public Header() { }
 	
 	/**
 	 * Constructor
@@ -65,6 +74,7 @@ public class Header {
 	 * 
 	 * @param commandId Optional identifer used to correlate responses to a command
 	 */
+	@JsonSetter("id")
 	public Header setCommandId(String commandId) { 
 		this.commandId = commandId;
 		return this;
@@ -95,10 +105,19 @@ public class Header {
 	 * 
 	 * @param contentType The type and version of the message body
 	 */
+	@JsonSetter("context_type")
 	public Header setContentType(String contentType) { 
 		this.contentType = contentType;
 		return this;
 	}
 	
+	@JsonIgnore
+	public boolean isEmpty() {
+		return (version == null || version.isEmpty()) 
+				&& (commandId == null || commandId.isEmpty())
+				&& (created == null || created.isEmpty())
+				&& (sender == null || sender.isEmpty())
+				&& (contentType == null || contentType.isEmpty());
+	}
 	
 }

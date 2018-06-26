@@ -31,6 +31,9 @@
  */
 public class Keys {
 	// Main message keys
+	public static final String HEADER = "header";
+	public static final String BODY = "command";
+	public static final String RESPONSE = "response";
 	public static final String ID = "id";
 	public static final String ACTION = "action";
 	public static final String TARGET = "target";

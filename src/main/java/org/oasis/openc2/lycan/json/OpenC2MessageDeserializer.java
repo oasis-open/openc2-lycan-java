@@ -30,6 +30,7 @@ import org.apache.commons.text.WordUtils;
 import org.oasis.openc2.lycan.OpenC2Message;
 import org.oasis.openc2.lycan.actuators.ActuatorType;
 import org.oasis.openc2.lycan.args.Args;
+import org.oasis.openc2.lycan.header.Header;
 import org.oasis.openc2.lycan.targets.TargetType;
 import org.oasis.openc2.lycan.utilities.Keys;
 import org.oasis.openc2.lycan.utilities.OpenC2Map;
@@ -70,6 +71,75 @@ public class OpenC2MessageDeserializer extends JsonDeserializer<OpenC2Message> {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		JsonNode nodes = p.getCodec().readTree(p);
+		Iterator<String> keys = nodes.fieldNames();
+		
+		while (keys.hasNext()) {
+			String key = keys.next();
+			if (key.equals(Keys.HEADER)) {
+				JsonNode node = nodes.get(key);
+				String headerJson = mapper.writeValueAsString(node);
+				JsonParser parser = new JsonFactory().createParser(headerJson);
+				message.setHeader((Header)mapper.readValue(parser, Header.class));
+			} else if (key.equals(Keys.BODY)) {
+				message = deserializeBody(mapper.writeValueAsString(nodes.get(key)), message, p, ctxt);
+			} else if (key.equals(Keys.ID)) {
+				message.setId(nodes.get(key).asText());
+			} else if (key.equals(Keys.ACTION)) {
+				message.setAction(nodes.get(key).asText());
+			} else if (key.equals(Keys.TARGET)) {
+				JsonNode node = nodes.get(key);
+				String targetJson = mapper.writeValueAsString(node);
+				JsonParser targetParser = new JsonFactory().createParser(targetJson);
+				String targetName = node.fieldNames().next();
+				if (node.get(targetName).isObject()) {
+					JsonNode targetNode = node.get(targetName);
+					targetJson = mapper.writeValueAsString(targetNode);
+					targetParser = new JsonFactory().createParser(targetJson);
+				}
+				
+				try {
+					Class<?> clazz = Class.forName(getTargetClassName(targetName));
+					message.setTarget((OpenC2Map<TargetType>)mapper.readValue(targetParser, clazz));
+				} catch (ClassNotFoundException e) {
+					throw new IOException("Unknown target type '" + getTargetClassName(targetName) + "' found in JSON");
+				}
+			} else if (key.equals(Keys.ACTUATOR)) {
+				JsonNode node = nodes.get(key);
+				String actuatorJson = mapper.writeValueAsString(node);
+				JsonParser actuatorParser = new JsonFactory().createParser(actuatorJson);
+				String actuatorName = node.fieldNames().next();
+				if (node.get(actuatorName).isObject()) {
+					JsonNode actuatorNode = node.get(actuatorName);
+					actuatorJson = mapper.writeValueAsString(actuatorNode);
+					actuatorParser = new JsonFactory().createParser(actuatorJson);
+				}
+				
+				try {
+					Class<?> clazz = Class.forName(getActuatorClassName(actuatorName));
+					message.setActuator((OpenC2Map<ActuatorType>)mapper.readValue(actuatorParser, clazz));
+				} catch (ClassNotFoundException e) {
+					throw new IOException("Unknown actuator type '" + getActuatorClassName(actuatorName) + "' found in JSON");
+				}
+			} else if (key.equals(Keys.ARGUMENTS)) {
+				JsonNode node = nodes.get(key);
+				String targetJson = mapper.writeValueAsString(node);
+				JsonParser targetParser = new JsonFactory().createParser(targetJson);
+				message.setArgs((OpenC2Map<String>)mapper.readValue(targetParser, Args.class));
+			}
+		}
+		
+		return message;
+	}
+		
+	/*
+	 * Method to parse the body of a header based JSON string
+	 */
+	@SuppressWarnings("unchecked")
+	private OpenC2Message deserializeBody(String json, OpenC2Message message, JsonParser p, DeserializationContext ctxt) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		JsonNode nodes = mapper.readTree(json);
+		
 		Iterator<String> keys = nodes.fieldNames();
 		
 		while (keys.hasNext()) {

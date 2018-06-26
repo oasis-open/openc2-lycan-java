@@ -73,7 +73,7 @@ public class JsonFormatter {
 	 * @return OpenC2Response object
 	 * @throws IOException Exception thrown if there is a problem reading the JSON
 	 */
-	public static OpenC2Response readOC2ResponseJson(String json) throws IOException {
+	public static OpenC2Response readOpenC2ResponseJson(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(json, OpenC2Response.class);
 	}

@@ -24,6 +24,7 @@ package org.oasis.openc2.lycan;
 
 import org.oasis.openc2.lycan.action.ActionType;
 import org.oasis.openc2.lycan.actuators.ActuatorType;
+import org.oasis.openc2.lycan.header.Header;
 import org.oasis.openc2.lycan.json.JsonFormatter;
 import org.oasis.openc2.lycan.json.OpenC2MessageDeserializer;
 import org.oasis.openc2.lycan.json.OpenC2MessageSerializer;
@@ -43,6 +44,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonSerialize(using = OpenC2MessageSerializer.class)
 @JsonDeserialize(using = OpenC2MessageDeserializer.class)
 public class OpenC2Message {
+	private Header header;
 	private String id;
 	private ActionType action;
 	private OpenC2Map<TargetType> target;
@@ -78,11 +80,17 @@ public class OpenC2Message {
 		this.id = id;
 	}
 	
+	public Header getHeader() { return header; }
 	public String getId() {  return id; }
 	public String getAction() { return action.toString(); }
 	public OpenC2Map<TargetType> getTarget() { return target; }
 	public OpenC2Map<ActuatorType> getActuator() { return actuator; }
 	public OpenC2Map<String> getArgs() { return args; }
+	
+	public OpenC2Message setHeader(Header header) { 
+		this.header = header;
+		return this;
+	}
 	
 	public OpenC2Message setId(String id) { 
 		this.id = id;
@@ -107,6 +115,15 @@ public class OpenC2Message {
 	public OpenC2Message setArgs(OpenC2Map<String> args) {
 		this.args = args;
 		return this;
+	}
+	
+	/**
+	 * Check if the id value has been set
+	 * 
+	 * @return true if the id value has been set
+	 */
+	public boolean hasHeader() {
+		return (header != null && !header.isEmpty());
 	}
 	
 	/**
