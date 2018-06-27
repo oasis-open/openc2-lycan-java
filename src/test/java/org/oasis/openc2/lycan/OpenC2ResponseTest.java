@@ -23,26 +23,52 @@
 package org.oasis.openc2.lycan;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-
+import org.oasis.openc2.lycan.header.Header;
 import org.oasis.openc2.lycan.json.JsonFormatter;
+import org.oasis.openc2.lycan.utilities.StatusCode;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OpenC2ResponseTest {
 	// Display the JSON to the console for human viewing
-	private static final boolean toConsole = true;
+	private static final boolean toConsole = false;
+	private static final String ID_VALUE = "TEST-id-1";
+	private static final String VERSION_VALUE = "0.1.0";
+	private static final String CONTENT_VALUE = "context";
+	private static final String STATUS_TEXT_VALUE = "Successful";
+	private static final String RESULTS_VALUE = "These are the results";
 	
-	private static String expected = "{\"response\":{\"source\":{\"type\":\"CommandResp\"}},\"status\":\"complete\",\"result\":\"Results of command\"}";
+	private static String expected1 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200}";
+	private static String expected2 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200,\"status_text\":\"Successful\",\"results\":\"These are the results\"}";
+	private static String expected3 = "{\"header\":{\"version\":\"0.1.0\",\"id\":\"TEST-id-1\",\"content_type\":\"context\"},\"response\":{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200,\"status_text\":\"Successful\",\"results\":\"These are the results\"}}}";
 	
-
+    /**
+     * This test case is just to cover noise that shows up in the code
+     * coverage report.  These aren't actual tests, they just exercise 
+     * some non-testable or trivial aspect of the code that is being 
+     * flagged due to the way the Emma engine executes it's reporting.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testCodeCoverage() throws Exception {
+    	OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK);
+    	response.setStatus(StatusCode.BAD_REQUEST);
+    	assertEquals(StatusCode.BAD_REQUEST.getValue(), response.getStatus());
+    	
+    	response.toPrettyJson(); // Just to call the method for coverage
+    }
+    
 	@Test
 	public void test1() throws Exception {
 		
-		OpenC2Response response = new OpenC2Response("CommandResp", "complete", "Results of command");
-		OpenC2Response response2 = JsonFormatter.readOC2ResponseJson(response.toJson());
-		OpenC2Response response3 = JsonFormatter.readOC2ResponseJson(expected);
+		OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK);
+		OpenC2Response response2 = JsonFormatter.readOpenC2Response(response.toJson());
+		OpenC2Response response3 = JsonFormatter.readOpenC2Response(expected1);
 
 		if (toConsole) {
     		// This is just to allow developer to eyeball the JSON created
@@ -57,8 +83,68 @@ public class OpenC2ResponseTest {
     	JsonNode response2JN = new ObjectMapper().readTree(response2.toJson());
     	JsonNode response3JN = new ObjectMapper().readTree(response3.toJson());
     	
+		assertEquals(responseJN, response2JN);  // Verify that the object created from a string is the same
+    	assertEquals(responseJN, response3JN);  // Verify that the object from an external JSON string is the same
+    	
+	}
+
+	@Test
+	public void test2() throws Exception {
+		
+		OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK, "Successful", "These are the results");
+		OpenC2Response response2 = JsonFormatter.readOpenC2Response(response.toJson());
+		OpenC2Response response3 = JsonFormatter.readOpenC2Response(expected2);
+
+		if (toConsole) {
+    		// This is just to allow developer to eyeball the JSON created
+			System.out.println("");
+    		System.out.println("OpenC2ResponseTest - Test1 JSON output:");
+			System.out.println(response.toJson());
+			System.out.println(response.toPrettyJson());
+			System.out.println("\n\n");
+		}
+			
+    	JsonNode responseJN = new ObjectMapper().readTree(response.toJson());
+    	JsonNode response2JN = new ObjectMapper().readTree(response2.toJson());
+    	JsonNode response3JN = new ObjectMapper().readTree(response3.toJson());
+
     	assertEquals(responseJN, response2JN);  // Verify that the object created from a string is the same
     	assertEquals(responseJN, response3JN);  // Verify that the object from an external JSON string is the same
+    	
+	}
+
+	@Test
+	public void test3() throws Exception {
+		
+		OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK)
+				.setStatusText(STATUS_TEXT_VALUE)
+				.setResults(RESULTS_VALUE)
+				.setHeader(new Header(VERSION_VALUE, CONTENT_VALUE)
+						.setCommandId(ID_VALUE));
+		OpenC2Response response2 = JsonFormatter.readOpenC2Response(response.toJson());
+		OpenC2Response response3 = JsonFormatter.readOpenC2Response(expected3);
+
+		if (toConsole) {
+    		// This is just to allow developer to eyeball the JSON created
+			System.out.println("");
+    		System.out.println("OpenC2ResponseTest - Test2 JSON output:");
+			System.out.println(response.toJson());
+			System.out.println(response.toPrettyJson());
+			System.out.println("\n\n");
+		}
+			
+    	JsonNode responseJN = new ObjectMapper().readTree(response.toJson());
+    	JsonNode response2JN = new ObjectMapper().readTree(response2.toJson());
+    	JsonNode response3JN = new ObjectMapper().readTree(response3.toJson());
+    	
+		assertEquals(responseJN, response2JN);  // Verify that the object created from a string is the same
+    	assertEquals(responseJN, response3JN);  // Verify that the object from an external JSON string is the same
+    	
+    	OpenC2Response inMsg = JsonFormatter.readOpenC2Response(expected3);
+    	assertTrue(inMsg.hasHeader());
+    	assertEquals(ID_VALUE, inMsg.getHeader().getCommandId());
+    	assertEquals(CONTENT_VALUE, inMsg.getHeader().getContentType());
+
     	
 	}
 

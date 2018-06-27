@@ -20,54 +20,47 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.utilities;
+package org.oasis.openc2.lycan.targets;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Map;
+
+import org.oasis.openc2.lycan.utilities.Keys;
+import org.oasis.openc2.lycan.utilities.OpenC2Map;
+
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
- * OC2BaseTypeSection extends OC2BaseSection and is the minimum set of 
- * variables and methods that are needed by the target and actuator
- * sections of an OpenC2 message.
- * <p>
- * @param <T> enum that defines the valid message types supported by the section
+ * Implementation of an File OpenC2 target
  *
  */
-public class OpenC2BaseTypeSection<T> extends OpenC2BaseSection {
-	private String dataModel = "openc2";
-	
-	/**
-	 * This constructor only exists for Jackson processing and should
-	 * not be used directly
-	 */
-	protected OpenC2BaseTypeSection() {
-		super();
-	}
+public class File extends OpenC2Map<TargetType> {
 	
 	/**
 	 * Constructor
-	 * 
-	 * @param type A type object (TargetType or ActuatorType)
 	 */
-	protected OpenC2BaseTypeSection(T type) {
-		this();
-		addSpecifier(Keys.TYPE, getType(type));
+	public File() {
+		super(TargetType.FILE);
 	}
 	
-	/**
-	 * Allows definition of a data model other than the default of openc2
-	 * 
-	 * @param dataModel
-	 */
-	@JsonIgnore
-	public void setDataModel(String dataModel) {
-		this.dataModel = dataModel;
+	public File setName(String name) {
+		super.put(Keys.NAME, name);
+		return this;
 	}
 	
-	/*
-	 * By the spec definition the type should have the data model and type,
-	 * this is just a convenience method to build that value.
-	 */
-	@JsonIgnore
-	private String getType(T type) 	{ return dataModel + ":" + type.toString(); }
+	public File setPath(String path) {
+		super.put(Keys.PATH, path);
+		return this;
+	}
+	
+	@JsonSetter(Keys.HASHES)
+	public File setHash(Map<String, Object> hash) {
+		super.put(Keys.HASHES, hash);
+		return this;
+	}
+	
+	public String getName() { return super.get(Keys.NAME).toString(); }
+	public String getPath() { return super.get(Keys.PATH).toString(); }
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getHashes() { return (Map<String, Object>)super.get(Keys.HASHES); }
 
 }

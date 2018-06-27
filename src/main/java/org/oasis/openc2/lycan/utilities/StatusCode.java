@@ -20,33 +20,36 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.actuators;
-
-import org.oasis.openc2.lycan.utilities.OpenC2BaseTypeSection;
+package org.oasis.openc2.lycan.utilities;
 
 /**
- * Generic implementation of a OpenC2 messages actuator section.  While this
- * class can be used raw, it's intended that the class would be extended
- * for each target type where the extended class would provide convenience
- * methods for the allowed specifiers based on the spec. 
+ * Definition of all the allowed target types as of the 03/27/2017 Openc2 spec
  *
  */
-public class OpenC2Actuator extends OpenC2BaseTypeSection<ActuatorType> {
+public enum StatusCode {
+	PROCESSING(102),		// Interim response to inform the client that the request was accepted but not complete yet
+	OK(200),				// Request was successful
+	MOVED(301),				// Target resource has been assigned a new permanent URI
+	BAD_REQUEST(400),		// Server cannot process the request due to something that is preceived to be a client error
+	UNAUTHORIZED(401),		// Request lacks valid authentication credentials for the target resource or authorization has been refused
+	FORBIDDEN(403),			// Server understood the request but refuses to authorize it
+	SERVER_ERROR(500),		// Server encountered an unexpected condition that prevented it from fulfilling the request
+	NOT_IMPLEMENTED(501);	// Server does not support the functionality required to fulfill the request
 	
-	/**
-	 * This constructor only exists for Jackson processing and should
-	 * not be used directly
-	 */
-	public OpenC2Actuator() { 
-		super();
+
+	private int type;
+	
+	StatusCode(int type) {
+		this.type = type;
 	}
 	
-	/**
-	 * Constructor to create the actuator and set it's type
-	 * 
-	 * @param type ActuatorType that represents the actuator object
-	 */
-	public OpenC2Actuator(ActuatorType type) {
-		super(type);
+	public int getValue() {
+		return type;
 	}
+	
+	@Override
+	public String toString() {
+		return "" + type;
+	}
+
 }

@@ -30,6 +30,21 @@
  *
  */
 public class Keys {
+	// Main message keys
+	public static final String HEADER = "header";
+	public static final String BODY = "command";
+	public static final String RESPONSE = "response";
+	public static final String ID = "id";
+	public static final String ACTION = "action";
+	public static final String TARGET = "target";
+	public static final String ACTUATOR = "actuator";
+	public static final String ARGUMENTS = "args";
+	
+	// Subsection keys
+	public static final String NAME = "name";
+	public static final String PATH = "path";
+	public static final String HASHES = "hashes";
+	
 	public static final String TYPE = "type";
 	public static final String VALUE = "value";
 	public static final String RESOLVES_TO_REFS = "resolves_to_refs";
@@ -37,6 +52,7 @@ public class Keys {
 	public static final String MIME_TYPE = "mime_type";
 	public static final String PAYLOAD_BIN = "payload_bin";
 	public static final String URL = "url";
-	public static final String HASHES = "hashes";
 	public static final String DXL_TOPIC = "dxl_topic";
+	public static final String ACTUATOR_ID = "actuator_id";
+	
 }

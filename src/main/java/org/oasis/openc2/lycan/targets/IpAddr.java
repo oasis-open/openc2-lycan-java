@@ -20,14 +20,42 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.modifiers;
+package org.oasis.openc2.lycan.targets;
 
-import org.oasis.openc2.lycan.utilities.OpenC2BaseSection;
+import org.oasis.openc2.lycan.utilities.OpenC2Map;
+
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
- * Generic implementation of a OpenC2 messages modifier section.  
+ * Implementation of an Ipv4Addr OpenC2 target
  *
  */
-public class OpenC2Modifier extends OpenC2BaseSection {
+public class IpAddr extends OpenC2Map<TargetType> {
+	
+	/**
+	 * Constructor
+	 */
+	public IpAddr() {
+		super(TargetType.IP_ADDR);
+	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param ip IP to assign to the ip addr object
+	 */
+	public IpAddr(String ip) {
+		super(TargetType.IP_ADDR);
+		setIpAddr(ip);
+	}
+	
+	@JsonSetter("ip_addr")
+	public void setIpAddr(String ip) {
+		super.put(TargetType.IP_ADDR.toString(), ip);
+	}
+	
+	public String getIpAddr() { 
+		return super.get(TargetType.IP_ADDR.toString()).toString();
+	}
 
 }

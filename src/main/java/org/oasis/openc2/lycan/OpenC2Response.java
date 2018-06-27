@@ -22,10 +22,13 @@
  */
 package org.oasis.openc2.lycan;
 
+import org.oasis.openc2.lycan.header.Header;
 import org.oasis.openc2.lycan.json.JsonFormatter;
 import org.oasis.openc2.lycan.json.OpenC2ResponseDeserializer;
 import org.oasis.openc2.lycan.json.OpenC2ResponseSerializer;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
+import org.oasis.openc2.lycan.utilities.StatusCode;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -38,8 +41,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonSerialize(using = OpenC2ResponseSerializer.class)
 @JsonDeserialize(using = OpenC2ResponseDeserializer.class)
 public class OpenC2Response {
-	private String source;
-	private String status;
+	private Header header;
+	private String id;
+	private String idRef;
+	private int status;
+	private String statusText;
 	private Object results;
 	
 	/**
@@ -51,47 +57,124 @@ public class OpenC2Response {
 	}
 	
 	/**
-	 * Constructor to assign the command, type and value to the response
+	 * Constructor to assign the id, id ref and status to the response
 	 * 
-	 * @param command command the response is for
-	 * @param type string representing the ActionType that describes the OpenC2 response message
-	 * @param value value of the OpenC2 response
+	 * @param id id of the response
+	 * @param idRef id of the command that induced this response
+	 * @param status An integer status code
 	 */
-	public OpenC2Response(String source, String status, Object results) {
-		this.source = source;
-		this.status = status;
-		this.results = results;
+	public OpenC2Response(String id, String idRef, StatusCode status) {
+		this.id = id;
+		this.idRef = idRef;
+		this.status = status.getValue();
 	}
 	
+	/**
+	 * Constructor to assign the id, id ref, status, status text and results to the response
+	 * 
+	 * @param id id of the response
+	 * @param idRef id of the command that induced this response
+	 * @param status An integer status code
+	 * @param statusText A free-form human redable description of the response status
+	 * @param results Data or extended status information that was requested from an OpenC2 command
+	 */
+	public OpenC2Response(String id, String idRef, StatusCode status, String statusText, Object results) {
+		this.id = id;
+		this.idRef = idRef;
+		this.status = status.getValue();
+		this.statusText = statusText;
+		this.results = results;
+	}
 
-	public String getSource() 	{ return source; }
-	public String getStatus() 	{ return status; }
-	public Object getResults() 	{ return results; }
+	public Header getHeader() 		{ return header; }
+	public String getId()			{ return id; }
+	public String getIdRef()		{ return idRef; }
+	public int getStatus() 			{ return status; }
+	public String getStatusText() 	{ return statusText; }
+	public Object getResults() 		{ return results; }
 	
-	@JsonAnySetter
-	public void setSource(String source) 	{ this.source = source; }	
-	public void setStatus(String status) 	{ this.status = status; }
-	public void setResults(Object results) 	{ this.results = results; }
+	public OpenC2Response setHeader(Header header) { 
+		this.header = header;
+		return this;
+	}
+	
+//	@JsonAnySetter
+	public OpenC2Response setId(String id)				 { 
+		this.id = id;
+		return this;
+	}
+	
+	public OpenC2Response setIdRef(String idRef)			 { 
+		this.idRef = idRef;
+		return this;
+	}
+
+	@JsonIgnore
+	public OpenC2Response setStatus(StatusCode status)	 { 
+		this.status = status.getValue();
+		return this;
+	}
+	
+	public OpenC2Response setStatus(int status) 			 { 
+		this.status = status;
+		return this;
+	}	
+	public OpenC2Response setStatusText(String statusText) { 
+		this.statusText = statusText;
+		return this;
+	}
+	
+	public OpenC2Response setResults(Object results) 		 { 
+		this.results = results;
+		return this;
+	}
+	
+	/**
+	 * Check if the id value has been set
+	 * 
+	 * @return true if the id value has been set
+	 */
+	public boolean hasHeader() {
+		return (header != null && !header.isEmpty());
+	}
+	
+	/**
+	 * Check if the id value has been set
+	 * 
+	 * @return true if the id value has been set
+	 */
+	public boolean hasStatusText() {
+		return (statusText != null && !statusText.isEmpty());
+	}
+	
+	/**
+	 * Check if the actuator object has been created
+	 * 
+	 * @return true if the actuator object has been set
+	 */
+	public boolean hasResults() {
+		return (results != null);
+	}
 	
 	/**
 	 * Convert the OpenC2Message object to a JSON string
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return String containing the JSON
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public String toJson() throws JsonProcessingException {
-		return JsonFormatter.getJson(this);
+		return JsonFormatter.getJson(this, false);
 	}
 	
 	/**
 	 * Convert the OpenC2Message object to a JSON string that is more
 	 * reader friendly.
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return String containing the JSON in a human readable format
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public String toPrettyJson() throws JsonProcessingException {
-		return JsonFormatter.getPrettyJson(this);
+		return JsonFormatter.getJson(this, true);
 	}
 	
 }

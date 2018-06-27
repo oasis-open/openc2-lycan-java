@@ -20,34 +20,37 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.targets;
+package org.oasis.openc2.lycan.actuators;
 
-import org.oasis.openc2.lycan.utilities.OpenC2BaseTypeSection;
+import org.oasis.openc2.lycan.utilities.Keys;
+import org.oasis.openc2.lycan.utilities.OpenC2Map;
 
 /**
- * Generic implementation of a OpenC2 messages target section.  While this
- * class can be used raw, it's intended that the class would be extended
- * for each target type where the extended class would provide convenience
- * methods for the allowed specifiers based on the spec. 
+ * Sample implementation of a single attribute actuator
+ * This is a sample because the spec does not have specific 
+ * definition for actuators at this time
  *
  */
-public class OpenC2Target extends OpenC2BaseTypeSection<TargetType> {
+public class NetworkSensor extends OpenC2Map<ActuatorType> {
 	
 	/**
-	 * This constructor only exists for Jackson processing and should
-	 * not be used directly
+	 * Constructor
 	 */
-	public OpenC2Target() {
-		super();
+	public NetworkSensor() {
+		super(ActuatorType.NETWORK_SENSOR);
 	}
 	
-	/**
-	 * Constructor to create a target and set it's type
-	 * 
-	 * @param type TargetType that represents the target object
-	 */
-	public OpenC2Target(TargetType type) {
-		super(type);
+	public NetworkSensor setName(String name) {
+		super.put(Keys.NAME, name);
+		return this;
 	}
+	
+	public NetworkSensor setPath(String path) {
+		super.put(Keys.PATH, path);
+		return this;
+	}
+	
+	public String getName() { return super.get(Keys.NAME).toString(); }
+	public String getPath() { return super.get(Keys.PATH).toString(); }
 
 }

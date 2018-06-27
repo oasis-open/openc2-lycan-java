@@ -20,53 +20,40 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.targets;
+package org.oasis.openc2.lycan.actuators;
 
-import java.util.List;
-
-import org.oasis.openc2.lycan.utilities.Keys;
+import org.oasis.openc2.lycan.utilities.OpenC2Map;
 
 /**
- * Implementation of an Ipv4Addr OpenC2 target
+ * Sample implementation of a single attribute actuator
+ * This is a sample because the spec does not have specific 
+ * definition for actuators at this time
  *
  */
-public class Ipv4Addr extends OpenC2Target {
+public class Network extends OpenC2Map<ActuatorType> {
 	
 	/**
 	 * Constructor
-	 * 
-	 * @param ip IP to assign to the ipv4 addr object
 	 */
-	public Ipv4Addr(String ip) {
-		super(TargetType.IPV4_ADDR);
-		setIp(ip);
+	public Network() {
+		super(ActuatorType.NETWORK);
 	}
-	
-	/*
-	 * Set the ip value for the Ipv4Addr section
-	 * 
-	 * @param ip to be assigned to the object
-	 */
-	private void setIp(String ip) {
-		super.addSpecifier(Keys.VALUE, ip);
-	}
-	
 	/**
-	 * Set a list references the IP resolves to
+	 * Constructor
 	 * 
-	 * @param value List of references to ip resolves to
+	 * @param endpoint sample network to assign to the object
 	 */
-	public void setResolvesToRefs(List<String> value) {
-		super.addSpecifier(Keys.RESOLVES_TO_REFS, value);
+	public Network(String endpoint) {
+		super(ActuatorType.NETWORK);
+		setNetwork(endpoint);
 	}
 	
-	/**
-	 * Set a list of references the IP belongs to
-	 * 
-	 * @param value List of references the ip belongs to
-	 */
-	public void setBelongsToRefs(List<String> value) {
-		super.addSpecifier(Keys.BELONGS_TO_REFS, value);
+	public void setNetwork(String endpoint) {
+		super.put(ActuatorType.NETWORK.toString(), endpoint);
+	}
+	
+	public String getNetwork() { 
+		return super.get(ActuatorType.NETWORK.toString()).toString();
 	}
 
 }

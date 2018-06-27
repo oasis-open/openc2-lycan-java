@@ -23,107 +23,156 @@
 package org.oasis.openc2.lycan;
 
 import org.oasis.openc2.lycan.action.ActionType;
-import org.oasis.openc2.lycan.actuators.OpenC2Actuator;
+import org.oasis.openc2.lycan.actuators.ActuatorType;
+import org.oasis.openc2.lycan.header.Header;
 import org.oasis.openc2.lycan.json.JsonFormatter;
-import org.oasis.openc2.lycan.modifiers.OpenC2Modifier;
-import org.oasis.openc2.lycan.targets.OpenC2Target;
+import org.oasis.openc2.lycan.json.OpenC2MessageDeserializer;
+import org.oasis.openc2.lycan.json.OpenC2MessageSerializer;
+import org.oasis.openc2.lycan.targets.TargetType;
+import org.oasis.openc2.lycan.utilities.OpenC2Map;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * OpenC2Message is the base object that should be used when working with
- * OpenC2 messaging.  At a minimum, all OpenC2 messages must have an 
- * action and a target.  Actuator and modifiers are optional.
+ * OpenC2 request messages.  At a minimum all OpenC2 messages must have 
+ * an action and a target.  Id, actuator and args are optional.
  *
  */
+@JsonSerialize(using = OpenC2MessageSerializer.class)
+@JsonDeserialize(using = OpenC2MessageDeserializer.class)
 public class OpenC2Message {
+	private Header header;
+	private String id;
 	private ActionType action;
-	private OpenC2Target target;
-	private OpenC2Actuator actuator = null;
-	private OpenC2Modifier modifiers = null;
+	private OpenC2Map<TargetType> target;
+	private OpenC2Map<ActuatorType> actuator;
+	private OpenC2Map<String> args;
 	
 	/**
-	 * This constructor only exists for Jackson processing and should
-	 * not be used directly
+	 * This constructor only exists for Jackson processing and should 
+	 * not be used directly.
 	 */
-	public OpenC2Message() {}
+	public OpenC2Message() { }
 	
 	/**
-	 * Constructor to assign an action and a target to the message
+	 * Constructor to assign an action and target to the message
 	 * 
 	 * @param action ActionType that describes the OpenC2 message
 	 * @param target Target object for the message
 	 */
-	public OpenC2Message(ActionType action, OpenC2Target target) {
+	public OpenC2Message(ActionType action, OpenC2Map<TargetType> target) {
 		this.action = action;
-		this.target = target;		
+		this.target = target;
 	}
 	
 	/**
-	 * Constructor to assign the action, target and actuator to the message
+	 * Constructor to assign the id, action and target to the message
 	 * 
+	 * @param id UUID to uniquely identify the message
 	 * @param action ActionType that describes the OpenC2 message
 	 * @param target Target object for the message
-	 * @param actuator Actuator object for the message
 	 */
-	public OpenC2Message(ActionType action, OpenC2Target target, OpenC2Actuator actuator) {
+	public OpenC2Message(String id, ActionType action, OpenC2Map<TargetType> target) {
 		this(action, target);
+		this.id = id;
+	}
+	
+	public Header getHeader() { return header; }
+	public String getId() {  return id; }
+	public String getAction() { return action.toString(); }
+	public OpenC2Map<TargetType> getTarget() { return target; }
+	public OpenC2Map<ActuatorType> getActuator() { return actuator; }
+	public OpenC2Map<String> getArgs() { return args; }
+	
+	public OpenC2Message setHeader(Header header) { 
+		this.header = header;
+		return this;
+	}
+	
+	public OpenC2Message setId(String id) { 
+		this.id = id;
+		return this;
+	}
+	
+	public OpenC2Message setAction(String action) { 
+		this.action = ActionType.valueOf(action.toUpperCase()); 
+		return this;
+	}
+	
+	public OpenC2Message setTarget(OpenC2Map<TargetType> target) { 
+		this.target = target; 
+		return this;
+	}
+	
+	public OpenC2Message setActuator(OpenC2Map<ActuatorType> actuator) {
 		this.actuator = actuator;
+		return this;
+	}
+	
+	public OpenC2Message setArgs(OpenC2Map<String> args) {
+		this.args = args;
+		return this;
 	}
 	
 	/**
-	 * Constructor to assign the action, target and modifier to the message
+	 * Check if the id value has been set
 	 * 
-	 * @param action ActionType that describes the OpenC2 message
-	 * @param target Target object for the message
-	 * @param modifier Modifier object for the message
+	 * @return true if the id value has been set
 	 */
-	public OpenC2Message(ActionType action, OpenC2Target target, OpenC2Modifier modifier) {
-		this(action, target);
-		this.modifiers = modifier;
+	public boolean hasHeader() {
+		return (header != null && !header.isEmpty());
 	}
 	
 	/**
-	 * Constructor to assign the action, target, actuator and modifier to the message
+	 * Check if the id value has been set
 	 * 
-	 * @param action ActionType that describes the OpenC2 message
-	 * @param target Target object for the message
-	 * @param actuator Actuator object for the message
-	 * @param modifier Modifier object for the message
+	 * @return true if the id value has been set
 	 */
-	public OpenC2Message(ActionType action, OpenC2Target target, OpenC2Actuator actuator, OpenC2Modifier modifiers) {
-		this(action, target);
-		this.actuator = actuator;
-		this.modifiers = modifiers;
+	public boolean hasId() {
+		return (id != null && !id.isEmpty());
 	}
 	
-	public String getAction() 			{ return action.toString(); }
-	public OpenC2Target getTarget() 		{ return target; }
-	public OpenC2Actuator getActuator() 	{ return actuator; }
-	public OpenC2Modifier getModifiers() 	{ return modifiers; }
+	/**
+	 * Check if the actuator object has been created
+	 * 
+	 * @return true if the actuator object has been set
+	 */
+	public boolean hasActuator() {
+		return (actuator != null && actuator.size() > 0);
+	}
 	
-	public void setAction(String action) 			{ this.action = ActionType.valueOf(action.toUpperCase()); }
-	public void setTarget(OpenC2Target target) 		{ this.target = target; }
-	public void setActuator(OpenC2Actuator actuator) 	{ this.actuator = actuator; }
-	public void setModifier(OpenC2Modifier modifiers) 	{ this.modifiers = modifiers; }
-	
+	/**
+	 * Check if the args object has been created
+	 * 
+	 * @return true if the args object has been set
+	 */
+	public boolean hasArgs() {
+		return (args != null && args.size() > 0);
+	}
+
 	/**
 	 * Convert the OpenC2Message object to a JSON string
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return String containing the JSON representation of the object 
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public String toJson() throws JsonProcessingException {
-		return JsonFormatter.getJson(this);
+		return JsonFormatter.getJson(this, false);
 	}
 	
 	/**
 	 * Convert the OpenC2Message object to a JSON string that is more
 	 * reader friendly.
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return String containing the JSON representation of the object in human 
+	 * 		   readable format
+	 * @throws JsonProcessingException Exception thrown by the Jackson library
 	 */
 	public String toPrettyJson() throws JsonProcessingException {
-		return JsonFormatter.getPrettyJson(this);
+		return JsonFormatter.getJson(this, true);
 	}
+
 }

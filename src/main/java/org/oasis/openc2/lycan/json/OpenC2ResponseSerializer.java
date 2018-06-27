@@ -25,8 +25,9 @@ package org.oasis.openc2.lycan.json;
 import java.io.IOException;
 
 import org.oasis.openc2.lycan.OpenC2Response;
+import org.oasis.openc2.lycan.utilities.Keys;
+
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
@@ -36,35 +37,25 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  */
 public class OpenC2ResponseSerializer extends JsonSerializer<OpenC2Response> {
 
-	/*
-	 * Customized serializer to create a response object that follows the following format
-	 * 
-	 * {
-	 *    "response": {
-	 *       "source": {
-	 *          "type": <value>
-	 *       }
-	 *    }
-	 *    "status": <status>
-	 *    "results": <results>
-	 * }
-	 * 
-	 * (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.JsonSerializer#serialize(java.lang.Object, com.fasterxml.jackson.core.JsonGenerator, com.fasterxml.jackson.databind.SerializerProvider)
-	 */
 	@Override
-	public void serialize(OpenC2Response oc2Resp, JsonGenerator generator, SerializerProvider provider) throws IOException, JsonProcessingException {
-		generator.writeStartObject();
-		generator.writeFieldName("response");
-		generator.writeStartObject();
-		generator.writeFieldName("source");
-		generator.writeStartObject();
-		generator.writeObjectField("type", oc2Resp.getSource());
-		generator.writeEndObject();
-		generator.writeEndObject();
-		generator.writeObjectField("status", oc2Resp.getStatus());
-		generator.writeObjectField("results", oc2Resp.getResults());
-		generator.writeEndObject();		
+	public void serialize(OpenC2Response oc2Resp, JsonGenerator gen, SerializerProvider provider) throws IOException {
+		gen.writeStartObject();
+		if (oc2Resp.hasHeader()) {
+			gen.writeObjectField(Keys.HEADER, oc2Resp.getHeader());
+			gen.writeFieldName(Keys.RESPONSE);
+			gen.writeStartObject();
+		}
+		gen.writeObjectField("id", oc2Resp.getId());
+		gen.writeObjectField("id_ref", oc2Resp.getIdRef());
+		gen.writeObjectField("status", oc2Resp.getStatus());
+		if (oc2Resp.hasStatusText())
+			gen.writeObjectField("status_text", oc2Resp.getStatusText());
+		if (oc2Resp.hasResults())
+			gen.writeObjectField("results", oc2Resp.getResults());
+		
+		if (oc2Resp.hasHeader())
+			gen.writeEndObject();
+		gen.writeEndObject();		
 	}
 
 }

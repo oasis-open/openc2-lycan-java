@@ -20,30 +20,32 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.targets;
+package org.oasis.openc2.lycan.actuators;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-
 import org.oasis.openc2.lycan.OpenC2Message;
 import org.oasis.openc2.lycan.action.ActionType;
+import org.oasis.openc2.lycan.json.JsonFormatter;
+import org.oasis.openc2.lycan.targets.IpAddr;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Ipv4AddrTest {
+public class NetworkTest {
 	private static final boolean toConsole = false;
-	private static final String expect = "{\"action\":\"locate\",\"target\":{\"value\":\"1.2.3.4\",\"type\":\"openc2:ipv4-addr\"}}";
-	private static final String expect2 = "{\"action\":\"allow\",\"target\":{\"resolves_to_refs\":[\"test.one.org\",\"test.two.org\"],\"belongs_to_refs\":[\"belongs.to.one.net\",\"belongs.to.two.net\"],\"value\":\"2.3.4.5\",\"type\":\"openc2:ipv4-addr\"}}";
+	private static final String IP_VALUE = "1.2.3.4";
+	private static final String NETWORK_VALUE = "router";
+	
+	private static final String expect = "{\"action\":\"deny\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"actuator\":{\"network\":\"router\"}}";
 
 	@Test
 	public void test1() throws Exception {
-
-		Ipv4Addr target = new Ipv4Addr("1.2.3.4");		
-		OpenC2Message message = new OpenC2Message(ActionType.LOCATE, target);
+		IpAddr target = new IpAddr(IP_VALUE);
+		Network actuator = new Network(NETWORK_VALUE);
+		OpenC2Message message = new OpenC2Message(ActionType.DENY, target).setActuator(actuator);
 
 		JsonNode expected = new ObjectMapper().readTree(expect);
 		JsonNode actual = new ObjectMapper().readTree(message.toJson());
@@ -52,37 +54,16 @@ public class Ipv4AddrTest {
 		if (toConsole) {
     		// This is just to allow developer to eyeball the JSON created
     		System.out.println("");
-    		System.out.println("Ipv4AddrTest - Test1 JSON output:");
+    		System.out.println("SampleActuatorTest - Test1 JSON output:");
     		System.out.println(message.toJson());
 			System.out.println(message.toPrettyJson());
 			System.out.println("\n\n");
 		}
-
-		List<String> list = new ArrayList<String>();
-		list.add("test.one.org");
-		list.add("test.two.org");
-		List<String> list2 = new ArrayList<String>();
-		list2.add("belongs.to.one.net");
-		list2.add("belongs.to.two.net");
-
-		target = new Ipv4Addr("2.3.4.5");
-		target.setResolvesToRefs(list);
-		target.setBelongsToRefs(list2);
-
-		message = new OpenC2Message(ActionType.ALLOW, target);
-
-		expected = new ObjectMapper().readTree(expect2);
-		actual = new ObjectMapper().readTree(message.toJson());
-		assertEquals(expected, actual);
-
-		if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("Ipv4AddrTest - Test1 JSON output:");
-    		System.out.println(message.toJson());
-			System.out.println(message.toPrettyJson());
-			System.out.println("\n\n");
-		}
+		
+		OpenC2Message inMsg = JsonFormatter.readOpenC2Message(expect);
+		assertTrue(inMsg.getActuator() instanceof Network);
+		Network inActuator = (Network)inMsg.getActuator();
+		assertEquals(NETWORK_VALUE, inActuator.getNetwork());
 	}
 
 }

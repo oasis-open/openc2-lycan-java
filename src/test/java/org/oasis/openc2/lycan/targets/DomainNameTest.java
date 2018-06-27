@@ -23,26 +23,25 @@
 package org.oasis.openc2.lycan.targets;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-
 import org.oasis.openc2.lycan.OpenC2Message;
 import org.oasis.openc2.lycan.action.ActionType;
+import org.oasis.openc2.lycan.json.JsonFormatter;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DomainNameTest  {
-	private static final boolean toConsole = true;
-	private static final String expect = "{\"action\":\"locate\",\"target\":{\"value\":\"www.mydomain.com\",\"type\":\"openc2:domain-name\"}}";
-	private static final String expect2 = "{\"action\":\"allow\",\"target\":{\"resolves_to_refs\":[\"test.one.org\",\"test.two.org\"],\"value\":\"www.yourdomain.com\",\"type\":\"openc2:domain-name\"}}";
+	private static final boolean toConsole = false;
+	private static final String DOMAIN_VALUE = "www.my.domain";
+	
+	private static final String expect = "{\"action\":\"locate\",\"target\":{\"domain_name\":\"www.my.domain\"}}";
 
 	@Test
 	public void test1() throws Exception {
-
-		DomainName target = new DomainName("www.mydomain.com");		
+		DomainName target = new DomainName(DOMAIN_VALUE);		
 		OpenC2Message message = new OpenC2Message(ActionType.LOCATE, target);
 
 		JsonNode expected = new ObjectMapper().readTree(expect);
@@ -52,33 +51,16 @@ public class DomainNameTest  {
 		if (toConsole) {
     		// This is just to allow developer to eyeball the JSON created
     		System.out.println("");
-    		System.out.println("DomainNameTest - Test1 JSON output:");
+    		System.out.println("IpAddrTest - Test1 JSON output:");
     		System.out.println(message.toJson());
 			System.out.println(message.toPrettyJson());
 			System.out.println("\n\n");
 		}
-
-		List<String> list = new ArrayList<String>();
-		list.add("test.one.org");
-		list.add("test.two.org");
-
-		target = new DomainName("www.yourdomain.com");
-		target.setResolvesToRefs(list);
-
-		message = new OpenC2Message(ActionType.ALLOW, target);
-
-		expected = new ObjectMapper().readTree(expect2);
-		actual = new ObjectMapper().readTree(message.toJson());
-		assertEquals(expected, actual);
-
-		if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("DomainNameTest - Test1 JSON output:");
-    		System.out.println(message.toJson());
-			System.out.println(message.toPrettyJson());
-			System.out.println("\n\n");
-		}
+		
+		OpenC2Message inMsg = JsonFormatter.readOpenC2Message(expect);
+		assertTrue(inMsg.getTarget() instanceof DomainName);
+		DomainName inTarget = (DomainName)inMsg.getTarget();
+		assertEquals(DOMAIN_VALUE, inTarget.getDomainName());
 	}
 
 }
