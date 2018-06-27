@@ -53,5 +53,6 @@ public class Keys {
 	public static final String PAYLOAD_BIN = "payload_bin";
 	public static final String URL = "url";
 	public static final String DXL_TOPIC = "dxl_topic";
+	public static final String ACTUATOR_ID = "actuator_id";
 	
 }

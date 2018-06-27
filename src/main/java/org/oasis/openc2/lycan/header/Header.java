@@ -105,7 +105,7 @@ public class Header {
 	 * 
 	 * @param contentType The type and version of the message body
 	 */
-	@JsonSetter("context_type")
+	@JsonSetter("content_type")
 	public Header setContentType(String contentType) { 
 		this.contentType = contentType;
 		return this;

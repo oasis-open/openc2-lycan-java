@@ -20,47 +20,40 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.targets;
+package org.oasis.openc2.lycan.actuators;
 
-import java.util.Map;
-
-import org.oasis.openc2.lycan.utilities.Keys;
 import org.oasis.openc2.lycan.utilities.OpenC2Map;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 /**
- * Implementation of an File OpenC2 target
+ * Sample implementation of a single attribute actuator
+ * This is a sample because the spec does not have specific 
+ * definition for actuators at this time
  *
  */
-public class File extends OpenC2Map<TargetType> {
+public class Network extends OpenC2Map<ActuatorType> {
 	
 	/**
 	 * Constructor
 	 */
-	public File() {
-		super(TargetType.FILE);
+	public Network() {
+		super(ActuatorType.NETWORK);
+	}
+	/**
+	 * Constructor
+	 * 
+	 * @param endpoint sample network to assign to the object
+	 */
+	public Network(String endpoint) {
+		super(ActuatorType.NETWORK);
+		setNetwork(endpoint);
 	}
 	
-	public File setName(String name) {
-		super.put(Keys.NAME, name);
-		return this;
+	public void setNetwork(String endpoint) {
+		super.put(ActuatorType.NETWORK.toString(), endpoint);
 	}
 	
-	public File setPath(String path) {
-		super.put(Keys.PATH, path);
-		return this;
+	public String getNetwork() { 
+		return super.get(ActuatorType.NETWORK.toString()).toString();
 	}
-	
-	@JsonSetter(Keys.HASHES)
-	public File setHash(Map<String, Object> hash) {
-		super.put(Keys.HASHES, hash);
-		return this;
-	}
-	
-	public String getName() { return super.get(Keys.NAME).toString(); }
-	public String getPath() { return super.get(Keys.PATH).toString(); }
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> getHashes() { return (Map<String, Object>)super.get(Keys.HASHES); }
 
 }

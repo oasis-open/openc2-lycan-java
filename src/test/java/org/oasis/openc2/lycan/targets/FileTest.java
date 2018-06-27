@@ -40,7 +40,7 @@ public class FileTest {
 	private static final boolean toConsole = false;
 	private static final String NAME_VALUE = "testfile";
 	private static final String PATH_VALUE = "/tmp/testfile";
-	private static final String HASH_VALUE = "123456789";
+//	private static final String HASH_VALUE = "123456789";
 	private static final String HASHKEY1_VALUE = "hashkey1";
 	private static final String VALUE1_VALUE = "value1";
 	private static final String HASHKEY2_VALUE = "hashkey2";
@@ -49,8 +49,8 @@ public class FileTest {
 
 	private static final String expect = "{\"action\":\"deny\",\"target\":{\"file\":{\"name\":\"testfile\"}}}";
 	private static final String expect2 = "{\"action\":\"deny\",\"target\":{\"file\":{\"path\":\"/tmp/testfile\"}}}";
-	private static final String expect3 = "{\"action\":\"deny\",\"target\":{\"file\":{\"hashes\":\"123456789\"}}}";
-	private static final String expect4 = "{\"action\":\"deny\",\"target\":{\"file\":{\"name\":\"testfile\",\"path\":\"/tmp/testfile\",\"hashes\":\"123456789\"}}}";
+	private static final String expect3 = "{\"action\":\"deny\",\"target\":{\"file\":{\"hashes\":{\"hashkey2\":\"value2\",\"hashkey1\":\"value1\"}}}}";
+	private static final String expect4 = "{\"action\":\"deny\",\"target\":{\"file\":{\"name\":\"testfile\",\"path\":\"/tmp/testfile\",\"hashes\":{\"hashkey2\":\"value2\",\"hashkey1\":\"value1\"}}}}";
 
 	static {
 		MAP_VALUE = new HashMap<String, Object>();
@@ -109,7 +109,7 @@ public class FileTest {
 
 	@Test
 	public void test3() throws Exception {
-		File target = new File().setHash(HASH_VALUE);		
+		File target = new File().setHash(MAP_VALUE);		
 		OpenC2Message message = new OpenC2Message(ActionType.DENY, target);
 
 		JsonNode expected = new ObjectMapper().readTree(expect3);
@@ -127,7 +127,7 @@ public class FileTest {
 		OpenC2Message inMsg = JsonFormatter.readOpenC2Message(expect3);
 		assertTrue(inMsg.getTarget() instanceof File);
 		File inTarget = (File)inMsg.getTarget();
-		assertEquals(HASH_VALUE, inTarget.getHashes());
+		assertEquals(MAP_VALUE, inTarget.getHashes());
 		
 		target = new File().setHash(MAP_VALUE);
 		message = new OpenC2Message(ActionType.DENY, target);
@@ -140,12 +140,21 @@ public class FileTest {
 			System.out.println("\n\n");
 		}
 		
+		// Just test that is can read the message
+		OpenC2Message inMsg2 = JsonFormatter.readOpenC2Message(message.toJson());
 		
+		if (toConsole) {
+    		// This is just to allow developer to eyeball the JSON created
+    		System.out.println("");
+    		System.out.println(inMsg2.toJson());
+			System.out.println(inMsg2.toPrettyJson());
+			System.out.println("\n\n");
+		}
 	}
 
 	@Test
 	public void test4() throws Exception {
-		File target = new File().setName(NAME_VALUE).setPath(PATH_VALUE).setHash(HASH_VALUE);		
+		File target = new File().setName(NAME_VALUE).setPath(PATH_VALUE).setHash(MAP_VALUE);		
 		OpenC2Message message = new OpenC2Message(ActionType.DENY, target);
 
 		JsonNode expected = new ObjectMapper().readTree(expect4);
@@ -166,7 +175,7 @@ public class FileTest {
 		File inTarget = (File)inMsg.getTarget();
 		assertEquals(NAME_VALUE, inTarget.getName());
 		assertEquals(PATH_VALUE, inTarget.getPath());
-		assertEquals(HASH_VALUE, inTarget.getHashes());
+		assertEquals(MAP_VALUE, inTarget.getHashes());
 	}
 
 }

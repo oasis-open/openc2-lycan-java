@@ -34,17 +34,17 @@ import org.oasis.openc2.lycan.targets.IpAddr;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EndpointTest {
+public class NetworkTest {
 	private static final boolean toConsole = false;
 	private static final String IP_VALUE = "1.2.3.4";
-	private static final String ENDPOINT_VALUE = "router";
+	private static final String NETWORK_VALUE = "router";
 	
-	private static final String expect = "{\"action\":\"deny\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"actuator\":{\"endpoint\":{\"actuator_id\":\"router\"}}}";
+	private static final String expect = "{\"action\":\"deny\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"actuator\":{\"network\":\"router\"}}";
 
 	@Test
 	public void test1() throws Exception {
 		IpAddr target = new IpAddr(IP_VALUE);
-		Endpoint actuator = new Endpoint(ENDPOINT_VALUE);
+		Network actuator = new Network(NETWORK_VALUE);
 		OpenC2Message message = new OpenC2Message(ActionType.DENY, target).setActuator(actuator);
 
 		JsonNode expected = new ObjectMapper().readTree(expect);
@@ -61,9 +61,9 @@ public class EndpointTest {
 		}
 		
 		OpenC2Message inMsg = JsonFormatter.readOpenC2Message(expect);
-		assertTrue(inMsg.getActuator() instanceof Endpoint);
-		Endpoint inActuator = (Endpoint)inMsg.getActuator();
-		assertEquals(ENDPOINT_VALUE, inActuator.getEndpoint());
+		assertTrue(inMsg.getActuator() instanceof Network);
+		Network inActuator = (Network)inMsg.getActuator();
+		assertEquals(NETWORK_VALUE, inActuator.getNetwork());
 	}
 
 }

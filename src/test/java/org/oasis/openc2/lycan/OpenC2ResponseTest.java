@@ -37,13 +37,14 @@ public class OpenC2ResponseTest {
 	// Display the JSON to the console for human viewing
 	private static final boolean toConsole = false;
 	private static final String ID_VALUE = "TEST-id-1";
+	private static final String VERSION_VALUE = "0.1.0";
 	private static final String CONTENT_VALUE = "context";
 	private static final String STATUS_TEXT_VALUE = "Successful";
 	private static final String RESULTS_VALUE = "These are the results";
 	
 	private static String expected1 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200}";
 	private static String expected2 = "{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200,\"status_text\":\"Successful\",\"results\":\"These are the results\"}";
-	private static String expected3 = "{\"header\":{\"id\":\"TEST-id-1\",\"context_type\":\"context\"},\"response\":{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200,\"status_text\":\"Successful\",\"results\":\"These are the results\"}}}";
+	private static String expected3 = "{\"header\":{\"version\":\"0.1.0\",\"id\":\"TEST-id-1\",\"content_type\":\"context\"},\"response\":{\"id\":\"CommandResp\",\"id_ref\":\"complete\",\"status\":200,\"status_text\":\"Successful\",\"results\":\"These are the results\"}}}";
 	
     /**
      * This test case is just to cover noise that shows up in the code
@@ -66,8 +67,8 @@ public class OpenC2ResponseTest {
 	public void test1() throws Exception {
 		
 		OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK);
-		OpenC2Response response2 = JsonFormatter.readOpenC2ResponseJson(response.toJson());
-		OpenC2Response response3 = JsonFormatter.readOpenC2ResponseJson(expected1);
+		OpenC2Response response2 = JsonFormatter.readOpenC2Response(response.toJson());
+		OpenC2Response response3 = JsonFormatter.readOpenC2Response(expected1);
 
 		if (toConsole) {
     		// This is just to allow developer to eyeball the JSON created
@@ -91,8 +92,8 @@ public class OpenC2ResponseTest {
 	public void test2() throws Exception {
 		
 		OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK, "Successful", "These are the results");
-		OpenC2Response response2 = JsonFormatter.readOpenC2ResponseJson(response.toJson());
-		OpenC2Response response3 = JsonFormatter.readOpenC2ResponseJson(expected2);
+		OpenC2Response response2 = JsonFormatter.readOpenC2Response(response.toJson());
+		OpenC2Response response3 = JsonFormatter.readOpenC2Response(expected2);
 
 		if (toConsole) {
     		// This is just to allow developer to eyeball the JSON created
@@ -118,11 +119,10 @@ public class OpenC2ResponseTest {
 		OpenC2Response response = new OpenC2Response("CommandResp", "complete", StatusCode.OK)
 				.setStatusText(STATUS_TEXT_VALUE)
 				.setResults(RESULTS_VALUE)
-				.setHeader(new Header()
-						.setCommandId(ID_VALUE)
-						.setContentType(CONTENT_VALUE));
-		OpenC2Response response2 = JsonFormatter.readOpenC2ResponseJson(response.toJson());
-		OpenC2Response response3 = JsonFormatter.readOpenC2ResponseJson(expected3);
+				.setHeader(new Header(VERSION_VALUE, CONTENT_VALUE)
+						.setCommandId(ID_VALUE));
+		OpenC2Response response2 = JsonFormatter.readOpenC2Response(response.toJson());
+		OpenC2Response response3 = JsonFormatter.readOpenC2Response(expected3);
 
 		if (toConsole) {
     		// This is just to allow developer to eyeball the JSON created
@@ -140,7 +140,7 @@ public class OpenC2ResponseTest {
 		assertEquals(responseJN, response2JN);  // Verify that the object created from a string is the same
     	assertEquals(responseJN, response3JN);  // Verify that the object from an external JSON string is the same
     	
-    	OpenC2Response inMsg = JsonFormatter.readOpenC2ResponseJson(expected3);
+    	OpenC2Response inMsg = JsonFormatter.readOpenC2Response(expected3);
     	assertTrue(inMsg.hasHeader());
     	assertEquals(ID_VALUE, inMsg.getHeader().getCommandId());
     	assertEquals(CONTENT_VALUE, inMsg.getHeader().getContentType());

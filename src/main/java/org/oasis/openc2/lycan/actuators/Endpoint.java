@@ -22,7 +22,10 @@
  */
 package org.oasis.openc2.lycan.actuators;
 
+import org.oasis.openc2.lycan.utilities.Keys;
 import org.oasis.openc2.lycan.utilities.OpenC2Map;
+
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
  * Sample implementation of a single attribute actuator
@@ -49,12 +52,13 @@ public class Endpoint extends OpenC2Map<ActuatorType> {
 		setEndpoint(endpoint);
 	}
 	
+	@JsonSetter(Keys.ACTUATOR_ID)
 	public void setEndpoint(String endpoint) {
-		super.put(ActuatorType.ENDPOINT.toString(), endpoint);
+		super.put(Keys.ACTUATOR_ID, endpoint);
 	}
 	
 	public String getEndpoint() { 
-		return super.get(ActuatorType.ENDPOINT.toString()).toString();
+		return super.get(Keys.ACTUATOR_ID).toString();
 	}
 
 }

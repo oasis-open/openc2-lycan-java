@@ -57,15 +57,16 @@ public class OpenC2MessageTest {
 	private static final String ARG2_VALUE = "Ack";
 	private static final String ENDPOINT_VALUE = "router";
 	private static final String CONTENT_VALUE = "context";
+	private static final String VERSION_VALUE = "0.1.0";
 	
 	private static final String test1Json = "{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}";
 	private static final String test2Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}";
-	private static final String test3Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"actuator\":{\"endpoint\":\"router\"}}";
+	private static final String test3Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"actuator\":{\"endpoint\":{\"actuator_id\":\"router\"}}}";
 	private static final String test4Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"args\":{\"start_time\":\"now\",\"response_requested\":\"Ack\"}}";
-	private static final String test5Json = "{\"header\":{\"id\":\"TEST-id-1\",\"context_type\":\"context\"},\"command\":{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}}";
-	private static final String test6Json = "{\"header\":{\"id\":\"TEST-id-1\",\"context_type\":\"context\"},\"command\":{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"args\":{\"start_time\":\"now\",\"response_requested\":\"Ack\"},\"actuator\":{\"endpoint\":\"router\"}}}";
+	private static final String test5Json = "{\"header\":{\"version\":\"0.1.0\",\"id\":\"TEST-id-1\",\"content_type\":\"context\"},\"command\":{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}}";
+	private static final String test6Json = "{\"header\":{\"version\":\"0.1.0\",\"id\":\"TEST-id-1\",\"content_type\":\"context\"},\"command\":{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"args\":{\"start_time\":\"now\",\"response_requested\":\"Ack\"},\"actuator\":{\"endpoint\":{\"actuator_id\":\"router\"}}}}";
 	private static final String test7Json = "{\"action\":\"copy\",\"target\":{\"artifact\":{\"mime_type\":\"Test mime\",\"payload_bin\":[10,15,20],\"url\":\"test url\",\"hashes\":{\"hashkey2\":\"value2\",\"hashkey1\":\"value1\"}}},\"actuator\":{\"network_sensor\":{\"name\":\"cisco\",\"path\":\"www.router.com\"}}}";
-	private static final String test8Json = "{\"header\":{\"id\":\"TEST-id-1\",\"context_type\":\"context\"},\"command\":{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"artifact\":{\"mime_type\":\"Test mime\",\"payload_bin\":[10,15,20],\"url\":\"test url\",\"hashes\":{\"hashkey2\":\"value2\",\"hashkey1\":\"value1\"}}},\"actuator\":{\"network_sensor\":{\"name\":\"cisco\",\"path\":\"www.router.com\"}}}}";
+	private static final String test8Json = "{\"header\":{\"version\":\"0.1.0\",\"id\":\"TEST-id-1\",\"content_type\":\"context\"},\"command\":{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"artifact\":{\"mime_type\":\"Test mime\",\"payload_bin\":[10,15,20],\"url\":\"test url\",\"hashes\":{\"hashkey2\":\"value2\",\"hashkey1\":\"value1\"}}},\"actuator\":{\"network_sensor\":{\"name\":\"cisco\",\"path\":\"www.router.com\"}}}}";
     
     /**
      * This test case is just to cover noise that shows up in the code
@@ -248,7 +249,7 @@ public class OpenC2MessageTest {
     @Test
     public void testTest5() throws Exception {
     	
-    	OpenC2Message message = new OpenC2Message(ActionType.COPY, new IpAddr(IP_VALUE)).setHeader(new Header().setCommandId(ID_VALUE).setContentType(CONTENT_VALUE));
+    	OpenC2Message message = new OpenC2Message(ActionType.COPY, new IpAddr(IP_VALUE)).setHeader(new Header(VERSION_VALUE, CONTENT_VALUE).setCommandId(ID_VALUE));
     	if (toConsole) {
     		// This is just to allow developer to eyeball the JSON created
     		System.out.println("");
@@ -281,6 +282,7 @@ public class OpenC2MessageTest {
 
     	OpenC2Message inMsg = JsonFormatter.readOpenC2Message(test5Json);
     	assertTrue(inMsg.hasHeader());
+    	assertEquals(VERSION_VALUE, inMsg.getHeader().getVersion());
     	assertEquals(ID_VALUE, inMsg.getHeader().getCommandId());
     	assertEquals(CONTENT_VALUE, inMsg.getHeader().getContentType());
     	assertEquals(inMsg.getAction(), ActionType.COPY.toString());
@@ -297,6 +299,7 @@ public class OpenC2MessageTest {
     	OpenC2Message inMsg = JsonFormatter.readOpenC2Message(test6Json);
     	
     	assertTrue(inMsg.hasHeader());
+    	assertEquals(VERSION_VALUE, inMsg.getHeader().getVersion());
     	assertEquals(ID_VALUE, inMsg.getHeader().getCommandId());
     	assertEquals(CONTENT_VALUE, inMsg.getHeader().getContentType());
     	assertEquals(inMsg.getAction(), ActionType.COPY.toString());
