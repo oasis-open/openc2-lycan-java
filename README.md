@@ -4,11 +4,11 @@
 ## Lycan
 
 Lycan is an implementation of the OpenC2 OASIS standard for command and control messaging. 
-The current implementation is based on the 1.0.0 Release Cadidate 4 documentation. 
+The current implementation is based on the Working Draft 06/Committee Specification Draft  04 documentation. 
 
 ## Requirements
 
-Java 1.7 or later.
+Java 1.8 or later.
 Jackson 2.8.8 or later.
 
 ## Installation
@@ -25,7 +25,7 @@ Add this dependency to your project's POM:
 <dependency>
 	<groupId>org.oasis.openc2</groupId>
 	<artifactId>lycan</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 </dependency>
 
 ```
