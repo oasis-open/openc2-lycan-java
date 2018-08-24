@@ -1,6 +1,88 @@
 <div>
 <h1>README</h1>
 
+## Lycan
+
+[![Build Status](https://travis-ci.org/oasis-open/openc2-lycan-java.svg)](https://travis-ci.org/oasis-open/openc2-lycan-java)
+[![Coverage Status](https://codecov.io/gh/oasis-open/openc2-lycan-java/branch/develop/graph/badge.svg)](https://codecov.io/gh/oasis-open/openc2-lycan-java)
+
+Lycan is an implementation of the OpenC2 OASIS standard for command and control messaging. 
+The current implementation is based on the Working Draft 06/Committee Specification Draft  04 documentation. 
+
+## Requirements
+
+Java 1.8 or later.
+Jackson 2.8.8 or later.
+
+## Installation
+
+### Maven users
+
+This repo is not currently in Maven Central so it requires users to manually build the repo
+and push the resulting jar to your local Maven repository.
+
+
+Add this dependency to your project's POM:
+
+```xml
+<dependency>
+	<groupId>org.oasis.openc2</groupId>
+	<artifactId>lycan</artifactId>
+	<version>0.1.0</version>
+</dependency>
+
+```
+
+### Others
+
+You'll need to manually install the following JARs:
+
+* Lycan https://github.com/<location/to/latest>
+* Jackson core 2.8.8 or later
+* Jackson databind 2.8.8 or later
+* Jackson annotations 2.8.8 or later
+
+## Documentation
+
+Please see the [Java docs](https://github.com/oasis-open/openc2-lycan-java/doc) for the most up-to-date documentation.
+
+## Usage
+
+LycanExample.java
+
+```java
+import org.oasis.openc2.lycan.OpenC2Message;
+import org.oasis.openc2.lycan.action.ActionType;
+import org.oasis.openc2.lycan.target.DomainName;
+
+public class LycanExample.java {
+
+	public static void main(String[] args) {
+		DomainName target = new DomainName("host.name.com");
+		OpenC2Message message = new OpenC2Message(ActionType.QUERY, target);
+
+		System.out.println(message.toJson());
+		System.out.println(message.toPrettyJson());
+	}
+}
+```
+
+## Built with
+* [Maven](https://maven.apache.org/) - Dependency Management
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://github.com/oasis-open/openc2-lycan-java/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/oasis-open/openc2-lycan-java/tags).
+
+## Authors
+
+* **Blake Essing** - *Initial work* - [AT&T](https://github.com/bessing)
+
+
 <div>
 <h2><a id="readme-general">OASIS TC Open Repository: openc2-lycan-java</a></h2>
 
