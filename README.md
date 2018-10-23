@@ -9,6 +9,8 @@
 Lycan is an implementation of the OpenC2 OASIS standard for command and control messaging. 
 The current implementation is based on the Working Draft 06/Committee Specification Draft  04 documentation. 
 
+<p>This repository contains code developed against an earlier version of the OpenC2 language than that presented by OASIS for public review in October / November 2018 and is NOT CONSISTENT WITH THE VERSION UNDERGOING PUBLIC REVIEW. Any implementer of OpenC2 using this code should be aware that it will require updating to align with the current OpenC2 Language Specification.</p>
+
 ## Requirements
 
 Java 1.8 or later.
