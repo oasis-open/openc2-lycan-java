@@ -11,7 +11,8 @@
   	<url>http://maven.apache.org</url>
 
 	<properties>
-		<jackson.version>2.9.7</jackson.version>
+		<jackson.annotations.version>2.9.7</jackson.annotations.version>
+                <jackson.version>2.9.8</jackson.version>
 		<commons.lang.version>3.7</commons.lang.version>
 		<commons.text.version>1.4</commons.text.version>
 		<junit.version>4.12</junit.version>
@@ -37,7 +38,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-			<version>${jackson.version}</version>
+			<version>${jackson.annotations.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
