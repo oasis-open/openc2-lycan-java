@@ -20,42 +20,26 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.json;
-
-import java.io.IOException;
-
-import org.oasis.openc2.lycan.OpenC2Response;
-import org.oasis.openc2.lycan.utilities.Keys;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+package org.oasis.openc2.lycan.types;
 
 /**
- * Customized Serializer for OpenC2 response messages
- * 
+ * Definition of all the allowed hash types as of the 03/27/2017 Openc2 spec
+ *
  */
-public class OpenC2ResponseSerializer extends JsonSerializer<OpenC2Response> {
-
+public enum HashType {
+	MD5("md5"),
+	SHA1("sha1"),
+	SHA256("sha256");
+	
+	private String type;
+	
+	HashType(String type) {
+		this.type = type;
+	}
+	
 	@Override
-	public void serialize(OpenC2Response oc2Resp, JsonGenerator gen, SerializerProvider provider) throws IOException {
-		gen.writeStartObject();
-		if (oc2Resp.hasHeader()) {
-			gen.writeObjectField(Keys.HEADER, oc2Resp.getHeader());
-			gen.writeFieldName(Keys.RESPONSE);
-			gen.writeStartObject();
-		}
-		gen.writeObjectField("id", oc2Resp.getId());
-		gen.writeObjectField("id_ref", oc2Resp.getIdRef());
-		gen.writeObjectField("status", oc2Resp.getStatus());
-		if (oc2Resp.hasStatusText())
-			gen.writeObjectField("status_text", oc2Resp.getStatusText());
-		if (oc2Resp.hasResults())
-			gen.writeObjectField("results", oc2Resp.getResults());
-		
-		if (oc2Resp.hasHeader())
-			gen.writeEndObject();
-		gen.writeEndObject();		
+	public String toString() {
+		return type;
 	}
 
 }

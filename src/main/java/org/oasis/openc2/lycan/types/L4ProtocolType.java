@@ -20,42 +20,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.targets;
-
-import org.oasis.openc2.lycan.utilities.OpenC2Map;
-
-import com.fasterxml.jackson.annotation.JsonSetter;
+package org.oasis.openc2.lycan.types;
 
 /**
- * Implementation of an Ipv4Addr OpenC2 target
+ * Definition of all the allowed hash types as of the 03/27/2017 Openc2 spec
  *
  */
-public class IpAddr extends OpenC2Map<TargetType> {
+public enum L4ProtocolType {
+	ICMP("icmp"),
+	TCP("tcp"),
+	UDP("udp"),
+	SCTP("sctp");
 	
-	/**
-	 * Constructor
-	 */
-	public IpAddr() {
-		super(TargetType.IP_ADDR);
+	private String type;
+	
+	L4ProtocolType(String type) {
+		this.type = type;
 	}
 	
-	/**
-	 * Constructor
-	 * 
-	 * @param ip IP to assign to the ip addr object
-	 */
-	public IpAddr(String ip) {
-		super(TargetType.IP_ADDR);
-		setIpAddr(ip);
-	}
-	
-	@JsonSetter("ip_addr")
-	public void setIpAddr(String ip) {
-		super.put(TargetType.IP_ADDR.toString(), ip);
-	}
-	
-	public String getIpAddr() { 
-		return super.get(TargetType.IP_ADDR.toString()).toString();
+	@Override
+	public String toString() {
+		return type;
 	}
 
 }

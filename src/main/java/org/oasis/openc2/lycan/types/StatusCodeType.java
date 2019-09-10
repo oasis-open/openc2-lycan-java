@@ -20,26 +20,28 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-package org.oasis.openc2.lycan.utilities;
+package org.oasis.openc2.lycan.types;
 
 /**
  * Definition of all the allowed target types as of the 03/27/2017 Openc2 spec
  *
  */
-public enum StatusCode {
-	PROCESSING(102),		// Interim response to inform the client that the request was accepted but not complete yet
-	OK(200),				// Request was successful
-	MOVED(301),				// Target resource has been assigned a new permanent URI
-	BAD_REQUEST(400),		// Server cannot process the request due to something that is preceived to be a client error
-	UNAUTHORIZED(401),		// Request lacks valid authentication credentials for the target resource or authorization has been refused
-	FORBIDDEN(403),			// Server understood the request but refuses to authorize it
-	SERVER_ERROR(500),		// Server encountered an unexpected condition that prevented it from fulfilling the request
-	NOT_IMPLEMENTED(501);	// Server does not support the functionality required to fulfill the request
+public enum StatusCodeType {
+	PROCESSING(102),			// Interim response to inform the client that the request was accepted but not complete yet
+	OK(200),					// Request was successful
+//	MOVED(301),					// Target resource has been assigned a new permanent URI
+	BAD_REQUEST(400),			// Server cannot process the request due to something that is preceived to be a client error
+	UNAUTHORIZED(401),			// Request lacks valid authentication credentials for the target resource or authorization has been refused
+	FORBIDDEN(403),				// Server understood the request but refuses to authorize it
+	NOT_FOUND(404),				// The consumer has not found anything matching the command
+	INTERNAL_ERROR(500),		// Server encountered an unexpected condition that prevented it from fulfilling the request
+	NOT_IMPLEMENTED(501),		// Server does not support the functionality required to fulfill the request
+	SERVICE_UNAVAILABLE(503);	// The consumer is currently unable to perform the command due to a temporary overloading or maintenance of the consumer
 	
 
 	private int type;
 	
-	StatusCode(int type) {
+	StatusCodeType(int type) {
 		this.type = type;
 	}
 	

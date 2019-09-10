@@ -4,7 +4,7 @@
 
   	<groupId>org.oasis.openc2</groupId>
   	<artifactId>lycan</artifactId>
-  	<version>0.1.0</version>
+  	<version>1.0.0</version>
   	<packaging>jar</packaging>
 
   	<name>lycan</name>
