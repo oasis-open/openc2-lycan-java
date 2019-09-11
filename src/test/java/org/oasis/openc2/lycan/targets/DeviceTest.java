@@ -23,20 +23,17 @@ public class DeviceTest {
 		device.setHostname("device hostname");
 		device.setIdnHostname("device idn hostname");
 		
-		assertEquals(expected, getJson(device, false));
-		
 		if (toConsole) {
 			System.out.println(getJson(device, true));
 		}
 		
-		Device newDevice = readArtifact(inputJson);
+		assertEquals(expected, getJson(device, false));
 		
-		if (toConsole) {
-			System.out.println("\n\n");
-			System.out.println("Device id: " + newDevice.getDeviceId());
-			System.out.println("Device hostname: " + newDevice.getHostname());
-			System.out.println("Device IDN hostname: " + newDevice.getIdnHostname());
-		}
+		Device device2 = readJson(inputJson);
+		
+		assertEquals(device.getDeviceId(), device2.getDeviceId());
+		assertEquals(device.getHostname(), device2.getHostname());
+		assertEquals(device.getIdnHostname(), device2.getIdnHostname());
 	}
 
 	public static String getJson(Device message, boolean prettyPrint) throws JsonProcessingException {
@@ -47,7 +44,7 @@ public class DeviceTest {
 		return mapper.writeValueAsString(message);
 	}
 
-	public static Device readArtifact(String json) throws IOException {
+	public static Device readJson(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(json, Device.class);
 	}

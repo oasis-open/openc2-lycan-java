@@ -21,18 +21,15 @@ public class EmailAddressTest {
 		
 		emailAddr.setEmailAddress("myemailaddress@abc.com");
 		
-		assertEquals(expected, getJson(emailAddr, false));
-		
 		if (toConsole) {
 			System.out.println(getJson(emailAddr, true));
 		}
 		
-		EmailAddress newEmailAddr = readArtifact(inputJson);
+		assertEquals(expected, getJson(emailAddr, false));
 		
-		if (toConsole) {
-			System.out.println("\n\n");
-			System.out.println("Email address: " + newEmailAddr.getEmailAddress());
-		}
+		EmailAddress emailAddr2 = readJson(inputJson);
+		
+		assertEquals(emailAddr.getEmailAddress(), emailAddr2.getEmailAddress());
 	}
 
 	public static String getJson(EmailAddress message, boolean prettyPrint) throws JsonProcessingException {
@@ -43,7 +40,7 @@ public class EmailAddressTest {
 		return mapper.writeValueAsString(message);
 	}
 
-	public static EmailAddress readArtifact(String json) throws IOException {
+	public static EmailAddress readJson(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(json, EmailAddress.class);
 	}

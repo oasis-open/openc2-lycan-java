@@ -3,7 +3,6 @@ package org.oasis.openc2.lycan.targets;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.junit.Test;
 import org.oasis.openc2.lycan.types.HashType;
@@ -15,37 +14,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ArtifactTest {
 	private boolean toConsole = true;
-	private String inputJson = "{\"mime_type\":\"My MIME Type\",\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}}";
 	private String expected  = "{\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},\"mime_type\":\"My MIME Type\"}";
+	private String inputJson = "{\"mime_type\":\"My MIME Type\",\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}}";
 	
 	@Test
 	public void test() throws Exception {
 		Artifact artifact = new Artifact();
 		
 		artifact.setMimeType("My MIME Type");
-		artifact.setPayload(new Payload().setUrl(new URI().setUri("www.testurl.com")).setBin("Test bin".getBytes()));
-		artifact.addHashes(HashType.MD5, "hash md5".getBytes()).addHashes(HashType.SHA1, "hash sha1".getBytes()).addHashes(HashType.SHA256, "hash sha256".getBytes());
-		
-		assertEquals(expected, getJson(artifact, false));
+		artifact.setPayload(new Payload()
+				.setUrl("www.testurl.com")
+				.setBin("Test bin".getBytes()));
+		artifact.addHashes(HashType.MD5, "hash md5".getBytes())
+				.addHashes(HashType.SHA1, "hash sha1".getBytes())
+				.addHashes(HashType.SHA256, "hash sha256".getBytes());
 		
 		if (toConsole) {
 			System.out.println(getJson(artifact, true));
 		}
 		
-		Artifact newArtifact = readArtifact(inputJson);
+		assertEquals(expected, getJson(artifact, false));
 		
-		if (toConsole) {
-			System.out.println("\n\n");
-			System.out.println("MIME: " + newArtifact.getMimeType());
-			System.out.println("Payload: ");
-			System.out.println("    URL: " + newArtifact.getPayload().getUrl());
-			System.out.println("    Bin: " + new String(newArtifact.getPayload().getBin()));
-			System.out.println("Hashes: ");
-			Map<String, byte[]> hashes = newArtifact.getHashes();
-			for (String key : hashes.keySet()) {
-				System.out.println("    Key: " + key + "\t\tHash: " + new String(hashes.get(key)));			
-			}
-		}
+		Artifact artifact2 = readJson(inputJson);
+		
+		assertEquals(artifact.getMimeType(), artifact2.getMimeType());
+		assertEquals(new String(artifact.getPayload().getBin()), new String(artifact2.getPayload().getBin()));
+		assertEquals(artifact.getPayload().getUrl(), artifact2.getPayload().getUrl());
+		assertEquals(new String(artifact.getHashes().get("sha1")), new String(artifact2.getHashes().get("sha1")));
+		assertEquals(new String(artifact.getHashes().get("md5")), new String(artifact2.getHashes().get("md5")));
+		assertEquals(new String(artifact.getHashes().get("sha256")), new String(artifact2.getHashes().get("sha256")));
 	}
 
 	public static String getJson(Artifact message, boolean prettyPrint) throws JsonProcessingException {
@@ -56,7 +53,7 @@ public class ArtifactTest {
 		return mapper.writeValueAsString(message);
 	}
 
-	public static Artifact readArtifact(String json) throws IOException {
+	public static Artifact readJson(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(json, Artifact.class);
 	}

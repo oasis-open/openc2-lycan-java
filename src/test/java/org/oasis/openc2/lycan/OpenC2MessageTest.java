@@ -1,6 +1,8 @@
 package org.oasis.openc2.lycan;
 
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.oasis.openc2.lycan.args.Args;
 import org.oasis.openc2.lycan.json.JsonFormatter;
@@ -29,12 +31,52 @@ import org.oasis.openc2.lycan.types.L4ProtocolType;
 import org.oasis.openc2.lycan.utilities.Payload;
 
 public class OpenC2MessageTest {
+	private boolean toConsole = true;
+	private String expected = "{\"action\":\"create\","
+			+ "\"target\":{\"artifact\":[{\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},"
+			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},"
+			+ "\"mime_type\":\"My MIME Type\"}],\"device\":[{\"hostname\":\"device hostname\","
+			+ "\"idn_hostname\":\"device idn hostname\",\"device_id\":\"Device id\"}],\"features\":[\"versions\","
+			+ "\"profiles\",\"pairs\",\"rate_limit\"],\"file\":[{\"name\":\"File name\",\"path\":\"File path\","
+			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}}],"
+			+ "\"iri\":\"My IRI identifier\",\"process\":[{\"pid\":12354,\"name\":\"Process name\",\"cwd\":\"Process CWD\","
+			+ "\"executable\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\","
+			+ "\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"parent\":{\"pid\":43521,\"name\":\"Process parent name\","
+			+ "\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"}],"
+			+ "\"properties\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\"],\"uri\":\"www.myuri.com\",\"domain_name\":\"Domain name\","
+			+ "\"email_addr\":\"Email address\",\"idn_domain_name\":\"IDN Domain name\",\"idn_email_addr\":\"IDN Email address\","
+			+ "\"ipv4_net\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},\"ipv4_connection\":[{\"protocol\":\"tcp\","
+			+ "\"src_addr\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},\"src_port\":8443,\"dst_addr\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},"
+			+ "\"dst_port\":9443}],\"ipv6_net\":{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"ipv6_connection\":[{\"protocol\":\"tcp\","
+			+ "\"src_addr\":{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"src_port\":8443,\"dst_addr\":{\"cidr\":24,"
+			+ "\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"dst_port\":9443}],\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"},"
+			+ "\"args\":{\"duration\":30000,\"start_time\":1568209029693,\"stop_time\":1568209059693,\"response_requested\":\"complete\"},"
+			+ "\"command_id\":\"My command id is here\"}";
+	private String inputJson = "{\"action\":\"create\",\"target\":{\"artifact\":[{\"payload\":{\"bin\":\"VGVzdCBiaW4=\","
+			+ "\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\","
+			+ "\"md5\":\"aGFzaCBtZDU=\"},\"mime_type\":\"My MIME Type\"}],\"device\":[{\"hostname\":\"device hostname\","
+			+ "\"idn_hostname\":\"device idn hostname\",\"device_id\":\"Device id\"}],\"features\":[\"versions\",\"profiles\","
+			+ "\"pairs\",\"rate_limit\"],\"file\":[{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\","
+			+ "\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}}],\"iri\":\"My IRI identifier\",\"process\":[{\"pid\":12354,"
+			+ "\"name\":\"Process name\",\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\",\"path\":\"File path\","
+			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"parent\":{\"pid\":43521,"
+			+ "\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"}],"
+			+ "\"properties\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\"],\"uri\":\"www.myuri.com\",\"domain_name\":\"Domain name\","
+			+ "\"email_addr\":\"Email address\",\"idn_domain_name\":\"IDN Domain name\",\"idn_email_addr\":\"IDN Email address\","
+			+ "\"ipv4_net\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},\"ipv4_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{\"cidr\":24,"
+			+ "\"ipv4_addr\":\"10.0.0.0\"},\"src_port\":8443,\"dst_addr\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},\"dst_port\":9443}],"
+			+ "\"ipv6_net\":{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"ipv6_connection\":[{\"protocol\":\"tcp\","
+			+ "\"src_addr\":{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"src_port\":8443,\"dst_addr\":{\"cidr\":24,"
+			+ "\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"dst_port\":9443}],\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"},"
+			+ "\"args\":{\"duration\":30000,\"start_time\":1568209029693,\"stop_time\":1568209059693,\"response_requested\":\"complete\"},"
+			+ "\"command_id\":\"My command id is here\"}";
 	
 	private Artifact getArtifact() throws Exception {
 		Artifact artifact = new Artifact();
 		
 		artifact.setMimeType("My MIME Type");
-		artifact.setPayload(new Payload().setUrl(new URI().setUri("www.testurl.com")).setBin("Test bin".getBytes()));
+		artifact.setPayload(new Payload().setUrl("www.testurl.com")
+										 .setBin("Test bin".getBytes()));
 		artifact.addHashes(HashType.MD5, "hash md5".getBytes())
 				.addHashes(HashType.SHA1, "hash sha1".getBytes())
 				.addHashes(HashType.SHA256, "hash sha256".getBytes());
@@ -230,7 +272,7 @@ public class OpenC2MessageTest {
 	private Args getArgs() throws Exception {
 		Args args = new Args();
 		
-		args.addStartDuration(System.currentTimeMillis(), 30 * 1000L);
+		args.addStartDuration(1568209029693L, 30 * 1000L);
 		
 		return args;
 	}
@@ -240,20 +282,19 @@ public class OpenC2MessageTest {
 		OpenC2Message msg = new OpenC2Message(ActionType.CREATE, getTarget(), getArgs());
 		msg.setCommandId("My command id is here");
 		
-		String json = JsonFormatter.getJson(msg, false);
-		System.out.println(JsonFormatter.getJson(msg, true));
+		if (toConsole) {
+			System.out.println(JsonFormatter.getJson(msg, true));
+		}
+
+		assertEquals(expected, JsonFormatter.getJson(msg, false));
 		
-		OpenC2Message msg2 = JsonFormatter.readOpenC2Message(json);
+		// Just verify that can read in JSON string, testing fields is done
+		// by individual test cases for each object
+		OpenC2Message msg2 = JsonFormatter.readOpenC2Message(inputJson);
 		
-		System.out.println("OpenC2Message read in from JSON:");
-		System.out.println("    Action:");
-		System.out.println("        " + msg2.getAction());
-		System.out.println("    Artifact:");
-		Artifact artifact = msg2.getTarget().getArtifact().get(0);
-		System.out.println("        MIME type :  " + artifact.getMimeType());
-		System.out.println("        Payload bin: " + artifact.getPayload().getBin());
-		System.out.println("        Payload URL: " + artifact.getPayload().getUrl());
-		System.out.println("        Hashes:      " + artifact.getHashes());
+		assertEquals(msg.getCommandId(), msg2.getCommandId());
+		
+
 	}
 
 }
