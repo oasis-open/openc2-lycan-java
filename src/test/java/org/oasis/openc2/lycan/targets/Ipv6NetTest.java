@@ -12,15 +12,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Ipv6NetTest {
 	private boolean toConsole = true;
-	private String expected  = "{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"}";
-	private String inputJson = "{\"ipv6_addr\":\"AE:00:E4:F1:04:65\",\"cidr\":24}";
+	private String expected  = "{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"}";
+	private String inputJson = "{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"}";
 
 	@Test
 	public void test() throws Exception {
 		Ipv6Net net = new Ipv6Net();
 		
-		net.setIpv6Addr("AE:00:E4:F1:04:65");
-		net.setCidr(24);
+		net.setIpv6Addr("AE:00:E4:F1:04:65/24");
 		
 		if (toConsole) {
 			System.out.println(getJson(net, true));
@@ -31,7 +30,6 @@ public class Ipv6NetTest {
 		Ipv6Net net2 = readJson(inputJson);
 		
 		assertEquals(net.getIpv6Addr(), net2.getIpv6Addr());
-		assertEquals(net.getCidr(), net2.getCidr());
 	}
 
 	public static String getJson(Ipv6Net message, boolean prettyPrint) throws JsonProcessingException {

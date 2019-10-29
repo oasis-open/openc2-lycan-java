@@ -12,15 +12,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Ipv4NetTest {
 	private boolean toConsole = true;
-	private String expected  = "{\"cidr\":24,\"ipv4_addr\":\"1.2.3.4\"}";
-	private String inputJson = "{\"ipv4_addr\":\"1.2.3.4\",\"cidr\":24}";
+	private String expected  = "{\"ipv4_addr\":\"1.2.3.4/24\"}";
+	private String inputJson = "{\"ipv4_addr\":\"1.2.3.4/24\"}";
 
 	@Test
 	public void test() throws Exception {
 		Ipv4Net net = new Ipv4Net();
 		
-		net.setIpv4Addr("1.2.3.4");
-		net.setCidr(24);
+		net.setIpv4Addr("1.2.3.4/24");
 		
 		if (toConsole) {
 			System.out.println(getJson(net, true));
@@ -31,7 +30,6 @@ public class Ipv4NetTest {
 		Ipv4Net net2 = readJson(inputJson);
 		
 		assertEquals(net.getIpv4Addr(), net2.getIpv4Addr());
-		assertEquals(net.getCidr(), net2.getCidr());
 	}
 
 	public static String getJson(Ipv4Net message, boolean prettyPrint) throws JsonProcessingException {

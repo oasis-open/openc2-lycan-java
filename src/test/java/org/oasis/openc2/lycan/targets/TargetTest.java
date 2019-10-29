@@ -27,11 +27,11 @@ public class TargetTest {
 			+ "\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},"
 			+ "\"command_line\":\"Process command line statement\"}],\"properties\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\"],"
 			+ "\"uri\":\"www.myuri.com\",\"domain_name\":\"Domain name\",\"email_addr\":\"Email address\",\"idn_domain_name\":"
-			+ "\"IDN Domain name\",\"idn_email_addr\":\"IDN Email address\",\"ipv4_net\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},"
-			+ "\"ipv4_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},\"src_port\":8443,"
-			+ "\"dst_addr\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},\"dst_port\":9443}],\"ipv6_net\":{\"cidr\":24,"
-			+ "\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"ipv6_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{\"cidr\":24,"
-			+ "\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"src_port\":8443,\"dst_addr\":{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},"
+			+ "\"IDN Domain name\",\"idn_email_addr\":\"IDN Email address\",\"ipv4_net\":{\"ipv4_addr\":\"10.0.0.0/24\"},"
+			+ "\"ipv4_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{\"ipv4_addr\":\"10.0.0.0/24\"},\"src_port\":8443,"
+			+ "\"dst_addr\":{\"ipv4_addr\":\"10.0.0.0/24\"},\"dst_port\":9443}],\"ipv6_net\":{"
+			+ "\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},\"ipv6_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{"
+			+ "\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},\"src_port\":8443,\"dst_addr\":{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},"
 			+ "\"dst_port\":9443}],\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"}";
 	private String inputJson = "{\"artifact\":[{\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},"
 			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},\"mime_type\":\"My MIME Type\"}],"
@@ -43,11 +43,11 @@ public class TargetTest {
 			+ "\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},"
 			+ "\"command_line\":\"Process command line statement\"}],\"properties\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\"],\"uri\":\"www.myuri.com\","
 			+ "\"domain_name\":\"Domain name\",\"email_addr\":\"Email address\",\"idn_domain_name\":\"IDN Domain name\","
-			+ "\"idn_email_addr\":\"IDN Email address\",\"ipv4_net\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},"
-			+ "\"ipv4_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},\"src_port\":8443,"
-			+ "\"dst_addr\":{\"cidr\":24,\"ipv4_addr\":\"10.0.0.0\"},\"dst_port\":9443}],\"ipv6_net\":{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},"
-			+ "\"ipv6_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"src_port\":8443,"
-			+ "\"dst_addr\":{\"cidr\":24,\"ipv6_addr\":\"AE:00:E4:F1:04:65\"},\"dst_port\":9443}],\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"}";
+			+ "\"idn_email_addr\":\"IDN Email address\",\"ipv4_net\":{\"ipv4_addr\":\"10.0.0.0/24\"},"
+			+ "\"ipv4_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{\"ipv4_addr\":\"10.0.0.0/24\"},\"src_port\":8443,"
+			+ "\"dst_addr\":{\"ipv4_addr\":\"10.0.0.0/24\"},\"dst_port\":9443}],\"ipv6_net\":{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},"
+			+ "\"ipv6_connection\":[{\"protocol\":\"tcp\",\"src_addr\":{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},\"src_port\":8443,"
+			+ "\"dst_addr\":{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},\"dst_port\":9443}],\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"}";
 	
 	private Artifact getArtifact() throws Exception {
 		Artifact artifact = new Artifact();
@@ -130,8 +130,7 @@ public class TargetTest {
 	private Ipv4Net getIpv4Net() throws Exception {
 		Ipv4Net ipv4Net = new Ipv4Net();
 		
-		ipv4Net.setIpv4Addr("10.0.0.0");
-		ipv4Net.setCidr(24);
+		ipv4Net.setIpv4Addr("10.0.0.0/24");
 		
 		return ipv4Net;
 	}
@@ -151,8 +150,7 @@ public class TargetTest {
 	private Ipv6Net getIpv6Net() throws Exception {
 		Ipv6Net ipv6Net = new Ipv6Net();
 		
-		ipv6Net.setIpv6Addr("AE:00:E4:F1:04:65");
-		ipv6Net.setCidr(24);
+		ipv6Net.setIpv6Addr("AE:00:E4:F1:04:65/24");
 		
 		return ipv6Net;
 	}
@@ -259,6 +257,7 @@ public class TargetTest {
 		
 		// Just verify that can read in JSON string, testing fields is done
 		// by individual test cases for each object
+		@SuppressWarnings("unused")
 		Target target2 = readJson(inputJson);
 	}
 
