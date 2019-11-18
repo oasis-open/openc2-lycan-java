@@ -81,9 +81,9 @@ public class TargetTest {
 		artifact.setMimeType("My MIME Type");
 		artifact.setPayload(new Payload().setUrl("www.testurl.com")
 										 .setBin("Test bin".getBytes()));
-		artifact.addHashes(HashType.MD5, "hash md5".getBytes())
-				.addHashes(HashType.SHA1, "hash sha1".getBytes())
-				.addHashes(HashType.SHA256, "hash sha256".getBytes());
+		artifact.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
+				.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
+				.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
 		
 		return artifact;
 	}
@@ -130,9 +130,9 @@ public class TargetTest {
 		
 		file.setName("File name");
 		file.setPath("File path");
-		file.addHashes(HashType.MD5, "hash md5".getBytes())
-			.addHashes(HashType.SHA1, "hash sha1".getBytes())
-			.addHashes(HashType.SHA256, "hash sha256".getBytes());
+		file.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
+			.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
+			.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
 		
 		return file;
 	}

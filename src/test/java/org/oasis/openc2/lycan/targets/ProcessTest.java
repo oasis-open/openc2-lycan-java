@@ -48,9 +48,12 @@ public class ProcessTest {
 		
 		file.setName("File name");
 		file.setPath("File path");
-		file.addHashes(HashType.MD5, "hash md5".getBytes())
-			.addHashes(HashType.SHA1, "hash sha1".getBytes())
-			.addHashes(HashType.SHA256, "hash sha256".getBytes());
+		file.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
+			.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
+			.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
+//			.addHashes(HashType.MD5, "hash md5")
+//			.addHashes(HashType.SHA1, "hash sha1")
+//			.addHashes(HashType.SHA256, "hash sha256");
 		
 		Process parent = new Process();
 		

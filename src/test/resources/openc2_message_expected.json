@@ -7,9 +7,9 @@
         "url":"www.testurl.com"
       },
       "hashes":{
-        "sha1":"aGFzaCBzaGEx",
-        "sha256":"aGFzaCBzaGEyNTY=",
-        "md5":"aGFzaCBtZDU="
+        "sha1":"1234567890ABCDEF1234567890ABCDEF12345678",
+        "sha256":"1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1",
+        "md5":"1234567890ABCDEF1234567890ABCDEF"
       },
       "mime_type":"My MIME Type"
     },
@@ -25,9 +25,9 @@
       "name":"File name",
       "path":"File path",
       "hashes":{
-        "sha1":"aGFzaCBzaGEx",
-        "sha256":"aGFzaCBzaGEyNTY=",
-        "md5":"aGFzaCBtZDU="
+        "sha1":"1234567890ABCDEF1234567890ABCDEF12345678",
+        "sha256":"1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1",
+        "md5":"1234567890ABCDEF1234567890ABCDEF"
       }
     },
     "iri":"My IRI identifier",
@@ -39,9 +39,9 @@
         "name":"File name",
         "path":"File path",
         "hashes":{
-          "sha1":"aGFzaCBzaGEx",
-          "sha256":"aGFzaCBzaGEyNTY=",
-          "md5":"aGFzaCBtZDU="
+          "sha1":"1234567890ABCDEF1234567890ABCDEF12345678",
+          "sha256":"1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1",
+          "md5":"1234567890ABCDEF1234567890ABCDEF"
         }
       },
       "parent":{

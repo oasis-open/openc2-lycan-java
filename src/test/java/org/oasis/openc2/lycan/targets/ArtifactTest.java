@@ -1,6 +1,8 @@
 package org.oasis.openc2.lycan.targets;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -51,9 +53,9 @@ public class ArtifactTest {
 		artifact.setPayload(new Payload()
 				.setUrl("www.testurl.com")
 				.setBin("Test bin".getBytes()));
-		artifact.addHashes(HashType.MD5, "hash md5".getBytes())
-				.addHashes(HashType.SHA1, "hash sha1".getBytes())
-				.addHashes(HashType.SHA256, "hash sha256".getBytes());
+		artifact.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
+				.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
+				.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
 		
 		if (toConsole) {
 			System.out.println(getJson(artifact, true));
@@ -69,6 +71,16 @@ public class ArtifactTest {
 		assertEquals(new String(artifact.getHashes().get("sha1")), new String(artifact2.getHashes().get("sha1")));
 		assertEquals(new String(artifact.getHashes().get("md5")), new String(artifact2.getHashes().get("md5")));
 		assertEquals(new String(artifact.getHashes().get("sha256")), new String(artifact2.getHashes().get("sha256")));
+		
+		assertTrue(artifact.isValid());
+		
+		try {
+			artifact.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF"); // MD5 hash keyed to SHA256
+			fail("Artifact failed to detect an invalid hash value");
+		} catch (IOException e) {
+			// Do nothing because this is what we expect to happen
+		}
+		
 	}
 
 	public static String getJson(Artifact message, boolean prettyPrint) throws JsonProcessingException {
