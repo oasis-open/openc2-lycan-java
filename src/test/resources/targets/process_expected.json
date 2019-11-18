@@ -1,0 +1,20 @@
+{
+  "pid":12354,
+  "name":"Process name",
+  "cwd":"Process CWD",
+  "executable":{
+    "name":"File name",
+    "path":"File path",
+    "hashes":{
+      "sha1":"aGFzaCBzaGEx",
+      "sha256":"aGFzaCBzaGEyNTY=",
+      "md5":"aGFzaCBtZDU="
+    }
+  },
+  "parent":{
+    "pid":43521,
+    "name":"Process parent name",
+    "cwd":"Process parent CWD"
+  },
+  "command_line":"Process command line statement"
+}

@@ -2,8 +2,11 @@ package org.oasis.openc2.lycan.targets;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.oasis.openc2.lycan.types.HashType;
 import org.oasis.openc2.lycan.utilities.Payload;
@@ -14,8 +17,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ArtifactTest {
 	private boolean toConsole = true;
-	private String expected  = "{\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},\"mime_type\":\"My MIME Type\"}";
-	private String inputJson = "{\"mime_type\":\"My MIME Type\",\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}}";
+	private String expectedFile = "src/test/resources/targets/artifact_expected.json";
+	private String inputFile = "src/test/resources/targets/artifact_input.json";
+	private String expected;
+	private String inputJson;
+//	private String expected  = "{\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},\"mime_type\":\"My MIME Type\"}";
+//	private String inputJson = "{\"mime_type\":\"My MIME Type\",\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}}";
+	
+	private String loadJson(String filename) {
+		StringBuilder builder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+			String contents;
+			while ((contents = br.readLine()) != null) {
+				builder.append(contents.trim());
+			}
+		} catch (IOException e) {
+			System.out.println("Unable to read the JSON file: " + e.getMessage());
+		}
+		return builder.toString();
+	}
+	
+	@Before
+	public void setUp() throws Exception {
+		expected = loadJson(expectedFile);
+		inputJson = loadJson(inputFile);
+	}
 	
 	@Test
 	public void test() throws Exception {

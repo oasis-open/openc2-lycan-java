@@ -1,9 +1,12 @@
 package org.oasis.openc2.lycan.targets;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.oasis.openc2.lycan.types.HashType;
 
@@ -13,9 +16,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ProcessTest {
 	private boolean toConsole = true;
-	private String expected  = "{\"pid\":12354,\"name\":\"Process name\",\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"}";
-	private String inputJson = "{\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"pid\":12354,\"name\":\"Process name\",\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"}";
+	private String expectedFile = "src/test/resources/targets/process_expected.json";
+	private String inputFile = "src/test/resources/targets/process_input.json";
+	private String expected;
+	private String inputJson;
+//	private String expected  = "{\"pid\":12354,\"name\":\"Process name\",\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"}";
+//	private String inputJson = "{\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"pid\":12354,\"name\":\"Process name\",\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"}";
 
+	private String loadJson(String filename) {
+		StringBuilder builder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+			String contents;
+			while ((contents = br.readLine()) != null) {
+				builder.append(contents.trim());
+			}
+		} catch (IOException e) {
+			System.out.println("Unable to read the JSON file: " + e.getMessage());
+		}
+		return builder.toString();
+	}
+	
+	@Before
+	public void setUp() throws Exception {
+		expected = loadJson(expectedFile);
+		inputJson = loadJson(inputFile);
+	}
+	
 	@Test
 	public void test() throws Exception {
 		File file = new File();

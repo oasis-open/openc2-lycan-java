@@ -2,14 +2,42 @@ package org.oasis.openc2.lycan;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.oasis.openc2.lycan.json.JsonFormatter;
 import org.oasis.openc2.lycan.types.StatusCodeType;
 
 public class OpenC2ResponseTest {
 	private boolean toConsole = true;
-	private String expected = "{\"status\":404,\"results\":{\"version\":\"1.0\",\"tags\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\",\"Tag5\"]},\"status_text\":\"Couldn't find what you want\"}";
-	private String inputJson = "{\"status_text\":\"Couldn't find what you want\",\"status\":404,\"results\":{\"version\":\"1.0\",\"tags\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\",\"Tag5\"]}}";
+	private String expectedFile = "src/test/resources/openc2_response_expected.json";
+	private String inputFile = "src/test/resources/openc2_response_input.json";
+	private String expected;
+	private String inputJson;
+//	private String expected = "{\"status\":404,\"results\":{\"version\":\"1.0\",\"tags\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\",\"Tag5\"]},\"status_text\":\"Couldn't find what you want\"}";
+//	private String inputJson = "{\"status_text\":\"Couldn't find what you want\",\"status\":404,\"results\":{\"version\":\"1.0\",\"tags\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\",\"Tag5\"]}}";
+	
+	private String loadJson(String filename) {
+		StringBuilder builder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+			String contents;
+			while ((contents = br.readLine()) != null) {
+				builder.append(contents.trim());
+			}
+		} catch (IOException e) {
+			System.out.println("Unable to read the JSON file: " + e.getMessage());
+		}
+		return builder.toString();
+	}
+	
+	@Before
+	public void setUp() throws Exception {
+		expected = loadJson(expectedFile);
+		inputJson = loadJson(inputFile);
+	}
 	
 	@Test
 	public void test() throws Exception {

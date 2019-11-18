@@ -1,0 +1,12 @@
+{
+  "mime_type":"My MIME Type",
+  "payload":{
+    "bin":"VGVzdCBiaW4=",
+    "url":"www.testurl.com"
+  },
+  "hashes":{
+    "sha1":"aGFzaCBzaGEx",
+    "sha256":"aGFzaCBzaGEyNTY=",
+    "md5":"aGFzaCBtZDU="
+  }
+}
