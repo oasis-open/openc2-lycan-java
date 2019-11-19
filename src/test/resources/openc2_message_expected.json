@@ -3,7 +3,6 @@
   "target":{
     "artifact":{
       "payload":{
-        "bin":"VGVzdCBiaW4=",
         "url":"www.testurl.com"
       },
       "hashes":{
@@ -59,9 +58,7 @@
      "email_addr":"Email address",
      "idn_domain_name":"IDN Domain name",
      "idn_email_addr":"IDN Email address",
-     "ipv4_net":{
-       "ipv4_addr":"10.0.0.0/24"
-     },
+     "ipv4_net":"10.0.0.0/24",
      "ipv4_connection":{
        "protocol":"tcp",
        "src_addr":"10.0.0.0/24",
@@ -69,9 +66,7 @@
        "dst_addr":"10.0.0.0/24",
        "dst_port":9443
      },
-     "ipv6_net":{
-       "ipv6_addr":"AE:00:E4:F1:04:65/24"
-     },
+     "ipv6_net":"AE:00:E4:F1:04:65/24",
      "ipv6_connection":{
        "protocol":"tcp",
        "src_addr":"AE:00:E4:F1:04:65/24",
@@ -79,7 +74,7 @@
        "dst_addr":"AE:00:E4:F1:04:65/24",
        "dst_port":9443
      },
-     "mac_addr":"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw=="
+     "mac_addr":"This is my mac address"
    },
    "args":{
      "duration":30000,

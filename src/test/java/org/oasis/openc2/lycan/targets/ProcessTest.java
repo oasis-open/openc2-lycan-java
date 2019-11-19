@@ -20,8 +20,6 @@ public class ProcessTest {
 	private String inputFile = "src/test/resources/targets/process_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"pid\":12354,\"name\":\"Process name\",\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"}";
-//	private String inputJson = "{\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"pid\":12354,\"name\":\"Process name\",\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();
@@ -51,9 +49,6 @@ public class ProcessTest {
 		file.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
 			.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
 			.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
-//			.addHashes(HashType.MD5, "hash md5")
-//			.addHashes(HashType.SHA1, "hash sha1")
-//			.addHashes(HashType.SHA256, "hash sha256");
 		
 		Process parent = new Process();
 		

@@ -19,8 +19,6 @@ public class URITest {
 	private String inputFile = "src/test/resources/targets/uri_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"uri\":\"www.testuri.com\"}";
-//	private String inputJson = "{\"uri\":\"www.testuri.com\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

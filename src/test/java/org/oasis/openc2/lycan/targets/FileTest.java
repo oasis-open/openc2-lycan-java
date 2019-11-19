@@ -22,8 +22,6 @@ public class FileTest {
 	private String inputFile = "src/test/resources/targets/file_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}}";
-//	private String inputJson = "{\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},\"name\":\"File name\",\"path\":\"File path\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

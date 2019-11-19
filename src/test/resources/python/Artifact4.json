@@ -1,0 +1,16 @@
+{
+    "action": "update",
+    "target": {
+        "artifact": {
+            "payload": {
+                "url": "www.testurl.com"
+            },
+            "hashes": {
+                "sha1": "1234567890ABCDEF1234567890ABCDEF12345678",
+                "sha256": "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1",
+                "md5": "1234567890ABCDEF1234567890ABCDEF"
+            },
+            "mime_type": "My MIME Type"
+        }
+    }
+}

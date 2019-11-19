@@ -19,8 +19,6 @@ public class IriTest {
 	private String inputFile = "src/test/resources/targets/iri_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"iri\":\"test iri string\"}";
-//	private String inputJson = "{\"iri\":\"test iri string\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

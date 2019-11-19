@@ -1,0 +1,6 @@
+{
+    "action": "restart",
+    "target": {
+        "mac_addr": "VGhpcyBpcyBteSBtYWMgYWRkcmVzcw=="
+    }
+}

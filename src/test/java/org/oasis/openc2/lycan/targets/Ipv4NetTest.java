@@ -19,8 +19,6 @@ public class Ipv4NetTest {
 	private String inputFile = "src/test/resources/targets/ipv4_net_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"ipv4_addr\":\"1.2.3.4/24\"}";
-//	private String inputJson = "{\"ipv4_addr\":\"1.2.3.4/24\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();
@@ -45,7 +43,7 @@ public class Ipv4NetTest {
 	public void test() throws Exception {
 		Ipv4Net net = new Ipv4Net();
 		
-		net.setIpv4Addr("1.2.3.4/24");
+		net.setIpv4Net("1.2.3.4/24");
 		
 		if (toConsole) {
 			System.out.println(getJson(net, true));
@@ -55,7 +53,7 @@ public class Ipv4NetTest {
 		
 		Ipv4Net net2 = readJson(inputJson);
 		
-		assertEquals(net.getIpv4Addr(), net2.getIpv4Addr());
+		assertEquals(net.getIpv4Net(), net2.getIpv4Net());
 	}
 
 	public static String getJson(Ipv4Net message, boolean prettyPrint) throws JsonProcessingException {

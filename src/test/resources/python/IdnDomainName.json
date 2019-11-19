@@ -1,0 +1,6 @@
+{
+    "action": "deny",
+    "target": {
+        "idn_domain_name": "IDN Domain name"
+    }
+}

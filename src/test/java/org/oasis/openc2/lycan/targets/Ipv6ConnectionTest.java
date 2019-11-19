@@ -20,8 +20,6 @@ public class Ipv6ConnectionTest {
 	private String inputFile = "src/test/resources/targets/ipv6_connection_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"protocol\":\"tcp\",\"src_addr\":\"AE:00:E4:F1:04:65/24\",\"src_port\":8443,\"dst_addr\":\"01:55:43:AB:C1:FF/16\",\"dst_port\":9443}";
-//	private String inputJson = "{\"src_port\":8443,\"dst_port\":9443,\"src_addr\":\"AE:00:E4:F1:04:65/24\",\"dst_addr\":\"01:55:43:AB:C1:FF/16\",\"protocol\":\"tcp\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

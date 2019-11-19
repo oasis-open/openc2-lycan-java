@@ -1,0 +1,6 @@
+{
+    "action": "detonate",
+    "target": {
+        "idn_email_addr": "IDN Email address"
+    }
+}

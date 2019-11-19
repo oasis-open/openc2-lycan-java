@@ -20,8 +20,6 @@ public class FeaturesTest {
 	private String inputFile = "src/test/resources/targets/features_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"features\":[\"rate_limit\",\"pairs\"]}";
-//	private String inputJson = "{\"features\":[\"rate_limit\",\"pairs\"]}";
 	
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

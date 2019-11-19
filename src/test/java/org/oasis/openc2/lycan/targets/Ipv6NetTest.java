@@ -19,8 +19,6 @@ public class Ipv6NetTest {
 	private String inputFile = "src/test/resources/targets/ipv6_net_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"}";
-//	private String inputJson = "{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();
@@ -45,7 +43,7 @@ public class Ipv6NetTest {
 	public void test() throws Exception {
 		Ipv6Net net = new Ipv6Net();
 		
-		net.setIpv6Addr("AE:00:E4:F1:04:65/24");
+		net.setIpv6Net("AE:00:E4:F1:04:65/24");
 		
 		if (toConsole) {
 			System.out.println(getJson(net, true));
@@ -55,7 +53,7 @@ public class Ipv6NetTest {
 		
 		Ipv6Net net2 = readJson(inputJson);
 		
-		assertEquals(net.getIpv6Addr(), net2.getIpv6Addr());
+		assertEquals(net.getIpv6Net(), net2.getIpv6Net());
 	}
 
 	public static String getJson(Ipv6Net message, boolean prettyPrint) throws JsonProcessingException {

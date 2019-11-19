@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Ipv6Net {
-	private String ipv6Addr;
+	private String ipv6Net;
 	
 	public Ipv6Net() { }
 	
-	@JsonGetter("ipv6_addr")
-	public String getIpv6Addr() { return ipv6Addr; }
+	@JsonGetter("ipv6_net")
+	public String getIpv6Net() { return ipv6Net; }
 	
-	@JsonSetter("ipv6_addr")
-	public Ipv6Net setIpv6Addr(String ipv6Addr) { this.ipv6Addr = ipv6Addr; return this; }
+	@JsonSetter("ipv6_net")
+	public Ipv6Net setIpv6Net(String ipv6Net) { this.ipv6Net = ipv6Net; return this; }
 }

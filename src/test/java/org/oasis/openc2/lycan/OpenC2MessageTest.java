@@ -41,44 +41,6 @@ public class OpenC2MessageTest {
 	private String inputFile = "src/test/resources/openc2_message_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"action\":\"create\","
-//			+ "\"target\":{\"artifact\":{\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},"
-//			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},"
-//			+ "\"mime_type\":\"My MIME Type\"},\"device\":{\"hostname\":\"device hostname\","
-//			+ "\"idn_hostname\":\"device idn hostname\",\"device_id\":\"Device id\"},\"features\":[\"versions\","
-//			+ "\"profiles\",\"pairs\",\"rate_limit\"],\"file\":{\"name\":\"File name\",\"path\":\"File path\","
-//			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},"
-//			+ "\"iri\":\"My IRI identifier\",\"process\":{\"pid\":12354,\"name\":\"Process name\",\"cwd\":\"Process CWD\","
-//			+ "\"executable\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\","
-//			+ "\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"parent\":{\"pid\":43521,\"name\":\"Process parent name\","
-//			+ "\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"},"
-//			+ "\"properties\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\"],\"uri\":\"www.myuri.com\",\"domain_name\":\"Domain name\","
-//			+ "\"email_addr\":\"Email address\",\"idn_domain_name\":\"IDN Domain name\",\"idn_email_addr\":\"IDN Email address\","
-//			+ "\"ipv4_net\":{\"ipv4_addr\":\"10.0.0.0/24\"},\"ipv4_connection\":{\"protocol\":\"tcp\","
-//			+ "\"src_addr\":\"10.0.0.0/24\",\"src_port\":8443,\"dst_addr\":\"10.0.0.0/24\","
-//			+ "\"dst_port\":9443},\"ipv6_net\":{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},\"ipv6_connection\":{\"protocol\":\"tcp\","
-//			+ "\"src_addr\":\"AE:00:E4:F1:04:65/24\",\"src_port\":8443,\"dst_addr\":\"AE:00:E4:F1:04:65/24\",\"dst_port\":9443},"
-//			+ "\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"},"
-//			+ "\"args\":{\"duration\":30000,\"start_time\":1568209029693,\"stop_time\":1568209059693,\"response_requested\":\"complete\"},"
-//			+ "\"command_id\":\"My command id is here\"}";
-//	private String inputJson = "{\"action\":\"create\",\"target\":{\"artifact\":{\"payload\":{\"bin\":\"VGVzdCBiaW4=\","
-//			+ "\"url\":\"www.testurl.com\"},\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\","
-//			+ "\"md5\":\"aGFzaCBtZDU=\"},\"mime_type\":\"My MIME Type\"},\"device\":{\"hostname\":\"device hostname\","
-//			+ "\"idn_hostname\":\"device idn hostname\",\"device_id\":\"Device id\"},\"features\":[\"versions\",\"profiles\","
-//			+ "\"pairs\",\"rate_limit\"],\"file\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\","
-//			+ "\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"iri\":\"My IRI identifier\",\"process\":{\"pid\":12354,"
-//			+ "\"name\":\"Process name\",\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\",\"path\":\"File path\","
-//			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"parent\":{\"pid\":43521,"
-//			+ "\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},\"command_line\":\"Process command line statement\"},"
-//			+ "\"properties\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\"],\"uri\":\"www.myuri.com\",\"domain_name\":\"Domain name\","
-//			+ "\"email_addr\":\"Email address\",\"idn_domain_name\":\"IDN Domain name\",\"idn_email_addr\":\"IDN Email address\","
-//			+ "\"ipv4_net\":{\"ipv4_addr\":\"10.0.0.0/24\"},\"ipv4_connection\":{\"protocol\":\"tcp\",\"src_addr\":"
-//			+ "\"10.0.0.0/24\",\"src_port\":8443,\"dst_addr\":\"10.0.0.0/24\",\"dst_port\":9443},"
-//			+ "\"ipv6_net\":{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},\"ipv6_connection\":{\"protocol\":\"tcp\","
-//			+ "\"src_addr\":\"AE:00:E4:F1:04:65/24\",\"src_port\":8443,\"dst_addr\":"
-//			+ "\"AE:00:E4:F1:04:65/24\",\"dst_port\":9443},\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"},"
-//			+ "\"args\":{\"duration\":30000,\"start_time\":1568209029693,\"stop_time\":1568209059693,\"response_requested\":\"complete\"},"
-//			+ "\"command_id\":\"My command id is here\"}";
 	
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();
@@ -103,8 +65,7 @@ public class OpenC2MessageTest {
 		Artifact artifact = new Artifact();
 		
 		artifact.setMimeType("My MIME Type");
-		artifact.setPayload(new Payload().setUrl("www.testurl.com")
-										 .setBin("Test bin".getBytes()));
+		artifact.setPayload(new Payload().setUrl("www.testurl.com"));
 		artifact.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
 				.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
 				.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
@@ -180,7 +141,7 @@ public class OpenC2MessageTest {
 	private Ipv4Net getIpv4Net() throws Exception {
 		Ipv4Net ipv4Net = new Ipv4Net();
 		
-		ipv4Net.setIpv4Addr("10.0.0.0/24");
+		ipv4Net.setIpv4Net("10.0.0.0/24");
 		
 		return ipv4Net;
 	}
@@ -200,7 +161,7 @@ public class OpenC2MessageTest {
 	private Ipv6Net getIpv6Net() throws Exception {
 		Ipv6Net ipv6Net = new Ipv6Net();
 		
-		ipv6Net.setIpv6Addr("AE:00:E4:F1:04:65/24");
+		ipv6Net.setIpv6Net("AE:00:E4:F1:04:65/24");
 		
 		return ipv6Net;
 	}
@@ -228,7 +189,7 @@ public class OpenC2MessageTest {
 	private MacAddress getMacAddress() throws Exception {
 		MacAddress macAddress = new MacAddress();
 		
-		macAddress.setMacAddress("This is my mac address".getBytes());
+		macAddress.setMacAddress("This is my mac address");
 		
 		return macAddress;
 	}
@@ -324,41 +285,4 @@ public class OpenC2MessageTest {
 
 	}
 
-//	@Test
-//	public void test2() throws Exception {
-//		
-//		Payload payload = new Payload().setBin("Test bin".getBytes()).setUrl("www.testurl.com");
-//		
-//		Artifact artifact = new Artifact().setMimeType("My MIME type").setPayload(payload);
-//		artifact.addHashes(HashType.MD5, "hash md5".getBytes())
-//				.addHashes(HashType.SHA1, "hash sha1".getBytes())
-//				.addHashes(HashType.SHA256, "hash sha256".getBytes());
-//		
-//		Target target = new Target().setArtifact(artifact);
-//		
-//		OpenC2Message msg = new OpenC2Message(ActionType.CREATE, target);
-//		
-//		System.out.println(JsonFormatter.getJson(msg, true));
-//
-//		OpenC2Message msg1 = JsonFormatter.readOpenC2Message(JsonFormatter.getJson(msg, false));
-//		
-//		String text = "{\"action\":\"create\","
-//				+ "\"target\":{"
-//				+ "\"artifact\":{"
-//				+ "\"mime_type\":\"My MIME Type\","
-//				+ "\"payload\":{"
-//				+ "\"bin\":\"Test bin\","
-//				+ "\"url\":\"www.testurl.com\"},"
-//				+ "\"hashes\":{"
-//				+ "\"md5\":\"aGFzaCBzaGEx\","
-//				+ "\"sha1\":\"aGFzaCBzaGEyNTY=\","
-//				+ "\"sha256\":\"aGFzaCBtZDU=\"}}}}";
-////				+ "\"md5\":\"hash md5\","
-////				+ "\"sha1\":\"hash sha1\","
-////				+ "\"sha256\":\"hash sha256\"}}}}";
-//		
-//		OpenC2Message msg2 = JsonFormatter.readOpenC2Message(text);
-//		
-//		System.out.println(msg2.toString());
-//	}
 }

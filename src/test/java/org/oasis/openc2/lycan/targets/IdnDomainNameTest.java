@@ -19,8 +19,6 @@ public class IdnDomainNameTest {
 	private String inputFile = "src/test/resources/targets/idn_domain_name_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"idn_domain_name\":\"This is my idn domain name\"}";
-//	private String inputJson = "{\"idn_domain_name\":\"This is my idn domain name\"}";
 	
 
 	private String loadJson(String filename) {

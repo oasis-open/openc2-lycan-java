@@ -19,8 +19,6 @@ public class EmailAddressTest {
 	private String inputFile = "src/test/resources/targets/email_address_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"email_addr\":\"myemailaddress@abc.com\"}";
-//	private String inputJson = "{\"email_addr\":\"myemailaddress@abc.com\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

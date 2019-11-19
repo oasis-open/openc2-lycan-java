@@ -19,8 +19,6 @@ public class MacAddressTest {
 	private String inputFile = "src/test/resources/targets/mac_address_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"mac_addr\":\"MTRGNTNBNjY=\"}";
-//	private String inputJson = "{\"mac_addr\":\"MTRGNTNBNjY=\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();
@@ -45,7 +43,7 @@ public class MacAddressTest {
 	public void test() throws Exception {
 		MacAddress macAddress = new MacAddress();
 		
-		macAddress.setMacAddress("14F53A66".getBytes());
+		macAddress.setMacAddress("14F53A66");
 		
 		if (toConsole) {
 			System.out.println(getJson(macAddress, true));

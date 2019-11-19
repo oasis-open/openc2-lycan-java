@@ -23,38 +23,6 @@ public class TargetTest {
 	private String inputFile = "src/test/resources/targets/target_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"artifact\":{\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},"
-//			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},"
-//			+ "\"mime_type\":\"My MIME Type\"},\"device\":{\"hostname\":\"device hostname\",\"idn_hostname\":"
-//			+ "\"device idn hostname\",\"device_id\":\"Device id\"},\"features\":[\"versions\",\"profiles\",\"pairs\","
-//			+ "\"rate_limit\"],\"file\":{\"name\":\"File name\",\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\","
-//			+ "\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"iri\":\"My IRI identifier\","
-//			+ "\"process\":{\"pid\":12354,\"name\":\"Process name\",\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\","
-//			+ "\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},"
-//			+ "\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},"
-//			+ "\"command_line\":\"Process command line statement\"},\"properties\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\"],"
-//			+ "\"uri\":\"www.myuri.com\",\"domain_name\":\"Domain name\",\"email_addr\":\"Email address\",\"idn_domain_name\":"
-//			+ "\"IDN Domain name\",\"idn_email_addr\":\"IDN Email address\",\"ipv4_net\":{\"ipv4_addr\":\"10.0.0.0/24\"},"
-//			+ "\"ipv4_connection\":{\"protocol\":\"tcp\",\"src_addr\":\"10.0.0.0/24\",\"src_port\":8443,"
-//			+ "\"dst_addr\":\"10.0.0.0/24\",\"dst_port\":9443},\"ipv6_net\":{"
-//			+ "\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},\"ipv6_connection\":{\"protocol\":\"tcp\",\"src_addr\":"
-//			+ "\"AE:00:E4:F1:04:65/24\",\"src_port\":8443,\"dst_addr\":\"AE:00:E4:F1:04:65/24\","
-//			+ "\"dst_port\":9443},\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"}";
-//	private String inputJson = "{\"artifact\":{\"payload\":{\"bin\":\"VGVzdCBiaW4=\",\"url\":\"www.testurl.com\"},"
-//			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"},\"mime_type\":\"My MIME Type\"},"
-//			+ "\"device\":{\"hostname\":\"device hostname\",\"idn_hostname\":\"device idn hostname\",\"device_id\":\"Device id\"},"
-//			+ "\"features\":[\"versions\",\"profiles\",\"pairs\",\"rate_limit\"],\"file\":{\"name\":\"File name\",\"path\":\"File path\","
-//			+ "\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},\"iri\":\"My IRI identifier\","
-//			+ "\"process\":{\"pid\":12354,\"name\":\"Process name\",\"cwd\":\"Process CWD\",\"executable\":{\"name\":\"File name\","
-//			+ "\"path\":\"File path\",\"hashes\":{\"sha1\":\"aGFzaCBzaGEx\",\"sha256\":\"aGFzaCBzaGEyNTY=\",\"md5\":\"aGFzaCBtZDU=\"}},"
-//			+ "\"parent\":{\"pid\":43521,\"name\":\"Process parent name\",\"cwd\":\"Process parent CWD\"},"
-//			+ "\"command_line\":\"Process command line statement\"},\"properties\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\"],\"uri\":\"www.myuri.com\","
-//			+ "\"domain_name\":\"Domain name\",\"email_addr\":\"Email address\",\"idn_domain_name\":\"IDN Domain name\","
-//			+ "\"idn_email_addr\":\"IDN Email address\",\"ipv4_net\":{\"ipv4_addr\":\"10.0.0.0/24\"},"
-//			+ "\"ipv4_connection\":{\"protocol\":\"tcp\",\"src_addr\":\"10.0.0.0/24\",\"src_port\":8443,"
-//			+ "\"dst_addr\":\"10.0.0.0/24\",\"dst_port\":9443},\"ipv6_net\":{\"ipv6_addr\":\"AE:00:E4:F1:04:65/24\"},"
-//			+ "\"ipv6_connection\":{\"protocol\":\"tcp\",\"src_addr\":\"AE:00:E4:F1:04:65/24\",\"src_port\":8443,"
-//			+ "\"dst_addr\":\"AE:00:E4:F1:04:65/24\",\"dst_port\":9443},\"mac_addr\":\"VGhpcyBpcyBteSBtYWMgYWRkcmVzcw==\"}";
 	
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();
@@ -79,8 +47,7 @@ public class TargetTest {
 		Artifact artifact = new Artifact();
 		
 		artifact.setMimeType("My MIME Type");
-		artifact.setPayload(new Payload().setUrl("www.testurl.com")
-										 .setBin("Test bin".getBytes()));
+		artifact.setPayload(new Payload().setUrl("www.testurl.com"));
 		artifact.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
 				.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
 				.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
@@ -156,7 +123,7 @@ public class TargetTest {
 	private Ipv4Net getIpv4Net() throws Exception {
 		Ipv4Net ipv4Net = new Ipv4Net();
 		
-		ipv4Net.setIpv4Addr("10.0.0.0/24");
+		ipv4Net.setIpv4Net("10.0.0.0/24");
 		
 		return ipv4Net;
 	}
@@ -176,7 +143,7 @@ public class TargetTest {
 	private Ipv6Net getIpv6Net() throws Exception {
 		Ipv6Net ipv6Net = new Ipv6Net();
 		
-		ipv6Net.setIpv6Addr("AE:00:E4:F1:04:65/24");
+		ipv6Net.setIpv6Net("AE:00:E4:F1:04:65/24");
 		
 		return ipv6Net;
 	}
@@ -204,7 +171,7 @@ public class TargetTest {
 	private MacAddress getMacAddress() throws Exception {
 		MacAddress macAddress = new MacAddress();
 		
-		macAddress.setMacAddress("This is my mac address".getBytes());
+		macAddress.setMacAddress("This is my mac address");
 		
 		return macAddress;
 	}

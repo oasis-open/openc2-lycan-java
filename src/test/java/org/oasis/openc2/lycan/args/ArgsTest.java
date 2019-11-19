@@ -19,8 +19,6 @@ public class ArgsTest {
 	private String inputFile = "src/test/resources/args/args_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"duration\":30000,\"start_time\":1568144664661,\"stop_time\":1568144694661,\"response_requested\":\"complete\"}";
-//	private String inputJson = "{\"start_time\":1568144664661,\"response_requested\":\"complete\",\"duration\":30000,\"stop_time\":1568144694661}";
 	
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

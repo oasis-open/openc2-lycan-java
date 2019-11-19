@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class Target {
-	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+//	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private Artifact artifact;
-	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+//	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private Device device;
 	@JsonUnwrapped
 	private DomainName domainName;
@@ -17,23 +17,25 @@ public class Target {
 	private EmailAddress emailAddress;
 	@JsonUnwrapped
 	private Features features;
-	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+//	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private File file;
 	@JsonUnwrapped
 	private IdnDomainName idnDomainName;
 	@JsonUnwrapped
 	private IdnEmailAddress idnEmailAddress;
+	@JsonUnwrapped
 	private Ipv4Net ipv4Net;
-	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+//	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private Ipv4Connection ipv4Connection;
+	@JsonUnwrapped
 	private Ipv6Net ipv6Net;
-	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+//	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private Ipv6Connection ipv6Connection;
 	@JsonUnwrapped
 	private Iri iri;
 	@JsonUnwrapped
 	private MacAddress macAddress;
-	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+//	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private Process process;
 	@JsonUnwrapped
 	private Properties properties;

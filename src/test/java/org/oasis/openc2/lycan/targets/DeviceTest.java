@@ -19,8 +19,6 @@ public class DeviceTest {
 	private String inputFile = "src/test/resources/targets/device_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"hostname\":\"device hostname\",\"idn_hostname\":\"device idn hostname\",\"device_id\":\"Device id\"}";
-//	private String inputJson = "{\"idn_hostname\":\"device idn hostname\",\"hostname\":\"device hostname\",\"device_id\":\"Device id\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

@@ -1,0 +1,10 @@
+{
+  "action" : "allow",
+  "target" : {
+    "device" : {
+      "hostname" : "device hostname",
+      "idn_hostname" : "device idn hostname",
+      "device_id" : "Device id"
+    }
+  }
+}

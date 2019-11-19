@@ -20,8 +20,6 @@ public class Ipv4ConnectionTest {
 	private String inputFile = "src/test/resources/targets/ipv4_connection_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected  = "{\"protocol\":\"tcp\",\"src_addr\":\"1.2.3.4/24\",\"src_port\":8443,\"dst_addr\":\"2.3.4.5/16\",\"dst_port\":9443}";
-//	private String inputJson = "{\"src_port\":8443,\"dst_port\":9443,\"src_addr\":\"1.2.3.4/24\",\"dst_addr\":\"2.3.4.5/16\",\"protocol\":\"tcp\"}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

@@ -19,8 +19,6 @@ public class PropertiesTest {
 	private String inputFile = "src/test/resources/targets/properties_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"properties\":[\"prop1\",\"prop2\",\"prop3\",\"prop4\"]}";
-//	private String inputJson = "{\"properties\":[\"prop1\",\"prop2\",\"prop3\",\"prop4\"]}";
 
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

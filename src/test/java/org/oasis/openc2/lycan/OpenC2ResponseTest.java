@@ -17,8 +17,6 @@ public class OpenC2ResponseTest {
 	private String inputFile = "src/test/resources/openc2_response_input.json";
 	private String expected;
 	private String inputJson;
-//	private String expected = "{\"status\":404,\"results\":{\"version\":\"1.0\",\"tags\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\",\"Tag5\"]},\"status_text\":\"Couldn't find what you want\"}";
-//	private String inputJson = "{\"status_text\":\"Couldn't find what you want\",\"status\":404,\"results\":{\"version\":\"1.0\",\"tags\":[\"Tag1\",\"Tag2\",\"Tag3\",\"Tag4\",\"Tag5\"]}}";
 	
 	private String loadJson(String filename) {
 		StringBuilder builder = new StringBuilder();

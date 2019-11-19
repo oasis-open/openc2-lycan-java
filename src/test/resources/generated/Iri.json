@@ -1,0 +1,6 @@
+{
+  "action" : "remediate",
+  "target" : {
+    "iri" : "My IRI identifier"
+  }
+}

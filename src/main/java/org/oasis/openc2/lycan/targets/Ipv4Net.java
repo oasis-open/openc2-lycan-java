@@ -2,15 +2,16 @@ package org.oasis.openc2.lycan.targets;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class Ipv4Net {
-	private String ipv4Addr;
+	private String ipv4Net;
 	
 	public Ipv4Net() { }
 	
-	@JsonGetter("ipv4_addr")
-	public String getIpv4Addr() { return ipv4Addr; }
+	@JsonGetter("ipv4_net")
+	public String getIpv4Net() { return ipv4Net; }
 	
-	@JsonSetter("ipv4_addr")
-	public Ipv4Net setIpv4Addr(String ipv4Addr) { this.ipv4Addr = ipv4Addr; return this; }
+	@JsonSetter("ipv4_net")
+	public Ipv4Net setIpv4Net(String ipv4Net) { this.ipv4Net = ipv4Net; return this; }
 }

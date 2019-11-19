@@ -1,0 +1,6 @@
+{
+  "action" : "scan",
+  "target" : {
+    "properties" : [ "Tag1", "Tag2", "Tag3", "Tag4" ]
+  }
+}

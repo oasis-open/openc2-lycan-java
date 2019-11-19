@@ -1,0 +1,6 @@
+{
+  "action" : "redirect",
+  "target" : {
+    "ipv6_net" : "AE:00:E4:F1:04:65/24"
+  }
+}
