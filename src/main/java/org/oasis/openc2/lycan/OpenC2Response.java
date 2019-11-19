@@ -6,7 +6,6 @@ import java.util.Map;
 import org.oasis.openc2.lycan.types.StatusCodeType;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class OpenC2Response {
