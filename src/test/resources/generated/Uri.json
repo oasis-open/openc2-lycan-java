@@ -1,0 +1,6 @@
+{
+  "action" : "set",
+  "target" : {
+    "uri" : "www.myuri.com"
+  }
+}

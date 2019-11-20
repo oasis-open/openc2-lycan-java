@@ -1,66 +1,73 @@
-/* 
- * The MIT License (MIT)
- *
- * Copyright 2018 AT&T Intellectual Property. All other rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
- * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- */
 package org.oasis.openc2.lycan.targets;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.junit.Before;
 import org.junit.Test;
-import org.oasis.openc2.lycan.OpenC2Message;
-import org.oasis.openc2.lycan.action.ActionType;
-import org.oasis.openc2.lycan.json.JsonFormatter;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DomainNameTest  {
-	private static final boolean toConsole = false;
-	private static final String DOMAIN_VALUE = "www.my.domain";
+public class DomainNameTest {
+	private boolean toConsole = true;
+	private String expectedFile = "src/test/resources/targets/domain_name_expected.json";
+	private String inputFile = "src/test/resources/targets/domain_name_input.json";
+	private String expected;
+	private String inputJson;
 	
-	private static final String expect = "{\"action\":\"locate\",\"target\":{\"domain_name\":\"www.my.domain\"}}";
 
+	private String loadJson(String filename) {
+		StringBuilder builder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+			String contents;
+			while ((contents = br.readLine()) != null) {
+				builder.append(contents.trim());
+			}
+		} catch (IOException e) {
+			System.out.println("Unable to read the JSON file: " + e.getMessage());
+		}
+		return builder.toString();
+	}
+	
+	@Before
+	public void setUp() throws Exception {
+		expected = loadJson(expectedFile);
+		inputJson = loadJson(inputFile);
+	}
+		
 	@Test
-	public void test1() throws Exception {
-		DomainName target = new DomainName(DOMAIN_VALUE);		
-		OpenC2Message message = new OpenC2Message(ActionType.LOCATE, target);
-
-		JsonNode expected = new ObjectMapper().readTree(expect);
-		JsonNode actual = new ObjectMapper().readTree(message.toJson());
-		assertEquals(expected, actual);
-
+	public void test() throws Exception {
+		DomainName domainName = new DomainName();
+		
+		domainName.setDomainName("This is my domain name");
+		
 		if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("IpAddrTest - Test1 JSON output:");
-    		System.out.println(message.toJson());
-			System.out.println(message.toPrettyJson());
-			System.out.println("\n\n");
+			System.out.println(getJson(domainName, true));
 		}
 		
-		OpenC2Message inMsg = JsonFormatter.readOpenC2Message(expect);
-		assertTrue(inMsg.getTarget() instanceof DomainName);
-		DomainName inTarget = (DomainName)inMsg.getTarget();
-		assertEquals(DOMAIN_VALUE, inTarget.getDomainName());
+		assertEquals(expected, getJson(domainName, false));
+		
+		DomainName domainName2 = readJson(inputJson);
+		
+		assertEquals(domainName.getDomainName(), domainName2.getDomainName());
+	}
+
+	public static String getJson(DomainName message, boolean prettyPrint) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		if (prettyPrint) 
+			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message);
+		return mapper.writeValueAsString(message);
+	}
+
+	public static DomainName readJson(String json) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(json, DomainName.class);
 	}
 
 }

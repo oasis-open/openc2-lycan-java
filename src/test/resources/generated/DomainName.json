@@ -1,0 +1,6 @@
+{
+  "action" : "cancel",
+  "target" : {
+    "domain_name" : "Domain name"
+  }
+}

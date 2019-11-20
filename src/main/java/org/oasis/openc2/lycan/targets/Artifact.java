@@ -1,98 +1,72 @@
-/*
- *  The MIT License (MIT)
- *
- * Copyright 2018 AT&T Intellectual Property. All other rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
- * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- */
 package org.oasis.openc2.lycan.targets;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
-import org.oasis.openc2.lycan.utilities.Keys;
-import org.oasis.openc2.lycan.utilities.OpenC2Map;
+import org.oasis.openc2.lycan.interfaces.Validation;
+import org.oasis.openc2.lycan.types.HashType;
+import org.oasis.openc2.lycan.utilities.Payload;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-/**
- * Implementation of an Artifact OpenC2 target
- *
- */
-public class Artifact extends OpenC2Map<TargetType> {
+public class Artifact implements Validation {
+	private static final String MD5_PATTERN = "^[A-F0-9]{32}$";
+	private static final String SHA1_PATTERN = "^[A-F0-9]{40}$";
+	private static final String SHA256_PATTERN = "^[A-F0-9]{64}$";
 	
-	/**
-	 * Constructor
-	 * 
-	 */
-	public Artifact() {
-		super(TargetType.ARTIFACT);
-	}
+	private String mimeType;
+	private Payload payload;
+	private Map<String, String> hashes = null;
 	
-	public String getMime() { return (String)super.get(Keys.MIME_TYPE); }
-	public Byte[] getPayloadBin() { return (Byte[])super.get(Keys.PAYLOAD_BIN); }
-	public String getUrl() { return (String)super.get(Keys.URL); }
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> getHashes() { return (Map<String, Object>)super.get(Keys.HASHES); }
-	
-	/**
-	 * Set the mime value
-	 * 
-	 * @param mime to be assigned to the object
-	 * @return Artifact object used for method chaining
-	 */
-	@JsonSetter(Keys.MIME_TYPE)
-	public Artifact setMime(String mime) {
-		super.put(Keys.MIME_TYPE, mime);
-		return this;
-	}
-	
-	/**
-	 * Set the payload_bin value
-	 * 
-	 * @param value payload_bin data in binary format
-	 * @return Artifact object used for method chaining
-	 */
-	@JsonSetter(Keys.PAYLOAD_BIN)
-	public Artifact setPayloadBin(Byte[] value) {
-		super.put(Keys.PAYLOAD_BIN, value);
-		return this;
-	}
-	
-	/**
-	 * Set the URL value
-	 * 
-	 * @param value URL string to assign
-	 * @return Artifact object used for method chaining
-	 */
-	public Artifact setUrl(String value) {
-		super.put(Keys.URL, value);
-		return this;
-	}
+	public Artifact() { }
 
-	/**
-	 * Set the hashes value
-	 * 
-	 * @param value URL string to assign
-	 * @return Artifact object used for method chaining
-	 */
-	public Artifact setHashes(Map<String, Object> value) {
-		super.put(Keys.HASHES, value);
+	@JsonGetter("mime_type")
+	public String getMimeType() 			{ return mimeType; }
+	public Payload getPayload() 			{ return payload; }
+	public Map<String, String> getHashes() 	{ return hashes; }
+
+	@JsonSetter("mime_type")
+	public Artifact setMimeType(String mimeType) 		{ this.mimeType = mimeType; return this; }
+	public Artifact setPayload(Payload payload) 		{ this.payload = payload; return this; }
+	public Artifact setHashes(Map<String, String> map) 	{ this.hashes = map; return this; }
+	
+	
+	public Artifact addHashes(HashType key, String hash) throws IOException {
+		if (hashes == null)
+			hashes = new HashMap<>();
+		
+		if (!validateHash(key.toString(), hash)) {
+			throw new IOException("The hash value was not a valid " + key.toString() + " value");
+		}
+		
+		hashes.put(key.toString(), hash);
 		return this;
 	}
-
+	
+	private boolean validateHash(String key, String value) {
+		if (key.equalsIgnoreCase("md5")) {
+			return Pattern.compile(MD5_PATTERN).matcher(value).matches();
+		} else if (key.equalsIgnoreCase("sha1")) {
+			return Pattern.compile(SHA1_PATTERN).matcher(value).matches();
+		} else if (key.equalsIgnoreCase("sha256")) {
+			return Pattern.compile(SHA256_PATTERN).matcher(value).matches();
+		}
+		
+		return false;
+	}
+	
+	@JsonIgnore
+	@Override
+	public boolean isValid() {
+		for (String key : hashes.keySet()) {
+			if (!validateHash(key, hashes.get(key)))
+				return false;
+		}
+		
+		return true;
+	}
 }

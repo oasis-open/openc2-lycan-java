@@ -1,0 +1,6 @@
+{
+    "action": "locate",
+    "target": {
+        "ipv4_net": "10.0.0.0/24"
+    }
+}

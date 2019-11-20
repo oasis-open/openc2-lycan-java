@@ -1,324 +1,288 @@
-/* 
- * The MIT License (MIT)
- *
- * Copyright 2018 AT&T Intellectual Property. All other rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
- * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- */
 package org.oasis.openc2.lycan;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.not;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.junit.Before;
 import org.junit.Test;
-import org.oasis.openc2.lycan.action.ActionType;
-import org.oasis.openc2.lycan.actuators.ActuatorType;
-import org.oasis.openc2.lycan.actuators.Endpoint;
-import org.oasis.openc2.lycan.actuators.NetworkSensor;
 import org.oasis.openc2.lycan.args.Args;
-import org.oasis.openc2.lycan.header.Header;
 import org.oasis.openc2.lycan.json.JsonFormatter;
-import org.oasis.openc2.lycan.targets.IpAddr;
-import org.oasis.openc2.lycan.targets.TargetType;
-import org.oasis.openc2.lycan.utilities.Keys;
-import org.oasis.openc2.lycan.utilities.StatusCode;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.oasis.openc2.lycan.targets.Artifact;
+import org.oasis.openc2.lycan.targets.Device;
+import org.oasis.openc2.lycan.targets.DomainName;
+import org.oasis.openc2.lycan.targets.EmailAddress;
+import org.oasis.openc2.lycan.targets.Features;
+import org.oasis.openc2.lycan.targets.File;
+import org.oasis.openc2.lycan.targets.IdnDomainName;
+import org.oasis.openc2.lycan.targets.IdnEmailAddress;
+import org.oasis.openc2.lycan.targets.Ipv4Connection;
+import org.oasis.openc2.lycan.targets.Ipv4Net;
+import org.oasis.openc2.lycan.targets.Ipv6Connection;
+import org.oasis.openc2.lycan.targets.Ipv6Net;
+import org.oasis.openc2.lycan.targets.Iri;
+import org.oasis.openc2.lycan.targets.MacAddress;
+import org.oasis.openc2.lycan.targets.Process;
+import org.oasis.openc2.lycan.targets.Properties;
+import org.oasis.openc2.lycan.targets.Target;
+import org.oasis.openc2.lycan.targets.URI;
+import org.oasis.openc2.lycan.types.ActionType;
+import org.oasis.openc2.lycan.types.FeatureType;
+import org.oasis.openc2.lycan.types.HashType;
+import org.oasis.openc2.lycan.types.L4ProtocolType;
+import org.oasis.openc2.lycan.utilities.Payload;
 
 public class OpenC2MessageTest {
-	private static final boolean toConsole = false;
-	private static final String IP_VALUE = "1.2.3.4";
-	private static final String ID_VALUE = "TEST-id-1";
-	private static final String ARG1_KEY = "start_time";
-	private static final String ARG1_VALUE = "now";
-	private static final String ARG2_KEY = "response_requested";
-	private static final String ARG2_VALUE = "Ack";
-	private static final String ENDPOINT_VALUE = "router";
-	private static final String CONTENT_VALUE = "context";
-	private static final String VERSION_VALUE = "0.1.0";
+	private boolean toConsole = true;
+	private String expectedFile = "src/test/resources/openc2_message_expected.json";
+	private String inputFile = "src/test/resources/openc2_message_input.json";
+	private String expected;
+	private String inputJson;
 	
-	private static final String test1Json = "{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}";
-	private static final String test2Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}";
-	private static final String test3Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"actuator\":{\"endpoint\":{\"actuator_id\":\"router\"}}}";
-	private static final String test4Json = "{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"args\":{\"start_time\":\"now\",\"response_requested\":\"Ack\"}}";
-	private static final String test5Json = "{\"header\":{\"version\":\"0.1.0\",\"id\":\"TEST-id-1\",\"content_type\":\"context\"},\"command\":{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"}}}";
-	private static final String test6Json = "{\"header\":{\"version\":\"0.1.0\",\"id\":\"TEST-id-1\",\"content_type\":\"context\"},\"command\":{\"action\":\"copy\",\"target\":{\"ip_addr\":\"1.2.3.4\"},\"args\":{\"start_time\":\"now\",\"response_requested\":\"Ack\"},\"actuator\":{\"endpoint\":{\"actuator_id\":\"router\"}}}}";
-	private static final String test7Json = "{\"action\":\"copy\",\"target\":{\"artifact\":{\"mime_type\":\"Test mime\",\"payload_bin\":[10,15,20],\"url\":\"test url\",\"hashes\":{\"hashkey2\":\"value2\",\"hashkey1\":\"value1\"}}},\"actuator\":{\"network_sensor\":{\"name\":\"cisco\",\"path\":\"www.router.com\"}}}";
-	private static final String test8Json = "{\"header\":{\"version\":\"0.1.0\",\"id\":\"TEST-id-1\",\"content_type\":\"context\"},\"command\":{\"id\":\"TEST-id-1\",\"action\":\"copy\",\"target\":{\"artifact\":{\"mime_type\":\"Test mime\",\"payload_bin\":[10,15,20],\"url\":\"test url\",\"hashes\":{\"hashkey2\":\"value2\",\"hashkey1\":\"value1\"}}},\"actuator\":{\"network_sensor\":{\"name\":\"cisco\",\"path\":\"www.router.com\"}}}}";
-    
-    /**
-     * This test case is just to cover noise that shows up in the code
-     * coverage report.  These aren't actual tests, they just exercise 
-     * some non-testable or trivial aspect of the code that is being 
-     * flagged due to the way the Emma engine executes it's reporting.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testCodeCoverage() throws Exception {
-    	new Keys();
-    	new JsonFormatter();
-    	StatusCode.valueOf("OK");
-    	StatusCode.OK.toString();
-    	TargetType.values();
-    	TargetType.valueOf("ARTIFACT");
-    	ActuatorType.values();
-    	ActuatorType.valueOf("ENDPOINT");
+	private String loadJson(String filename) {
+		StringBuilder builder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+			String contents;
+			while ((contents = br.readLine()) != null) {
+				builder.append(contents.trim());
+			}
+		} catch (IOException e) {
+			System.out.println("Unable to read the JSON file: " + e.getMessage());
+		}
+		return builder.toString();
+	}
 	
-    	OpenC2Message message = new OpenC2Message("", ActionType.COPY, new IpAddr(IP_VALUE))
-    			.setActuator(new NetworkSensor())
-    			.setArgs(new Args());
-    	message.toPrettyJson();
-    	assertFalse(message.hasId());		// test empty id
-    	assertFalse(message.hasActuator()); // test empty actuator
-    	assertFalse(message.hasArgs());     // test empty args
-    }
-    
-    @Test
-    public void testTest1() throws Exception {
-    	
-    	OpenC2Message message = new OpenC2Message(ActionType.COPY, new IpAddr(IP_VALUE));
-    	OpenC2Message message2 = JsonFormatter.readOpenC2Message(message.toJson());
-    	
-    	// Create JsonNode objects for comparison 
-    	JsonNode messageJN = new ObjectMapper().readTree(message.toJson());
-    	JsonNode message2JN = new ObjectMapper().readTree(message2.toJson());
-    	JsonNode message3JN = new ObjectMapper().readTree(test1Json);
-    	JsonNode message4JN = new ObjectMapper().readTree(test2Json);
+	@Before
+	public void setUp() throws Exception {
+		expected = loadJson(expectedFile);
+		inputJson = loadJson(inputFile);
+	}
+	
+	private Artifact getArtifact() throws Exception {
+		Artifact artifact = new Artifact();
+		
+		artifact.setMimeType("My MIME Type");
+		artifact.setPayload(new Payload().setUrl("www.testurl.com"));
+		artifact.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
+				.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
+				.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
+		
+		return artifact;
+	}
+	
+	private Device getDevice() throws Exception {
+		Device device = new Device();
+		
+		device.setDeviceId("Device id");
+		device.setHostname("device hostname");
+		device.setIdnHostname("device idn hostname");
+		
+		return device;
+	}
+	
+	private DomainName getDomainName() throws Exception {
+		DomainName domainName = new DomainName();
+		
+		domainName.setDomainName("Domain name");
+		
+		return domainName;
+	}
+	
+	private EmailAddress getEmailAddress() throws Exception {
+		EmailAddress emailAddr = new EmailAddress();
+		
+		emailAddr.setEmailAddress("Email address");
+		
+		return emailAddr;
+	}
+	
+	private Features getFeatures() throws Exception {
+		Features features = new Features();
+		
+		features.addFeature(FeatureType.VERSIONS);
+		features.addFeature(FeatureType.PROFILES);
+		features.addFeature(FeatureType.PAIRS);
+		features.addFeature(FeatureType.RATE_LIMIT);
+		
+		return features;
+	}
+	
+	private File getFile() throws Exception {
+		File file = new File();
+		
+		file.setName("File name");
+		file.setPath("File path");
+		file.addHashes(HashType.MD5, "1234567890ABCDEF1234567890ABCDEF")
+			.addHashes(HashType.SHA1, "1234567890ABCDEF1234567890ABCDEF12345678")
+			.addHashes(HashType.SHA256, "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1");
+		
+		return file;
+	}
+	
+	private IdnDomainName getIdnDomainName() throws Exception {
+		IdnDomainName idnDomainName = new IdnDomainName();
+		
+		idnDomainName.setIdnDomainName("IDN Domain name");
+		
+		return idnDomainName;
+	}
+	
+	private IdnEmailAddress getIdnEmailAddress() throws Exception {
+		IdnEmailAddress idnEmailAddr = new IdnEmailAddress();
+		
+		idnEmailAddr.setIdnEmailAddress("IDN Email address");
+		
+		return idnEmailAddr;
+	}
+	
+	private Ipv4Net getIpv4Net() throws Exception {
+		Ipv4Net ipv4Net = new Ipv4Net();
+		
+		ipv4Net.setIpv4Net("10.0.0.0/24");
+		
+		return ipv4Net;
+	}
+	
+	private Ipv4Connection getIpv4Connection() throws Exception {
+		Ipv4Connection ipv4Connection = new Ipv4Connection();
+		
+		ipv4Connection.setSrcAddr("10.0.0.0/24");
+		ipv4Connection.setSrcPort(8443);
+		ipv4Connection.setDstAddr("10.0.0.0/24");
+		ipv4Connection.setDstPort(9443);
+		ipv4Connection.setProtocol(L4ProtocolType.TCP);
+		
+		return ipv4Connection;
+	}
+	
+	private Ipv6Net getIpv6Net() throws Exception {
+		Ipv6Net ipv6Net = new Ipv6Net();
+		
+		ipv6Net.setIpv6Net("AE:00:E4:F1:04:65/24");
+		
+		return ipv6Net;
+	}
+	
+	private Ipv6Connection getIpv6Connection() throws Exception {
+		Ipv6Connection ipv6Connection = new Ipv6Connection();
+		
+		ipv6Connection.setSrcAddr("AE:00:E4:F1:04:65/24");
+		ipv6Connection.setSrcPort(8443);
+		ipv6Connection.setDstAddr("AE:00:E4:F1:04:65/24");
+		ipv6Connection.setDstPort(9443);
+		ipv6Connection.setProtocol(L4ProtocolType.TCP);
+		
+		return ipv6Connection;
+	}
+	
+	private Iri getIri() throws Exception {
+		Iri iri = new Iri();
+		
+		iri.setIri("My IRI identifier");
+		
+		return iri;
+	}
+	
+	private MacAddress getMacAddress() throws Exception {
+		MacAddress macAddress = new MacAddress();
+		
+		macAddress.setMacAddress("This is my mac address");
+		
+		return macAddress;
+	}
+	
+	private Process getProcess() throws Exception {
+		Process parent = new Process();
+		
+		parent.setPid(43521);
+		parent.setName("Process parent name");
+		parent.setCwd("Process parent CWD");
+		
+		Process process = new Process();
+		
+		process.setPid(12354);
+		process.setName("Process name");
+		process.setCwd("Process CWD");
+		process.setExecutable(getFile());
+		process.setParent(parent);
+		process.setCommandLine("Process command line statement");
+		
+		return process;
+	}
+	
+	private Properties getProperties() throws Exception {
+		Properties properties = new Properties();
+		
+		properties.addProperties("Tag1")
+				  .addProperties("Tag2")
+				  .addProperties("Tag3")
+				  .addProperties("Tag4");
+		
+		return properties;
+	}
+	
+	private URI getUri() throws Exception {
+		URI uri = new URI();
+		
+		uri.setUri("www.myuri.com");
+		
+		return uri;
+	}
 
-    	assertEquals(messageJN, message2JN);  // Verify that the object created from a string is the same
-    	assertEquals(messageJN, message3JN);  // Verify that the object from an external JSON string is the same
-    	assertThat(messageJN, not(equalTo(message4JN))); // Verify that two different objects are not equal
+	private Target getTarget() throws Exception {
+		Target target = new Target();
+		
+		target.setArtifact(getArtifact());
+		target.setDevice(getDevice());
+		target.setDomainName(getDomainName());
+		target.setEmailAddress(getEmailAddress());
+		target.setFeatures(getFeatures());
+		target.setFile(getFile());
+		target.setIdnDomainName(getIdnDomainName());
+		target.setIdnEmailAddress(getIdnEmailAddress());
+		target.setIpv4Net(getIpv4Net());
+		target.setIpv4Connection(getIpv4Connection());
+		target.setIpv6Net(getIpv6Net());
+		target.setIpv6Connection(getIpv6Connection());
+		target.setIri(getIri());
+		target.setMacAddress(getMacAddress());
+		target.setProcess(getProcess());
+		target.setProperties(getProperties());
+		target.setUri(getUri());
+		
+		return target;
+	}
+	
+	private Args getArgs() throws Exception {
+		Args args = new Args();
+		
+		args.addStartDuration(1568209029693L, 30 * 1000L);
+		
+		return args;
+	}
+	
+	@Test
+	public void test() throws Exception {
+		OpenC2Message msg = new OpenC2Message(ActionType.CREATE, getTarget(), getArgs());
+		msg.setCommandId("My command id is here");
+		
+		if (toConsole) {
+			System.out.println(JsonFormatter.getJson(msg, false));
+			System.out.println(JsonFormatter.getJson(msg, true));
+		}
 
-    	if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("OpenC2MessageTest - Test1 JSON output:");
-    		System.out.println(message.toJson());
-    		System.out.println(message.toPrettyJson());
-    		System.out.println("\n\n");
-    	}
+		assertEquals(expected, JsonFormatter.getJson(msg, false));
+		
+		// Just verify that can read in JSON string, testing fields is done
+		// by individual test cases for each object
+		OpenC2Message msg2 = JsonFormatter.readOpenC2Message(inputJson);
+		
+		assertEquals(msg.getCommandId(), msg2.getCommandId());
+		
 
-    	OpenC2Message inMsg = JsonFormatter.readOpenC2Message(test1Json);
-    	assertEquals(inMsg.getAction(), ActionType.COPY.toString());
-    	assertNull(inMsg.getId());
-    	assertTrue(inMsg.getTarget() instanceof IpAddr);
-    	IpAddr target = (IpAddr)inMsg.getTarget();
-    	assertEquals(IP_VALUE, target.getIpAddr());
-    	assertNull(inMsg.getActuator());
-    	assertNull(inMsg.getArgs());
-    }
-    
-    @Test
-    public void testTest2() throws Exception {
-    	
-    	OpenC2Message message = new OpenC2Message(ActionType.COPY, new IpAddr(IP_VALUE)).setId(ID_VALUE);
-    	OpenC2Message message2 = JsonFormatter.readOpenC2Message(message.toJson());
-    	    	
-    	// Create JsonNode objects for comparison 
-    	JsonNode messageJN = new ObjectMapper().readTree(message.toJson());
-    	JsonNode message2JN = new ObjectMapper().readTree(message2.toJson());
-    	JsonNode message3JN = new ObjectMapper().readTree(test2Json);
-    	JsonNode message4JN = new ObjectMapper().readTree(test1Json);
-
-    	assertEquals(messageJN, message2JN);  // Verify that the object created from a string is the same
-    	assertEquals(messageJN, message3JN);  // Verify that the object from an external JSON string is the same
-    	assertThat(messageJN, not(equalTo(message4JN))); // Verify that two different objects are not equal
-
-    	if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("OpenC2MessageTest - Test2 JSON output:");
-    		System.out.println(message.toJson());
-    		System.out.println(message.toPrettyJson());
-    		System.out.println("\n\n");
-    	}
-
-    	OpenC2Message inMsg = JsonFormatter.readOpenC2Message(test2Json);
-    	assertEquals(inMsg.getAction(), ActionType.COPY.toString());
-    	assertEquals(ID_VALUE, inMsg.getId());
-    	assertTrue(inMsg.getTarget() instanceof IpAddr);
-    	IpAddr target = (IpAddr)inMsg.getTarget();
-    	assertEquals(IP_VALUE, target.getIpAddr());
-    	assertNull(inMsg.getActuator());
-    	assertNull(inMsg.getArgs());
-    }
-    
-    @Test
-    public void testTest3() throws Exception {
-    	
-    	OpenC2Message message = new OpenC2Message(ActionType.COPY, new IpAddr(IP_VALUE)).setId(ID_VALUE).setActuator(new Endpoint(ENDPOINT_VALUE));
-    	OpenC2Message message2 = JsonFormatter.readOpenC2Message(message.toJson());
-    	    	
-    	// Create JsonNode objects for comparison 
-    	JsonNode messageJN = new ObjectMapper().readTree(message.toJson());
-    	JsonNode message2JN = new ObjectMapper().readTree(message2.toJson());
-    	JsonNode message3JN = new ObjectMapper().readTree(test3Json);
-    	JsonNode message4JN = new ObjectMapper().readTree(test1Json);
-
-    	assertEquals(messageJN, message2JN);  // Verify that the object created from a string is the same
-    	assertEquals(messageJN, message3JN);  // Verify that the object from an external JSON string is the same
-    	assertThat(messageJN, not(equalTo(message4JN))); // Verify that two different objects are not equal
-
-    	if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("OpenC2MessageTest - Test3 JSON output:");
-    		System.out.println(message.toJson());
-    		System.out.println(message.toPrettyJson());
-    		System.out.println("\n\n");
-    	}
-
-    	OpenC2Message inMsg = JsonFormatter.readOpenC2Message(test3Json);
-    	assertEquals(inMsg.getAction(), ActionType.COPY.toString());
-    	assertEquals(ID_VALUE, inMsg.getId());
-    	assertTrue(inMsg.getTarget() instanceof IpAddr);
-    	IpAddr target = (IpAddr)inMsg.getTarget();
-    	assertEquals(IP_VALUE, target.getIpAddr());
-    	assertNotNull(inMsg.getActuator());
-    	assertTrue(inMsg.getActuator() instanceof Endpoint);
-    	Endpoint actuator = (Endpoint)inMsg.getActuator();
-    	assertEquals(ENDPOINT_VALUE, actuator.getEndpoint());
-    	assertNull(inMsg.getArgs());
-    }
-    
-    @Test
-    public void testTest4() throws Exception {
-    	
-    	OpenC2Message message = new OpenC2Message(ActionType.COPY, new IpAddr(IP_VALUE))
-    			.setId(ID_VALUE)
-    			.setArgs(new Args()
-    					.addArg(ARG1_KEY, ARG1_VALUE)
-    					.addArg(ARG2_KEY, ARG2_VALUE));
-    	OpenC2Message message2 = JsonFormatter.readOpenC2Message(message.toJson());
-    	    	
-    	// Create JsonNode objects for comparison 
-    	JsonNode messageJN = new ObjectMapper().readTree(message.toJson());
-    	JsonNode message2JN = new ObjectMapper().readTree(message2.toJson());
-    	JsonNode message3JN = new ObjectMapper().readTree(test4Json);
-    	JsonNode message4JN = new ObjectMapper().readTree(test1Json);
-
-    	assertEquals(messageJN, message2JN);  // Verify that the object created from a string is the same
-    	assertEquals(messageJN, message3JN);  // Verify that the object from an external JSON string is the same
-    	assertThat(messageJN, not(equalTo(message4JN))); // Verify that two different objects are not equal
-
-    	if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("OpenC2MessageTest - Test4 JSON output:");
-    		System.out.println(message.toJson());
-    		System.out.println(message.toPrettyJson());
-    		System.out.println("\n\n");
-    	}
-
-    	OpenC2Message inMsg = JsonFormatter.readOpenC2Message(test4Json);
-    	assertEquals(inMsg.getAction(), ActionType.COPY.toString());
-    	assertEquals(ID_VALUE, inMsg.getId());
-    	assertTrue(inMsg.getTarget() instanceof IpAddr);
-    	IpAddr target = (IpAddr)inMsg.getTarget();
-    	assertEquals(IP_VALUE, target.getIpAddr());
-    	assertNull(inMsg.getActuator());
-    	assertNotNull(inMsg.getArgs());
-    	Args args = (Args)inMsg.getArgs();
-    	assertEquals(ARG1_VALUE, args.getArg(ARG1_KEY));
-    	assertEquals(ARG2_VALUE, args.getArg(ARG2_KEY));
-    }
-    
-    @Test
-    public void testTest5() throws Exception {
-    	
-    	OpenC2Message message = new OpenC2Message(ActionType.COPY, new IpAddr(IP_VALUE)).setHeader(new Header(VERSION_VALUE, CONTENT_VALUE).setCommandId(ID_VALUE));
-    	if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("OpenC2MessageTest - Test5 JSON output:");
-    		System.out.println(message.toJson());
-    		System.out.println(message.toPrettyJson());
-    		System.out.println("\n\n");
-    	}
-
-    	OpenC2Message message2 = JsonFormatter.readOpenC2Message(message.toJson());
-    	
-    	// Create JsonNode objects for comparison 
-    	JsonNode messageJN = new ObjectMapper().readTree(message.toJson());
-    	JsonNode message2JN = new ObjectMapper().readTree(message2.toJson());
-    	JsonNode message3JN = new ObjectMapper().readTree(test5Json);
-    	JsonNode message4JN = new ObjectMapper().readTree(test2Json);
-
-    	assertEquals(messageJN, message2JN);  // Verify that the object created from a string is the same
-    	assertEquals(messageJN, message3JN);  // Verify that the object from an external JSON string is the same
-    	assertThat(messageJN, not(equalTo(message4JN))); // Verify that two different objects are not equal
-
-    	if (toConsole) {
-    		// This is just to allow developer to eyeball the JSON created
-    		System.out.println("");
-    		System.out.println("OpenC2MessageTest - Test5 JSON output:");
-    		System.out.println(message.toJson());
-    		System.out.println(message.toPrettyJson());
-    		System.out.println("\n\n");
-    	}
-
-    	OpenC2Message inMsg = JsonFormatter.readOpenC2Message(test5Json);
-    	assertTrue(inMsg.hasHeader());
-    	assertEquals(VERSION_VALUE, inMsg.getHeader().getVersion());
-    	assertEquals(ID_VALUE, inMsg.getHeader().getCommandId());
-    	assertEquals(CONTENT_VALUE, inMsg.getHeader().getContentType());
-    	assertEquals(inMsg.getAction(), ActionType.COPY.toString());
-    	assertNull(inMsg.getId());
-    	assertTrue(inMsg.getTarget() instanceof IpAddr);
-    	IpAddr target = (IpAddr)inMsg.getTarget();
-    	assertEquals(IP_VALUE, target.getIpAddr());
-    	assertNull(inMsg.getActuator());
-    	assertNull(inMsg.getArgs());
-    }
-
-    @Test
-    public void testTest6() throws Exception {
-    	OpenC2Message inMsg = JsonFormatter.readOpenC2Message(test6Json);
-    	
-    	assertTrue(inMsg.hasHeader());
-    	assertEquals(VERSION_VALUE, inMsg.getHeader().getVersion());
-    	assertEquals(ID_VALUE, inMsg.getHeader().getCommandId());
-    	assertEquals(CONTENT_VALUE, inMsg.getHeader().getContentType());
-    	assertEquals(inMsg.getAction(), ActionType.COPY.toString());
-    	assertNull(inMsg.getId());
-    	assertTrue(inMsg.getTarget() instanceof IpAddr);
-    	IpAddr target = (IpAddr)inMsg.getTarget();
-    	assertEquals(IP_VALUE, target.getIpAddr());
-    	assertTrue(inMsg.hasActuator());
-    	assertTrue(inMsg.getActuator() instanceof Endpoint);
-    	Endpoint actuator = (Endpoint)inMsg.getActuator();
-    	assertEquals(ENDPOINT_VALUE, actuator.getEndpoint());
-    	Args args = (Args)inMsg.getArgs();
-    	assertEquals(ARG1_VALUE, args.getArg(ARG1_KEY));
-    	assertEquals(ARG2_VALUE, args.getArg(ARG2_KEY));
-    
-    	// Test to read target and actuators that are objects
-    	// Just reading the JSON string is success
-    	inMsg = JsonFormatter.readOpenC2Message(test7Json);
-    	inMsg = JsonFormatter.readOpenC2Message(test8Json);
-    }    
+	}
 
 }

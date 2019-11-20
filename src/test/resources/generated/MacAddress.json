@@ -1,0 +1,6 @@
+{
+  "action" : "restart",
+  "target" : {
+    "mac_addr" : "This is my mac address"
+  }
+}

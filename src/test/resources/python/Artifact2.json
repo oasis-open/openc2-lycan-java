@@ -1,0 +1,22 @@
+{
+    "action": "start",
+    "target": {
+        "artifact": {
+            "payload": {
+                "url": "www.testurl.com"
+            },
+            "hashes": {
+                "sha1": "1234567890ABCDEF1234567890ABCDEF12345678",
+                "sha256": "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABDEF1",
+                "md5": "1234567890ABCDEF1234567890ABCDEF"
+            },
+            "mime_type": "My MIME Type"
+        }
+    },
+    "args": {
+        "duration": 30000,
+        "start_time": 1568209029693,
+        "stop_time": 1568209059693,
+        "response_requested": "complete"
+    }
+}
