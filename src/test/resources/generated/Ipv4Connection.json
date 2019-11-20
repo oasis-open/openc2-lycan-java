@@ -1,0 +1,12 @@
+{
+  "action" : "investigate",
+  "target" : {
+    "ipv4_connection" : {
+      "protocol" : "tcp",
+      "src_addr" : "10.0.0.0/24",
+      "src_port" : 8443,
+      "dst_addr" : "10.0.0.0/24",
+      "dst_port" : 9443
+    }
+  }
+}

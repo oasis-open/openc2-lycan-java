@@ -4,16 +4,16 @@
 
   	<groupId>org.oasis.openc2</groupId>
   	<artifactId>lycan</artifactId>
-  	<version>0.1.0</version>
+  	<version>1.0.0</version>
   	<packaging>jar</packaging>
 
   	<name>lycan</name>
   	<url>http://maven.apache.org</url>
 
 	<properties>
-        <jackson.core.version>2.9.10</jackson.core.version>
+		<jackson.core.version>2.9.10</jackson.core.version>
 		<jackson.annotations.version>2.9.10</jackson.annotations.version>
-        <jackson.databind.version>2.9.10.1</jackson.databind.version>
+		<jackson.databind.version>2.9.10.1</jackson.databind.version>
 		<commons.lang.version>3.7</commons.lang.version>
 		<commons.text.version>1.4</commons.text.version>
 		<junit.version>4.12</junit.version>

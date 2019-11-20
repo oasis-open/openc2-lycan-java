@@ -1,0 +1,10 @@
+{
+  "status_text":"Couldn't find what you want",
+  "status":404,
+  "results":{
+    "version":"1.0",
+    "tags":[
+      "Tag1","Tag2","Tag3","Tag4","Tag5"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "features":[
+    "rate_limit",
+    "pairs"
+  ]
+}

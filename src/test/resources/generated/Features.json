@@ -1,0 +1,6 @@
+{
+  "action" : "create",
+  "target" : {
+    "features" : [ "versions", "profiles", "pairs", "rate_limit" ]
+  }
+}

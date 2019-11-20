@@ -1,0 +1,7 @@
+{
+  "src_port":8443,
+  "dst_port":9443,
+  "src_addr":"1.2.3.4/24",
+  "dst_addr":"2.3.4.5/16",
+  "protocol":"tcp"
+}

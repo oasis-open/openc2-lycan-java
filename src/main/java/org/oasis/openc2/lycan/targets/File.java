@@ -1,66 +1,66 @@
-/*
- *  The MIT License (MIT)
- *
- * Copyright 2018 AT&T Intellectual Property. All other rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
- * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- */
 package org.oasis.openc2.lycan.targets;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
-import org.oasis.openc2.lycan.utilities.Keys;
-import org.oasis.openc2.lycan.utilities.OpenC2Map;
+import org.oasis.openc2.lycan.interfaces.Validation;
+import org.oasis.openc2.lycan.types.HashType;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/**
- * Implementation of an File OpenC2 target
- *
- */
-public class File extends OpenC2Map<TargetType> {
+public class File implements Validation {
+	private static final String MD5_PATTERN = "^[A-F0-9]{32}$";
+	private static final String SHA1_PATTERN = "^[A-F0-9]{40}$";
+	private static final String SHA256_PATTERN = "^[A-F0-9]{64}$";
 	
-	/**
-	 * Constructor
-	 */
-	public File() {
-		super(TargetType.FILE);
-	}
+	private String name;
+	private String path;
+	private Map<String, String> hashes = null;
+
+	public File() { }
+
+	public String getName() 				{ return name; }
+	public String getPath() 				{ return path; }
+	public Map<String, String> getHashes() 	{ return hashes; }
+
+	public File setName(String name) 				{ this.name = name; return this; }
+	public File setPath(String path) 				{ this.path = path; return this; }
+	public File setHashes(Map<String, String> map) 	{ this.hashes = map; return this; }
 	
-	public File setName(String name) {
-		super.put(Keys.NAME, name);
+	public File addHashes(HashType key, String hash) throws IOException {
+		if (hashes == null)
+			hashes = new HashMap<>();
+			
+		if (!validateHash(key.toString(), hash)) {
+			throw new IOException("The hash value was not a valid " + key.toString() + " value");
+		}
+
+		hashes.put(key.toString(), hash);
 		return this;
 	}
-	
-	public File setPath(String path) {
-		super.put(Keys.PATH, path);
-		return this;
-	}
-	
-	@JsonSetter(Keys.HASHES)
-	public File setHash(Map<String, Object> hash) {
-		super.put(Keys.HASHES, hash);
-		return this;
-	}
-	
-	public String getName() { return super.get(Keys.NAME).toString(); }
-	public String getPath() { return super.get(Keys.PATH).toString(); }
-	@SuppressWarnings("unchecked")
-	public Map<String, Object> getHashes() { return (Map<String, Object>)super.get(Keys.HASHES); }
 
+	private boolean validateHash(String key, String value) {
+		if (key.equalsIgnoreCase("md5")) {
+			return Pattern.matches(MD5_PATTERN, value);
+		} else if (key.equalsIgnoreCase("sha1")) {
+			return Pattern.matches(SHA1_PATTERN, value);
+		} else if (key.equalsIgnoreCase("sha256")) {
+			return Pattern.matches(SHA256_PATTERN, value);
+		}
+		
+		return false;
+	}
+	
+	@JsonIgnore
+	@Override
+	public boolean isValid() {
+		for (Map.Entry<String, String> entry : hashes.entrySet()) {
+			if (!validateHash(entry.getKey(), entry.getValue()))
+				return false;
+		}
+		
+		return true;
+	}
 }

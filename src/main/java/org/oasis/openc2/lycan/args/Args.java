@@ -22,65 +22,122 @@
  */
 package org.oasis.openc2.lycan.args;
 
-import java.util.Map;
+import org.oasis.openc2.lycan.types.ArgsResponseType;
 
-import org.oasis.openc2.lycan.utilities.OpenC2Map;
-
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
  * Args object holds the command level args that are to be associated with
  * the ActionType of the message.
  *
  */
-public class Args extends OpenC2Map<String> {
-
+public class Args {
+	private Long startTime;
+	private Long stopTime;
+	private Long duration;
+	private ArgsResponseType responseRequested;
+	
 	/**
-	 * Constructor to create teh args object
+	 * Constructor to create the args object
 	 */
 	public Args() {
-		super("args");
+		responseRequested = ArgsResponseType.COMPLETE;
+	}
+	
+	@JsonGetter("start_time")
+	public Long getStartTime() 						{ return startTime; }
+	@JsonGetter("stop_time")
+	public Long getStopTime() 						{ return stopTime; }
+	public Long getDuration() 						{ return duration; }
+	@JsonGetter("response_requested")
+	public String getResponseRequested() 			{ return responseRequested.toString(); }
+
+	@JsonSetter("start_time")
+	public Args setStartTime(Long startTime) 								{ this.startTime = startTime; return this; }
+	@JsonSetter("stop_time")
+	public Args setStopTime(Long stopTime) 									{ this.stopTime = stopTime; return this; }
+	public Args setDuration(Long duration) 									{ this.duration = duration; return this; }
+	@JsonSetter("response_requested")
+	public Args setResponseRequested(ArgsResponseType responseRequested) 	{ this.responseRequested = responseRequested; return this; }
+	@JsonSetter("response_requested")
+	public Args setResponseRequested(String responseRequested) 				{ this.responseRequested = ArgsResponseType.valueOf(responseRequested.toUpperCase()); return this; }
+
+
+	/**
+	 * Set the start time
+	 * 
+	 * @param startTime start time in epoch
+	 */
+	public void addStart(Long startTime) {
+		this.startTime = startTime;
+		this.stopTime = -1L;
+		this.duration = -1L;
 	}
 	
 	/**
-	 * Add a key/value pair to the args object
+	 * Set the start time and stop time
 	 * 
-	 * @param key the arg key assigned to the value
-	 * @param value value for the key
-	 * @return Args object to allow for method chaining 
+	 * @param startTime start time in epoch
+	 * @param stopTime stop time in epoch
 	 */
-	public Args addArg(String key, Object value) {
-		super.put(key, value);
-		return this;
+	public void addStartStop(Long startTime, Long stopTime) {
+		this.startTime = startTime;
+		if (stopTime > startTime) {
+			this.stopTime = stopTime;
+			this.duration = stopTime - startTime;
+		} else {
+			this.stopTime = -1L;
+			this.duration = -1L;
+		}
 	}
 	
 	/**
-	 * Set a key/value pair in the args object.  
-	 * This method is a helper method for the Jackson library
+	 * Set the start time and duration
 	 * 
-	 * @param key the arg key assigned to the value
-	 * @param value value for the key
+	 * @param startTime start time in epoch
+	 * @param duration duration in milliseconds
 	 */
-	@JsonAnySetter
-	public void setArg(String key, Object value) {
-		addArg(key, value);
+	public void addStartDuration(Long startTime, Long duration) {
+		this.startTime = startTime;
+		this.stopTime = startTime + duration;
+		this.duration = duration;
 	}
 	
 	/**
-	 * Get a list of all the args that were passed with the ActionType
+	 * Set the stop time
 	 * 
-	 * @return Map object containing the key/value pairs assigned
+	 * @param stopTime stop time in epoch
 	 */
-	public Map<String, Object> getArgs() {  return super.getAll(); }
+	public void addStop(Long stopTime) {
+		Long now = System.currentTimeMillis();
+		this.startTime = now;
+		this.stopTime = stopTime;
+		this.duration = stopTime - now;
+	}
 	
 	/**
-	 * Get a specific value assigned to a key in the args object
+	 * Set the stop time and duration
 	 * 
-	 * @param key the arg key assigned to the value
-	 * @return Object that was stored with the key in the map
+	 * @param stopTime stop time in epoch
+	 * @param duration duration in milliseconds
 	 */
-	@JsonIgnore
-	public Object getArg(String key) { return super.get(key); }
+	public void addStopDuration(Long stopTime, Long duration) {
+		this.startTime = stopTime - duration;
+		this.stopTime = stopTime;
+		this.duration = duration;
+	}
 	
+	/**
+	 * Set the duration 
+	 * 
+	 * @param duration duration in milliseconds
+	 */
+	public void addDuration(Long duration) {
+		Long now = System.currentTimeMillis();
+		this.startTime = now;
+		this.stopTime = now + duration;
+		this.duration = duration;
+	}
+		
 }

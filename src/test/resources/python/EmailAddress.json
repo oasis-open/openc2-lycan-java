@@ -1,0 +1,6 @@
+{
+    "action": "copy",
+    "target": {
+        "email_addr": "Email address"
+    }
+}

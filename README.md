@@ -7,14 +7,13 @@
 [![Coverage Status](https://codecov.io/gh/oasis-open/openc2-lycan-java/branch/develop/graph/badge.svg)](https://codecov.io/gh/oasis-open/openc2-lycan-java)
 
 Lycan is an implementation of the OpenC2 OASIS standard for command and control messaging. 
-The current implementation is based on the Working Draft 06/Committee Specification Draft  04 documentation. 
+The current implementation is based on the Language Specification v1.0. 
 
-<p>This repository contains code developed against an earlier version of the OpenC2 language than that presented by OASIS for public review in October / November 2018 and is NOT CONSISTENT WITH THE VERSION UNDERGOING PUBLIC REVIEW. Any implementer of OpenC2 using this code should be aware that it will require updating to align with the current OpenC2 Language Specification.</p>
 
 ## Requirements
 
 Java 1.8 or later.
-Jackson 2.8.8 or later.
+Jackson 2.9.9 or later.
 
 ## Installation
 
@@ -30,7 +29,7 @@ Add this dependency to your project's POM:
 <dependency>
 	<groupId>org.oasis.openc2</groupId>
 	<artifactId>lycan</artifactId>
-	<version>0.1.0</version>
+	<version>1.0.0</version>
 </dependency>
 
 ```
@@ -40,15 +39,18 @@ Add this dependency to your project's POM:
 You'll need to manually install the following JARs:
 
 * Lycan https://github.com/<location/to/latest>
-* Jackson core 2.8.8 or later
-* Jackson databind 2.8.8 or later
-* Jackson annotations 2.8.8 or later
+* Jackson core 2.9.9 or later
+* Jackson databind 2.9.9.2 or later
+* Jackson annotations 2.9.9 or later
 
 ## Documentation
 
 Please see the [Java docs](https://github.com/oasis-open/openc2-lycan-java/doc) for the most up-to-date documentation.
 
 ## Usage
+
+--- Under Construction ---
+
 
 LycanExample.java
 
